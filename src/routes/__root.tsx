@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { THEME_COLOR } from "../lib/seo/site-config";
 import { ProtocolProvider } from "../hooks/use-protocol-state";
 import { PredictionSessionProvider } from "../hooks/use-prediction-session";
 import { MemberTasksProvider } from "../hooks/use-member-tasks";
@@ -82,41 +83,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "STACK XI — Pepe Matchdays on Base" },
-      {
-        name: "description",
-        content:
-          "Dallas World Cup matchday stories, real USDC predictions on Base, and the founding squad NFT mint. Pepe doesn't chase. Luck does.",
-      },
-      { name: "author", content: "STACK XI" },
-      { property: "og:title", content: "STACK XI — Pepe Matchdays on Base" },
-      {
-        property: "og:description",
-        content:
-          "Matchday Pepe storytelling, USDC predictions, and founding squad mint on Base. Finals arc on Bitcoin via Stacks.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "STACK XI — Pepe Matchdays on Base" },
-      {
-        name: "twitter:description",
-        content:
-          "Dallas WC matchday stories, USDC predictions on Base, and 11-player squad mint. Luck chases Pepe now.",
-      },
-      {
-        property: "og:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a86f64a4-9b45-4476-86e9-bb5e2cd6467a/id-preview-1bf84696--8d65c517-9635-4db8-93a5-b6a053150685.lovable.app-1783011580055.png",
-      },
-      {
-        name: "twitter:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a86f64a4-9b45-4476-86e9-bb5e2cd6467a/id-preview-1bf84696--8d65c517-9635-4db8-93a5-b6a053150685.lovable.app-1783011580055.png",
-      },
+      { name: "theme-color", content: THEME_COLOR },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "apple-touch-icon", href: "/pepeheadball.jpg" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

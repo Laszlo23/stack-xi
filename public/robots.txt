@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /labs
+
+Sitemap: https://stackxi.xyz/sitemap.xml

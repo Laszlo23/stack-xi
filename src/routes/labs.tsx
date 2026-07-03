@@ -6,8 +6,16 @@ import { MatchTradingRoom } from "@/features/markets/MatchTradingRoom";
 import { RefereeFeed } from "@/features/oracle/RefereeFeed";
 import { PositionsPanel } from "@/features/positions/PositionsPanel";
 import { TrainingCampsSection } from "@/features/vaults/TrainingCampsSection";
+import { buildPageSeo } from "@/lib/seo/meta";
 
 export const Route = createFileRoute("/labs")({
+  head: () =>
+    buildPageSeo({
+      title: "Protocol Labs",
+      description: "Internal STACK XI DeFi UI prototypes — not indexed for public search.",
+      path: "/labs",
+      robots: "noindex, nofollow",
+    }),
   component: LabsPage,
 });
 

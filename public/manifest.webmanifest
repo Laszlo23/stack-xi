@@ -1,0 +1,26 @@
+{
+  "name": "STACK XI — Pepe Matchdays on Base",
+  "short_name": "STACK XI",
+  "description": "Dallas World Cup matchday stories, USDC predictions on Base, and the founding squad NFT mint.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1f2937",
+  "theme_color": "#1f2937",
+  "lang": "en",
+  "categories": ["finance", "entertainment", "social"],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/pepeheadball.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

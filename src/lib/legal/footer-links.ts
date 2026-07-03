@@ -16,3 +16,8 @@ export const LEGAL_ROUTES = [
   { to: "/terms" as const, label: "Terms" },
   { to: "/imprint" as const, label: "Imprint" },
 ] as const;
+
+export const FOOTER_SITE_ROUTES = [
+  { to: "/blog" as const, label: "Blog" },
+  ...LEGAL_ROUTES,
+] as const;

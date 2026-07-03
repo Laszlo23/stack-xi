@@ -3,7 +3,7 @@ import { BookOpen, Glasses, Home, Sparkles, Target, User, Users } from "lucide-r
 import { useEffect, useState } from "react";
 import { PROTOCOL_NAME } from "@/domain/constants";
 import { BaseWalletChip } from "@/features/wallet/BaseWalletChip";
-import { FOOTER_BASESCAN, FOOTER_COMMUNITY, LEGAL_ROUTES } from "@/lib/legal/footer-links";
+import { FOOTER_BASESCAN, FOOTER_COMMUNITY, FOOTER_SITE_ROUTES } from "@/lib/legal/footer-links";
 import { getActiveMatchday } from "@/lib/story/dallas-schedule";
 
 const NAV_ITEMS = [
@@ -184,7 +184,7 @@ export function AppFooter() {
             </div>
 
             <div className="flex flex-wrap gap-x-4 gap-y-2 font-mono text-xs text-muted-foreground">
-              {LEGAL_ROUTES.map(({ to, label }) => (
+              {FOOTER_SITE_ROUTES.map(({ to, label }) => (
                 <Link key={to} to={to} className="hover:text-primary">
                   {label}
                 </Link>
