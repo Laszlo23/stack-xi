@@ -1,0 +1,213 @@
+import { Link, useRouterState } from "@tanstack/react-router";
+import { BookOpen, Glasses, Home, Sparkles, Target, User, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { PROTOCOL_NAME } from "@/domain/constants";
+import { BaseWalletChip } from "@/features/wallet/BaseWalletChip";
+import { FOOTER_BASESCAN, FOOTER_COMMUNITY, LEGAL_ROUTES } from "@/lib/legal/footer-links";
+import { getActiveMatchday } from "@/lib/story/dallas-schedule";
+
+const NAV_ITEMS = [
+  { hash: undefined, route: "/" as const, label: "Home", icon: Home },
+  { hash: "visual-story", route: undefined, label: "Lore", icon: Sparkles },
+  { hash: "story", route: undefined, label: "Story", icon: BookOpen },
+  { hash: "squad", route: undefined, label: "Squad", icon: Users },
+  { hash: "predict", route: undefined, label: "Predict", icon: Target },
+  { hash: "decentraland", route: undefined, label: "Metaverse", icon: Glasses },
+  { hash: undefined, route: "/profile" as const, label: "Profile", icon: User },
+] as const;
+
+/** Primary destinations on small screens — wallet stays in the header. */
+const MOBILE_NAV_ITEMS = [
+  NAV_ITEMS[0],
+  NAV_ITEMS[1],
+  NAV_ITEMS[4],
+  NAV_ITEMS[3],
+  NAV_ITEMS[6],
+] as const;
+
+function NavItem({
+  hash,
+  route,
+  label,
+  icon: Icon,
+  mobile,
+  activeHash,
+  pathname,
+}: {
+  hash?: string;
+  route?: "/" | "/profile";
+  label: string;
+  icon: typeof Home;
+  mobile?: boolean;
+  activeHash: string;
+  pathname: string;
+}) {
+  const isActive = route
+    ? pathname === route
+    : hash === undefined
+      ? pathname === "/" && activeHash === ""
+      : pathname === "/" && activeHash === hash;
+
+  const className = mobile
+    ? `flex flex-1 flex-col items-center gap-1 py-2 text-[10px] font-medium uppercase tracking-wide ${isActive ? "text-primary" : "text-muted-foreground"}`
+    : `inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition ${isActive ? "bg-primary/10 text-primary font-semibold" : "text-muted-foreground hover:text-primary"}`;
+
+  if (hash) {
+    return (
+      <Link to="/" hash={hash} className={className}>
+        <Icon className={mobile ? "h-5 w-5" : "h-4 w-4"} />
+        {label}
+      </Link>
+    );
+  }
+
+  return (
+    <Link to={route ?? "/"} className={className}>
+      <Icon className={mobile ? "h-5 w-5" : "h-4 w-4"} />
+      {label}
+    </Link>
+  );
+}
+
+export function AppNav() {
+  const [activeHash, setActiveHash] = useState("");
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const activeMatch = getActiveMatchday();
+
+  useEffect(() => {
+    const sync = () => setActiveHash(window.location.hash.replace("#", ""));
+    sync();
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, []);
+
+  return (
+    <>
+      <header className="sticky top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-xl">
+        <div className="border-b border-primary/20 bg-primary/5 px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-2">
+            <span className="inline-flex items-center gap-2">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
+              Next: {activeMatch.home} vs {activeMatch.away} · {activeMatch.kickoffLabel} · Base
+              USDC
+            </span>
+          </div>
+        </div>
+
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary font-black text-primary-foreground shadow-[0_0_20px_var(--neon)]">
+              XI
+            </div>
+            <div className="hidden min-w-0 sm:block">
+              <div className="font-display text-sm font-bold tracking-wide">{PROTOCOL_NAME}</div>
+            </div>
+          </Link>
+
+          <nav className="hidden items-center gap-1 lg:flex">
+            {NAV_ITEMS.map((item) => (
+              <NavItem key={item.label} {...item} activeHash={activeHash} pathname={pathname} />
+            ))}
+          </nav>
+
+          <BaseWalletChip />
+        </div>
+      </header>
+
+      <nav className="fixed bottom-0 left-0 right-0 z-50 flex border-t border-border/60 bg-background/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden">
+        {MOBILE_NAV_ITEMS.map((item) => (
+          <NavItem key={item.label} {...item} mobile activeHash={activeHash} pathname={pathname} />
+        ))}
+      </nav>
+    </>
+  );
+}
+
+export function AppFooter() {
+  return (
+    <footer className="border-t border-border/60 bg-background pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-0">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary font-black text-primary-foreground shadow-[0_0_20px_var(--neon)]">
+              XI
+            </div>
+            <div>
+              <div className="font-display font-bold">{PROTOCOL_NAME}</div>
+              <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                Base USDC · Decentraland watch party
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 sm:items-end">
+            <div className="flex flex-wrap gap-x-4 gap-y-2 font-mono text-xs text-muted-foreground">
+              <a
+                className="hover:text-primary"
+                href={FOOTER_COMMUNITY.x}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                X
+              </a>
+              {FOOTER_COMMUNITY.telegram && (
+                <a
+                  className="hover:text-primary"
+                  href={FOOTER_COMMUNITY.telegram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Telegram
+                </a>
+              )}
+              {FOOTER_COMMUNITY.places && (
+                <a
+                  className="hover:text-primary"
+                  href={FOOTER_COMMUNITY.places}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Places
+                </a>
+              )}
+              <a
+                className="hover:text-primary"
+                href={FOOTER_BASESCAN}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                BaseScan
+              </a>
+              <Link to="/finals" className="hover:text-primary">
+                Finals (Stacks)
+              </Link>
+            </div>
+
+            <div className="flex flex-wrap gap-x-4 gap-y-2 font-mono text-xs text-muted-foreground">
+              {LEGAL_ROUTES.map(({ to, label }) => (
+                <Link key={to} to={to} className="hover:text-primary">
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <p className="mt-8 max-w-2xl text-xs leading-relaxed text-muted-foreground">
+          Predictions and NFT mints involve financial risk. Not investment advice. USDC stakes and
+          squad mints are on Base mainnet — verify contract addresses before signing.
+        </p>
+      </div>
+    </footer>
+  );
+}
+
+export function PageShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <AppNav />
+      {children}
+      <AppFooter />
+    </div>
+  );
+}
