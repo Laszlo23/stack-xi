@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Loader2, Zap } from "lucide-react";
 import { BccTokenChip } from "@/features/defi/BccTokenChip";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { useBccBalance } from "@/hooks/use-bcc-balance";
-import { BCC_SYMBOL } from "@/lib/base/config";
+import { useSponsoredPrediction } from "@/hooks/use-sponsored-prediction";
+import { BCC_SYMBOL, SPONSORED_PREDICTION_MAX, SPONSORED_STAKE_BCC, formatBcc } from "@/lib/base/config";
 import { DALLAS_SCHEDULE } from "@/lib/story/dallas-schedule";
 
 const ROUND_16 = DALLAS_SCHEDULE.find((m) => m.id === "m8")!;
@@ -44,8 +45,9 @@ function AnimatedPool({ value, pulse }: { value: number; pulse: boolean }) {
 }
 
 export function PredictToEarnBlock() {
-  const { isConnected, connectWallet, isConnecting, address } = useBaseWallet();
+  const { isConnected, connectWallet, isConnecting, address } = useConnectBaseWallet();
   const { formatted } = useBccBalance(address);
+  const sponsor = useSponsoredPrediction();
   const [pick, setPick] = useState<"home" | "away">("home");
   const [stakeInput, setStakeInput] = useState("100");
   const [poolTotal, setPoolTotal] = useState(BASE_POOL_BCC);
@@ -77,6 +79,16 @@ export function PredictToEarnBlock() {
       <p className="mt-2 max-w-xl text-muted-foreground">
         Stake {BCC_SYMBOL} on match outcomes. Winners share the culture pool. Losers fuel the lore.
       </p>
+      {sponsor.isConfigured && sponsor.remainingSlots > 0 && (
+        <p className="mt-3 rounded-xl border border-accent/40 bg-accent/10 px-4 py-3 text-sm">
+          First {SPONSORED_PREDICTION_MAX} verified members (Farcaster or X): treasury sponsors your{" "}
+          {formatBcc(SPONSORED_STAKE_BCC)} prediction —{" "}
+          <span className="font-mono text-primary">{sponsor.remainingSlots} slots left</span>.
+          <Link to="/" hash="predict" className="ml-1 font-semibold text-primary hover:underline">
+            Use guided flow →
+          </Link>
+        </p>
+      )}
       {isConnected && (
         <p className="mt-2 font-mono text-xs text-primary">
           Your balance: {formatted} {BCC_SYMBOL}

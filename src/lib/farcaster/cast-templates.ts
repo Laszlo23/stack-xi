@@ -1,3 +1,4 @@
+import { buildSharePost } from "@/lib/growth/share-copy";
 import { BASESCAN_URL, BCC_SYMBOL, formatBcc } from "@/lib/base/config";
 import { SITE_LINKS } from "@/lib/site/links";
 
@@ -16,23 +17,29 @@ export type PredictCastInput = {
 };
 
 export function buildMintCast(input: MintCastInput): string {
-  return [
-    `Just minted ${input.playerName} on Building Culture 🐸⚽`,
-    `Mint #${input.mintOrder} for ${formatBcc(input.pricePaid)}.`,
-    `Onchain proof: ${BASESCAN_URL}/tx/${input.txHash}`,
-    `Trade ${BCC_SYMBOL}: ${SITE_LINKS.bccDexScreener}`,
-    `@jessepollak @dwr culture > solo grind 💜`,
-  ].join("\n");
+  return buildSharePost(
+    [
+      `Just minted ${input.playerName} on Building Culture 🐸⚽`,
+      `Mint #${input.mintOrder} for ${formatBcc(input.pricePaid)}.`,
+      `Onchain proof: ${BASESCAN_URL}/tx/${input.txHash}`,
+      `Trade ${BCC_SYMBOL}: ${SITE_LINKS.bccDexScreener}`,
+      "culture > solo grind 💜",
+    ],
+    { path: "/" },
+  );
 }
 
 export function buildPredictCast(input: PredictCastInput): string {
-  return [
-    `Locked ${input.pick} on STACK XI 🐸⚽`,
-    `${input.matchLabel} · ${input.stakeLabel} ${BCC_SYMBOL} on Base.`,
-    `Receipt: ${BASESCAN_URL}/tx/${input.txHash}`,
-    `Chart: ${SITE_LINKS.bccDexScreener}`,
-    `Luck decides. pepe.buildingcultureid.space`,
-  ].join("\n");
+  return buildSharePost(
+    [
+      `Locked ${input.pick} on STACK XI 🐸⚽`,
+      `${input.matchLabel} · ${input.stakeLabel} ${BCC_SYMBOL} on Base.`,
+      `Receipt: ${BASESCAN_URL}/tx/${input.txHash}`,
+      `Chart: ${SITE_LINKS.bccDexScreener}`,
+      "Luck decides.",
+    ],
+    { path: "/" },
+  );
 }
 
 export function warpcastComposeUrl(text: string): string {

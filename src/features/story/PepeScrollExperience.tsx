@@ -1,9 +1,16 @@
+import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { PROTOCOL_ONE_LINER, PROTOCOL_TAGLINE } from "@/domain/constants";
+import { AirdropAnnouncementBanner } from "@/features/growth/AirdropAnnouncementBanner";
+import { SponsoredPredictionCampaignBanner } from "@/features/growth/SponsoredPredictionCampaignBanner";
 import { DecentralandEventSection } from "@/features/community/DecentralandEventSection";
 import { DeFiLayerTeaser } from "@/features/defi/DeFiLayerTeaser";
 import { SquadMintSection } from "@/features/founding/SquadMintSection";
 import { GuidedPredictionFlow } from "@/features/predict/GuidedPredictionFlow";
+import { QuickPredictBar } from "@/features/predict/QuickPredictBar";
+import { TelegramConnectWallet } from "@/features/telegram/TelegramConnectWallet";
+import { useSquadMintStatus } from "@/hooks/use-squad-mint-status";
+import { TelegramGamePanel } from "@/features/telegram/TelegramGamePanel";
 import { MatchdayStorySection } from "@/features/story/MatchdayStorySection";
 import { PepeVisualScroll } from "@/features/story/PepeVisualScroll";
 import {
@@ -18,9 +25,19 @@ export function PepeScrollExperience() {
   const activeMatch = getActiveMarket();
   const lastResult = getLastCompletedMarket();
   const isAustrianMarket = getActiveMarketKind() === "austrian_bundesliga";
+  const { isSoldOut } = useSquadMintStatus();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (sessionStorage.getItem("stackxi:tg-deeplink") === "predict") {
+      sessionStorage.removeItem("stackxi:tg-deeplink");
+      window.location.hash = "predict";
+    }
+  }, []);
 
   return (
     <div className="scroll-smooth">
+      <QuickPredictBar />
       <section className="relative flex min-h-[90vh] flex-col justify-center overflow-hidden">
         <div
           className="pointer-events-none absolute inset-0 opacity-40"
@@ -40,6 +57,9 @@ export function PepeScrollExperience() {
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
 
         <div className="relative mx-auto w-full max-w-7xl px-4 py-24 sm:px-6 sm:py-28">
+          <div className="mb-8 max-w-3xl">
+            <AirdropAnnouncementBanner compact />
+          </div>
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full glass-neon px-3 py-1 font-mono text-xs uppercase tracking-widest">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
@@ -77,16 +97,31 @@ export function PepeScrollExperience() {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href="#visual-story"
-                className="inline-flex rounded-xl border border-primary/40 bg-primary/10 px-6 py-3 text-sm font-bold text-primary transition hover:bg-primary/20"
-              >
-                Scroll Pepe lore →
-              </a>
-              <a
                 href="#predict"
                 className="inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-[0_0_32px_var(--neon)] transition hover:brightness-110"
               >
                 Predict with BCC
+              </a>
+              {isSoldOut ? (
+                <a
+                  href="#squad"
+                  className="inline-flex rounded-xl border border-primary/40 bg-primary/10 px-6 py-3 text-sm font-bold text-primary transition hover:bg-primary/20"
+                >
+                  View founding squad →
+                </a>
+              ) : (
+                <a
+                  href="#squad"
+                  className="inline-flex rounded-xl border border-primary/40 bg-primary/10 px-6 py-3 text-sm font-bold text-primary transition hover:bg-primary/20"
+                >
+                  Mint founding squad →
+                </a>
+              )}
+              <a
+                href="#visual-story"
+                className="inline-flex rounded-xl border border-border px-6 py-3 text-sm font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+              >
+                Pepe lore
               </a>
             </div>
           </div>
@@ -97,6 +132,11 @@ export function PepeScrollExperience() {
       <MatchdayStorySection />
       <SquadMintSection />
       <DeFiLayerTeaser />
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 space-y-4">
+        <SponsoredPredictionCampaignBanner />
+        <TelegramConnectWallet />
+        <TelegramGamePanel />
+      </div>
       <GuidedPredictionFlow />
       <DecentralandEventSection />
 

@@ -23,7 +23,7 @@ function ImprintPage() {
     <LegalDocument
       title="Imprint"
       subtitle="Legal notice and contact information for STACK XI."
-      sections={IMRINT_SECTIONS}
+      sections={IMPRINT_SECTIONS}
     />
   );
 }

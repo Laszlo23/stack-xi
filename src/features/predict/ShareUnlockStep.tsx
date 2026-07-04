@@ -1,12 +1,16 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Lock, Unlock } from "lucide-react";
+import { Lock, Loader2, Unlock } from "lucide-react";
 import { PepeBubble } from "@/features/story/PepeBubble";
+import { useMemberTasksOptional } from "@/hooks/use-member-tasks";
+import { useTelegramSessionOptional } from "@/hooks/use-telegram-session";
 import {
   buildPredictionCastText,
   markShareUnlock,
   openCastShare,
   openXShare,
 } from "@/lib/predict/share-unlock";
+import { shareViaTelegram } from "@/lib/telegram/share";
 
 const UNLOCK_BEAT = {
   id: "unlock",
@@ -36,11 +40,33 @@ export function ShareUnlockStep({
   onUnlocked: () => void;
 }) {
   const castText = buildPredictionCastText({ home, away, pick, stakeLabel, stage });
+  const telegram = useTelegramSessionOptional();
+  const memberTasks = useMemberTasksOptional();
+  const [sharing, setSharing] = useState(false);
 
   function unlockAfterShare(opener: () => void) {
     opener();
     if (address) markShareUnlock(address, matchId);
     onUnlocked();
+  }
+
+  async function unlockViaTelegramShare() {
+    if (!telegram?.initData) return;
+    setSharing(true);
+    try {
+      const sent = await shareViaTelegram({
+        initData: telegram.initData,
+        shareType: "prediction",
+        text: castText,
+      });
+      if (sent) {
+        if (address) markShareUnlock(address, matchId);
+        memberTasks?.completeTask("share_telegram_matchday");
+        onUnlocked();
+      }
+    } finally {
+      setSharing(false);
+    }
   }
 
   return (
@@ -80,22 +106,40 @@ export function ShareUnlockStep({
 
         {!unlocked && (
           <div className="mt-6 space-y-3">
-            <button
-              type="button"
-              onClick={() => unlockAfterShare(() => openCastShare(castText))}
-              className="defi-energy-btn w-full rounded-xl bg-primary py-3.5 text-sm font-bold text-primary-foreground shadow-[0_0_24px_var(--neon)] hover:brightness-110"
-            >
-              Cast on Farcaster to unlock
-            </button>
-            <button
-              type="button"
-              onClick={() => unlockAfterShare(() => openXShare(castText))}
-              className="w-full rounded-xl border border-border py-3.5 text-sm font-bold text-foreground hover:border-primary/50 hover:text-primary"
-            >
-              Post on X to unlock
-            </button>
+            {telegram?.isTelegram && (
+              <button
+                type="button"
+                disabled={sharing}
+                onClick={() => void unlockViaTelegramShare()}
+                className="defi-energy-btn w-full rounded-xl bg-sky-600 py-3.5 text-sm font-bold text-white shadow-[0_0_24px_oklch(0.6_0.15_240/0.4)] hover:brightness-110 disabled:opacity-60"
+              >
+                {sharing ? (
+                  <Loader2 className="mx-auto h-4 w-4 animate-spin" />
+                ) : (
+                  "Share to Telegram to unlock"
+                )}
+              </button>
+            )}
+            {!telegram?.isTelegram && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => unlockAfterShare(() => openCastShare(castText))}
+                  className="defi-energy-btn w-full rounded-xl bg-primary py-3.5 text-sm font-bold text-primary-foreground shadow-[0_0_24px_var(--neon)] hover:brightness-110"
+                >
+                  Cast on Farcaster to unlock
+                </button>
+                <button
+                  type="button"
+                  onClick={() => unlockAfterShare(() => openXShare(castText))}
+                  className="w-full rounded-xl border border-border py-3.5 text-sm font-bold text-foreground hover:border-primary/50 hover:text-primary"
+                >
+                  Post on X to unlock
+                </button>
+              </>
+            )}
             <p className="text-center font-mono text-[10px] text-muted-foreground">
-              Share opens in a new tab · unlock confirms when you return
+              Share opens native picker · unlock confirms when sent
             </p>
             <Link to="/calendar" className="block text-center text-xs text-primary hover:underline">
               Need cast copy? Post calendar →

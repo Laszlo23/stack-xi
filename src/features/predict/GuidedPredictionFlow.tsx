@@ -7,15 +7,19 @@ import { CrowdPressureBar } from "@/features/predict/CrowdPressureBar";
 import { PredictionReceiptPanel } from "@/features/predict/PredictionReceiptPanel";
 import { PredictionShareCard } from "@/features/predict/PredictionShareCard";
 import { ShareUnlockStep } from "@/features/predict/ShareUnlockStep";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { useMemberTasksOptional } from "@/hooks/use-member-tasks";
 import { usePredictionSession } from "@/hooks/use-prediction-session";
+import { useSponsoredPrediction } from "@/hooks/use-sponsored-prediction";
 import {
   BASESCAN_URL,
   BCC_SYMBOL,
+  SPONSORED_PREDICTION_MAX,
+  SPONSORED_STAKE_BCC,
   STAKE_TIERS_BCC,
   formatBcc,
   isPredictionPoolConfigured,
+  isSponsorConfigured,
 } from "@/lib/base/config";
 import { useEffect, useState } from "react";
 import { buildPredictCast } from "@/lib/farcaster/cast-templates";
@@ -25,11 +29,9 @@ import {
   isPredictionSubmitAllowed,
 } from "@/lib/predict/match-window";
 import { hasShareUnlock } from "@/lib/predict/share-unlock";
-import { getAccount } from "wagmi/actions";
-import { submitBasePrediction } from "@/lib/base/submit-prediction";
+import { submitBasePrediction, submitSponsoredPrediction } from "@/lib/base/submit-prediction";
 import { recordPredictionTx } from "@/lib/profile/task-storage";
 import { getActiveMarket } from "@/lib/story/match-markets";
-import { wagmiConfig } from "@/lib/base/wagmi-config";
 import {
   PEPE_CONFIRM_INTRO,
   PEPE_PREDICT_INTRO,
@@ -50,8 +52,9 @@ export function GuidedPredictionFlow() {
     isConnecting,
     writeContractAsync,
     ensureBccAllowance,
-  } = useBaseWallet();
+  } = useConnectBaseWallet();
   const memberTasks = useMemberTasksOptional();
+  const sponsor = useSponsoredPrediction();
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [, tick] = useState(0);
@@ -86,34 +89,51 @@ export function GuidedPredictionFlow() {
     setSubmitting(true);
     setSubmitError(null);
     try {
-      if (!isConnected) {
-        await connectWallet();
+      let wallet = address;
+      if (!wallet) {
+        wallet = await connectWallet();
       }
-      const wallet = getAccount(wagmiConfig).address ?? address;
       if (!wallet) {
         throw new Error("Connect your Base wallet first.");
       }
 
-      const txHash = await submitBasePrediction(
-        (args) =>
-          writeContractAsync({
-            address: args.address,
-            abi: args.abi,
-            functionName: args.functionName,
-            args: args.args,
-          }),
-        ensureBccAllowance,
-        {
-          matchId: session.matchId,
-          pickHome: session.pick === "home",
-          amount: session.stakeBcc,
-          useContract: isPredictionPoolConfigured(),
-        },
-      );
+      const isSponsored = Boolean(session.sponsored);
+
+      const txHash = isSponsored
+        ? await submitSponsoredPrediction(
+            (args) =>
+              writeContractAsync({
+                address: args.address,
+                abi: args.abi,
+                functionName: args.functionName,
+                args: args.args,
+              }),
+            {
+              matchId: session.matchId,
+              pickHome: session.pick === "home",
+            },
+          )
+        : await submitBasePrediction(
+            (args) =>
+              writeContractAsync({
+                address: args.address,
+                abi: args.abi,
+                functionName: args.functionName,
+                args: args.args,
+              }),
+            ensureBccAllowance,
+            {
+              matchId: session.matchId,
+              pickHome: session.pick === "home",
+              amount: session.stakeBcc,
+              useContract: isPredictionPoolConfigured(),
+            },
+          );
 
       markSubmitted(txHash);
       recordPredictionTx(wallet, txHash);
       memberTasks?.refreshProgress();
+      void sponsor.refetch();
     } catch (err) {
       const message = err instanceof Error ? err.message : "Transaction failed";
       setSubmitError(message);
@@ -123,10 +143,13 @@ export function GuidedPredictionFlow() {
   }
 
   const windowClosed = window.status === "closed";
+  const isSponsoredStake = Boolean(session?.sponsored);
   const canSubmitOnchain =
     Boolean(session?.shareUnlocked) &&
     isPredictionPoolConfigured() &&
-    Boolean(session && session.stakeBcc <= bccBalance) &&
+    (isSponsoredStake
+      ? isSponsorConfigured() && sponsor.isEligible
+      : Boolean(session && session.stakeBcc <= bccBalance)) &&
     isPredictionSubmitAllowed(window);
 
   const submitBlockers: string[] = [];
@@ -135,7 +158,19 @@ export function GuidedPredictionFlow() {
   if (!isPredictionPoolConfigured()) {
     submitBlockers.push("Prediction pool not configured (VITE_PREDICTION_POOL_ADDRESS)");
   }
-  if (session && session.stakeBcc > bccBalance) {
+  if (isSponsoredStake) {
+    if (!isSponsorConfigured()) {
+      submitBlockers.push("Sponsor contract not configured (VITE_PREDICTION_SPONSOR_ADDRESS)");
+    } else if (!sponsor.isEligible) {
+      if (!sponsor.socialGate.socialEligible) {
+        submitBlockers.push("Connect Farcaster or X on Profile to unlock sponsored stake");
+      } else if (sponsor.socialGate.onChainAllowed === false) {
+        submitBlockers.push("On-chain allowlist syncing — wait a moment and retry");
+      } else {
+        submitBlockers.push("Sponsored slot unavailable — already used or all 77 claimed");
+      }
+    }
+  } else if (session && session.stakeBcc > bccBalance) {
     submitBlockers.push(`Insufficient ${BCC_SYMBOL} balance for stake`);
   }
   if (windowClosed) submitBlockers.push("Match window closed — predictions lock at kickoff");
@@ -152,6 +187,33 @@ export function GuidedPredictionFlow() {
           </span>
           <LiveWindowBadge window={window} />
         </div>
+
+        {sponsor.isConfigured && sponsor.remainingSlots > 0 && step < 5 && (
+          <div className="mb-6 rounded-xl border border-accent/40 bg-accent/10 px-4 py-3 text-sm">
+            <strong className="text-accent">Founding sponsor:</strong> First {SPONSORED_PREDICTION_MAX}{" "}
+            verified members (Farcaster FID or linked X) get {formatBcc(SPONSORED_STAKE_BCC)} staked
+            free —{" "}
+            <span className="font-mono text-primary">{sponsor.remainingSlots} slots left</span>
+            {sponsor.isEligible && step === 2 && (
+              <span className="text-muted-foreground"> · You&apos;re eligible</span>
+            )}
+            {address && !sponsor.socialGate.socialEligible && (
+              <span className="mt-2 block text-muted-foreground">
+                {sponsor.socialGate.reason}{" "}
+                <Link to="/profile" className="font-semibold text-primary hover:underline">
+                  Connect on Profile →
+                </Link>
+              </span>
+            )}
+            {address &&
+              sponsor.socialGate.socialEligible &&
+              sponsor.socialGate.onChainAllowed === false && (
+                <span className="mt-2 block text-muted-foreground">
+                  Social verified — syncing on-chain allowlist (retry in a few seconds).
+                </span>
+              )}
+          </div>
+        )}
 
         {windowClosed && step === 1 && (
           <div className="mb-8 space-y-6">
@@ -201,11 +263,28 @@ export function GuidedPredictionFlow() {
               Your pick: <strong>{pickedTeam}</strong>
             </div>
             <div className="grid gap-3">
+              {sponsor.isEligible && (
+                <button
+                  type="button"
+                  onClick={() => setStake(SPONSORED_STAKE_BCC, true)}
+                  className="flex items-center justify-between rounded-xl border-2 border-accent/50 bg-accent/10 px-5 py-4 text-left transition hover:border-accent hover:bg-accent/15"
+                >
+                  <div>
+                    <div className="font-display text-xl font-bold text-accent">
+                      {formatBcc(SPONSORED_STAKE_BCC)} · Sponsored
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Founding member stake — free from treasury ({sponsor.remainingSlots} left)
+                    </div>
+                  </div>
+                  <span className="font-mono text-xs uppercase text-accent">Free →</span>
+                </button>
+              )}
               {STAKE_TIERS_BCC.map((tier) => (
                 <button
                   key={tier.label}
                   type="button"
-                  onClick={() => setStake(tier.amount)}
+                  onClick={() => setStake(tier.amount, false)}
                   className="glass flex items-center justify-between rounded-xl px-5 py-4 text-left transition hover:border-primary/50 hover:bg-primary/5"
                 >
                   <div>
@@ -251,17 +330,28 @@ export function GuidedPredictionFlow() {
               </div>
               <div className="flex justify-between font-mono text-sm">
                 <span className="text-muted-foreground">Stake</span>
-                <span>{formatBcc(session.stakeBcc)}</span>
+                <span>
+                  {formatBcc(session.stakeBcc)}
+                  {session.sponsored && (
+                    <span className="ml-2 text-accent">· sponsored</span>
+                  )}
+                </span>
               </div>
               <div className="flex justify-between font-mono text-sm">
                 <span className="text-muted-foreground">Social unlock</span>
                 <span className="text-primary">✓ Cast gate passed</span>
               </div>
-              {isConnected && address && (
+              {isConnected && address && !session.sponsored && (
                 <div className="flex justify-between font-mono text-sm">
                   <span className="text-muted-foreground">Your balance</span>
                   <span>{bccBalanceLabel}</span>
                 </div>
+              )}
+              {session.sponsored && (
+                <p className="rounded-lg border border-accent/40 bg-accent/10 px-3 py-2 text-xs text-accent">
+                  Treasury sponsors your {formatBcc(SPONSORED_STAKE_BCC)} stake — no BCC needed in
+                  wallet.
+                </p>
               )}
               {!isPredictionPoolConfigured() && (
                 <p className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
@@ -269,7 +359,7 @@ export function GuidedPredictionFlow() {
                   stakes.
                 </p>
               )}
-              {isConnected && session.stakeBcc > bccBalance && (
+              {isConnected && !session.sponsored && session.stakeBcc > bccBalance && (
                 <BccAcquireGate
                   requiredAmount={session.stakeBcc}
                   actionLabel="Submit prediction"
@@ -296,7 +386,9 @@ export function GuidedPredictionFlow() {
                 className="defi-energy-btn flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-base font-bold text-primary-foreground shadow-[0_0_32px_var(--neon)] hover:brightness-110 disabled:opacity-60"
               >
                 {submitting && <Loader2 className="h-5 w-5 animate-spin" />}
-                Lock in prediction · {formatBcc(session.stakeBcc)}
+                {session.sponsored
+                  ? `Lock sponsored prediction · ${formatBcc(session.stakeBcc)} free`
+                  : `Lock in prediction · ${formatBcc(session.stakeBcc)}`}
               </button>
             )}
 

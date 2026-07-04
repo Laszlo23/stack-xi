@@ -6,6 +6,7 @@ export type PredictionSession = {
   matchId: string;
   pick: PredictionPick;
   stakeBcc: bigint;
+  sponsored?: boolean;
   txId?: string;
   status: "draft" | "submitted";
   shareUnlocked?: boolean;
@@ -18,7 +19,7 @@ type PredictionSessionContextValue = {
   step: PredictionStep;
   setStep: (step: PredictionStep) => void;
   setPick: (matchId: string, pick: PredictionPick) => void;
-  setStake: (stakeBcc: bigint) => void;
+  setStake: (stakeBcc: bigint, sponsored?: boolean) => void;
   markShareUnlocked: () => void;
   markSubmitted: (txId: string) => void;
   reset: () => void;
@@ -31,12 +32,12 @@ export function PredictionSessionProvider({ children }: { children: ReactNode })
   const [step, setStep] = useState<PredictionStep>(1);
 
   const setPick = useCallback((matchId: string, pick: PredictionPick) => {
-    setSession({ matchId, pick, stakeBcc: 0n, status: "draft", shareUnlocked: false });
+    setSession({ matchId, pick, stakeBcc: 0n, sponsored: false, status: "draft", shareUnlocked: false });
     setStep(2);
   }, []);
 
-  const setStake = useCallback((stakeBcc: bigint) => {
-    setSession((prev) => (prev ? { ...prev, stakeBcc } : prev));
+  const setStake = useCallback((stakeBcc: bigint, sponsored = false) => {
+    setSession((prev) => (prev ? { ...prev, stakeBcc, sponsored } : prev));
     setStep(3);
   }, []);
 

@@ -2,7 +2,7 @@ import { ExternalLink, ShieldCheck } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { BccTokenChip } from "@/features/defi/BccTokenChip";
 import { ZeroXSwapWidget } from "@/features/swap/ZeroXSwapWidget";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import {
   BASESCAN_URL,
   BCC_SYMBOL,
@@ -57,7 +57,7 @@ function DexScreenerBoostChecklist() {
 }
 
 export function OnchainProofPage() {
-  const { address, isConnected, connectWallet, isConnecting } = useBaseWallet();
+  const { address, isConnected, connectWallet, isConnecting } = useConnectBaseWallet();
   const progress = address ? loadMemberProgress(address) : null;
 
   return (
@@ -75,7 +75,8 @@ export function OnchainProofPage() {
           tied to {BCC_SYMBOL} on Base.
         </p>
         <p className="mt-2 max-w-2xl text-xs text-muted-foreground/80">
-          Note: NFT tokenURI metadata on BaseScan may still reference the legacy stackxi.xyz host
+          Note: On-chain tokenURI uses nftpepesoccer.4everbucket.com art after contract redeploy.
+          Already-minted tokens keep prior metadata until the squad contract is upgraded.
           until a future contract redeploy. Off-chain squad pages and proofs live on this domain.
         </p>
         <div className="mt-4">

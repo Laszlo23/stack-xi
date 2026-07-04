@@ -1,13 +1,21 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { AirdropAnnouncementBanner } from "@/features/growth/AirdropAnnouncementBanner";
+import { PointsQuickStart } from "@/features/growth/PointsQuickStart";
 import { useBaseWallet } from "@/hooks/use-base-wallet";
 import { useMemberTasks } from "@/hooks/use-member-tasks";
 import { useUserSquadHoldings } from "@/hooks/use-user-squad-holdings";
 import { ProfileConnectPrompt, ProfileHeader } from "@/features/profile/ProfileHeader";
 import { MemberTasksPreview } from "@/features/profile/MemberTasksPanel";
+import {
+  SocialConnectToast,
+  SocialConnectionsPanel,
+} from "@/features/profile/SocialConnectionsPanel";
+import { TelegramGamePanel } from "@/features/telegram/TelegramGamePanel";
 import { SquadHoldingsPanel } from "@/features/profile/SquadHoldingsPanel";
 import { getCultureLevel, TOTAL_MEMBER_XP } from "@/lib/profile/member-tasks";
 import { processDailyLogin } from "@/lib/profile/task-storage";
+import { getAirdropTier, formatAirdropWeight } from "@/lib/growth/airdrop-tiers";
 
 export function ProfilePageContent() {
   const { isConnected, address } = useBaseWallet();
@@ -34,12 +42,19 @@ export function ProfilePageContent() {
 
       {!isConnected ? (
         <>
+          <AirdropAnnouncementBanner />
+          <PointsQuickStart compact />
           <ProfileConnectPrompt />
           <MemberTasksPreview />
         </>
       ) : (
         <>
+          <SocialConnectToast />
+          <AirdropAnnouncementBanner />
+          <PointsQuickStart />
           <ProfileHeader />
+          <SocialConnectionsPanel />
+          <TelegramGamePanel />
           <SquadHoldingsPanel
             holdings={holdings}
             isLoading={isLoading}
@@ -68,6 +83,7 @@ export function ProfilePageContent() {
 function ProfileXpSummary() {
   const { progress } = useMemberTasks();
   const level = getCultureLevel(progress.totalXp);
+  const airdropTier = getAirdropTier(progress.totalXp);
   const xpPercent = Math.round((progress.totalXp / TOTAL_MEMBER_XP) * 100);
 
   return (
@@ -85,7 +101,8 @@ function ProfileXpSummary() {
         />
       </div>
       <p className="mt-2 text-sm text-muted-foreground">
-        {progress.completedTaskIds.length} missions complete · {progress.loginStreak}-day streak
+        {progress.completedTaskIds.length} missions complete · {progress.loginStreak}-day streak ·
+        airdrop weight {formatAirdropWeight(airdropTier.weight)} ({airdropTier.label})
       </p>
     </div>
   );

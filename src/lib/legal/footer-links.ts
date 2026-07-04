@@ -1,10 +1,11 @@
 import { BASESCAN_URL, SQUAD_NFT_ADDRESS } from "@/lib/base/config";
-import { SOCIAL_LINKS } from "@/lib/profile/social-links";
+import { SITE_LINKS } from "@/lib/site/links";
 
 export const FOOTER_COMMUNITY = {
-  x: SOCIAL_LINKS.communityX,
-  telegram: import.meta.env.VITE_COMMUNITY_TELEGRAM_URL ?? "",
-  places: import.meta.env.VITE_PLACES_SITE_URL ?? "",
+  x: SITE_LINKS.communityX,
+  telegram: SITE_LINKS.telegram,
+  places: SITE_LINKS.places,
+  team: SITE_LINKS.team,
 } as const;
 
 export const FOOTER_BASESCAN = SQUAD_NFT_ADDRESS?.startsWith("0x")

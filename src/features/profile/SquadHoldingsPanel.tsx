@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import type { SquadHolding } from "@/domain/types";
 import { BASESCAN_URL, SQUAD_NFT_ADDRESS } from "@/lib/base/config";
 
@@ -91,12 +92,13 @@ export function SquadHoldingsPanel({
       {!isLoading && holdings.length === 0 && isConfigured && (
         <div className="glass rounded-2xl p-8 text-center">
           <p className="text-muted-foreground">No squad NFTs in this wallet yet.</p>
-          <a
-            href="/#squad"
-            className="mt-4 inline-flex rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
+          <Link
+            to="/"
+            hash="squad"
+            className="mt-4 inline-flex cursor-pointer rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
           >
             Mint from 770 BCC →
-          </a>
+          </Link>
         </div>
       )}
 

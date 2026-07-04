@@ -36,7 +36,7 @@ export const TERMS_SECTIONS = [
   },
   {
     title: "Predictions & settlement",
-    body: "Match predictions are recorded on-chain. Settlement for Dallas events may be manual during MVP — payouts are not guaranteed by smart contract oracle in v1. Read pool contract behavior before staking.",
+    body: "Match predictions are recorded on-chain. Settlement for Dallas events may be manual during MVP — payouts are not guaranteed by smart contract oracle in v1. Read pool contract behavior before staking. Promotional sponsored stakes (first 77 unique wallets, 1,000 BCC each) are funded by the operator treasury while slots remain.",
   },
   {
     title: "NFT mints",
@@ -44,7 +44,11 @@ export const TERMS_SECTIONS = [
   },
   {
     title: "Social missions",
-    body: "Culture tasks use an honor system for social actions. False claims do not create on-chain rights. We may adjust XP or perks at any time during beta.",
+    body: "Culture tasks use API verification when X or Farcaster accounts are connected, with honor-system fallback when API checks are unavailable. False claims do not create on-chain rights. We may adjust XP or perks at any time during beta.",
+  },
+  {
+    title: "Culture airdrop",
+    body: "Promotional messaging about a BCC participant airdrop (including pool size and XP weight tiers) is not a guarantee of allocation, value, or claim timing. Final tokenomics, eligibility, and claim mechanics will be announced separately and may change.",
   },
   {
     title: "Limitation of liability",
@@ -52,21 +56,31 @@ export const TERMS_SECTIONS = [
   },
 ] as const;
 
+export const BUILDING_CULTURE_TEAM_URL = "https://app.buildingcultureid.space/team";
+
 export const IMPRINT_SECTIONS = [
   {
     title: "Operator",
-    body: "STACK XI — Building Culture ID / Leonardo (0xleonardo). World Cup matchday culture project on Base.",
+    body: `STACK XI is operated by Building Culture — a trust layer where people, communities, and builders earn reputation on Base. Product lead: Laszlo Bihary (Co-founder). Team: https://app.buildingcultureid.space/team`,
+  },
+  {
+    title: "Responsible persons",
+    body: "Laszlo Bihary — Co-founder & product (Vienna, Austria). Reinhard Stix — Co-founder & real estate. Roman Horvath — Accountant. See the Building Culture team page for full bios and links.",
   },
   {
     title: "Contact",
-    body: `Email: ${LEGAL_CONTACT_EMAIL}`,
+    body: `Email: ${LEGAL_CONTACT_EMAIL} · Team: ${BUILDING_CULTURE_TEAM_URL}`,
   },
   {
     title: "On-chain contracts",
-    body: "Smart contracts are deployed on Base mainnet. Verify addresses in-app and on BaseScan before interacting.",
+    body: "Smart contracts are deployed on Base mainnet. Verify addresses in-app and on BaseScan before interacting. Founding squad mints and BCC predictions are user-initiated wallet transactions.",
+  },
+  {
+    title: "Sponsored predictions",
+    body: "Promotional sponsored prediction stakes (first 77 unique wallets, 1,000 BCC each) are funded by the operator treasury via a dedicated sponsor contract. One sponsored slot per wallet while slots remain. Not a guarantee of winnings or future sponsorship.",
   },
   {
     title: "Dispute resolution",
-    body: "For support regarding mints, predictions, or perks, contact us via email with your wallet address and transaction hash.",
+    body: "For support regarding mints, predictions, sponsored stakes, or perks, contact us via email with your wallet address and transaction hash.",
   },
 ] as const;

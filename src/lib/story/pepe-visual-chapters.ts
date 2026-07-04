@@ -1,3 +1,5 @@
+import { ensureShareUrl } from "@/lib/growth/share-copy";
+
 export type PepeVisualChapter = {
   id: string;
   image: string;
@@ -11,7 +13,7 @@ export type PepeVisualChapter = {
   accent: "neon" | "electric" | "magenta";
 };
 
-export const PEPE_VISUAL_CHAPTERS: PepeVisualChapter[] = [
+const RAW_PEPE_VISUAL_CHAPTERS: PepeVisualChapter[] = [
   {
     id: "before-fall",
     image: "/beforefallpepepengubeer.jpg",
@@ -91,3 +93,8 @@ export const PEPE_VISUAL_CHAPTERS: PepeVisualChapter[] = [
     accent: "neon",
   },
 ];
+
+export const PEPE_VISUAL_CHAPTERS: PepeVisualChapter[] = RAW_PEPE_VISUAL_CHAPTERS.map((chapter) => ({
+  ...chapter,
+  sharePost: ensureShareUrl(chapter.sharePost),
+}));

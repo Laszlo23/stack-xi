@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
+import { farcasterComposeUrl, xComposeUrl } from "@/lib/profile/social-links";
 
 function FarcasterIcon({ className }: { className?: string }) {
   return (
@@ -27,11 +28,11 @@ export function ShareActions({ text, compact }: { text: string; compact?: boolea
   }
 
   function shareX() {
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank");
+    window.open(xComposeUrl(text), "_blank", "noopener,noreferrer");
   }
 
   function shareFarcaster() {
-    window.open(`https://warpcast.com/~/compose?text=${encodeURIComponent(text)}`, "_blank");
+    window.open(farcasterComposeUrl(text), "_blank", "noopener,noreferrer");
   }
 
   return (

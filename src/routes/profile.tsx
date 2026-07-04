@@ -3,7 +3,17 @@ import { PageShell } from "@/components/layout/AppShell";
 import { ProfilePageContent } from "@/features/profile/ProfilePage";
 import { buildPageSeo } from "@/lib/seo/meta";
 
+type ProfileSearch = {
+  x?: string;
+};
+
+function parseProfileSearch(search: Record<string, unknown>): ProfileSearch {
+  const x = typeof search.x === "string" ? search.x : undefined;
+  return { x };
+}
+
 export const Route = createFileRoute("/profile")({
+  validateSearch: parseProfileSearch,
   head: () =>
     buildPageSeo({
       title: "Member Profile",

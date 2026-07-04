@@ -12,11 +12,19 @@ export const SQUAD_NFT_ADDRESS = import.meta.env.VITE_SQUAD_NFT_ADDRESS as
 export const PREDICTION_POOL_ADDRESS = import.meta.env.VITE_PREDICTION_POOL_ADDRESS as
   `0x${string}` | undefined;
 
+export const PREDICTION_SPONSOR_ADDRESS = import.meta.env.VITE_PREDICTION_SPONSOR_ADDRESS as
+  `0x${string}` | undefined;
+
 export const USDC_DECIMALS = 6;
 
 /** BCC payment layer — 18 decimals (Clanker token on Base) */
 export const BCC_DECIMALS = 18;
 export const BCC_UNIT = 10n ** 18n;
+
+export const SPONSORED_STAKE_BCC = 1_000n * BCC_UNIT;
+export const SPONSORED_PREDICTION_MAX = Number(
+  import.meta.env.VITE_SPONSORED_PREDICTION_MAX ?? 77,
+);
 
 export const MINT_BASE_PRICE_BCC = 770n * BCC_UNIT;
 export const MINT_PRICE_INCREMENT_BCC = 70n * BCC_UNIT;
@@ -76,6 +84,10 @@ export function isSquadContractConfigured(): boolean {
 
 export function isPredictionPoolConfigured(): boolean {
   return Boolean(PREDICTION_POOL_ADDRESS?.startsWith("0x"));
+}
+
+export function isSponsorConfigured(): boolean {
+  return Boolean(PREDICTION_SPONSOR_ADDRESS?.startsWith("0x"));
 }
 
 export const ERC20_ABI = [
@@ -255,5 +267,65 @@ export const PREDICTION_POOL_ABI = [
       { name: "amount", type: "uint256" },
     ],
     outputs: [],
+  },
+  {
+    type: "function",
+    name: "predictFor",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "user", type: "address" },
+      { name: "matchId", type: "string" },
+      { name: "pickHome", type: "bool" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [],
+  },
+] as const;
+
+export const PREDICTION_SPONSOR_ABI = [
+  {
+    type: "function",
+    name: "sponsoredPredict",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "matchId", type: "string" },
+      { name: "pickHome", type: "bool" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "remainingSlots",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "isEligible",
+    stateMutability: "view",
+    inputs: [{ name: "user", type: "address" }],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "hasUsedSponsored",
+    stateMutability: "view",
+    inputs: [{ name: "user", type: "address" }],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "allowed",
+    stateMutability: "view",
+    inputs: [{ name: "user", type: "address" }],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "sponsoredCount",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
   },
 ] as const;

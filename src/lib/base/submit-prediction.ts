@@ -1,4 +1,11 @@
-import { PREDICTION_POOL_ABI, PREDICTION_POOL_ADDRESS, isPredictionPoolConfigured } from "./config";
+import {
+  PREDICTION_POOL_ABI,
+  PREDICTION_POOL_ADDRESS,
+  PREDICTION_SPONSOR_ABI,
+  PREDICTION_SPONSOR_ADDRESS,
+  isPredictionPoolConfigured,
+  isSponsorConfigured,
+} from "./config";
 
 export type SubmitBasePredictionParams = {
   matchId: string;
@@ -32,5 +39,26 @@ export async function submitBasePrediction(
     abi: PREDICTION_POOL_ABI,
     functionName: "predict",
     args: [params.matchId, params.pickHome, params.amount],
+  });
+}
+
+export async function submitSponsoredPrediction(
+  writeContract: (args: {
+    address: `0x${string}`;
+    abi: readonly unknown[];
+    functionName: string;
+    args: unknown[];
+  }) => Promise<`0x${string}`>,
+  params: Pick<SubmitBasePredictionParams, "matchId" | "pickHome">,
+): Promise<`0x${string}`> {
+  if (!isSponsorConfigured() || !PREDICTION_SPONSOR_ADDRESS) {
+    throw new Error("Prediction sponsor not configured. Set VITE_PREDICTION_SPONSOR_ADDRESS.");
+  }
+
+  return writeContract({
+    address: PREDICTION_SPONSOR_ADDRESS,
+    abi: PREDICTION_SPONSOR_ABI,
+    functionName: "sponsoredPredict",
+    args: [params.matchId, params.pickHome],
   });
 }

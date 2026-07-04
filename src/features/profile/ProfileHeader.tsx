@@ -1,6 +1,7 @@
 import { Check, Copy, Flame, LogOut, Wallet } from "lucide-react";
 import { useState } from "react";
 import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { useMemberTasks } from "@/hooks/use-member-tasks";
 import { useUserSquadHoldings } from "@/hooks/use-user-squad-holdings";
 import { getCultureLevel } from "@/lib/profile/member-tasks";
@@ -123,7 +124,7 @@ export function ProfileHeader() {
 }
 
 export function ProfileConnectPrompt() {
-  const { connectWallet, isConnecting } = useBaseWallet();
+  const { connectWallet, isConnecting, connectError, clearConnectError } = useConnectBaseWallet();
 
   return (
     <div className="glass-neon rounded-3xl p-8 text-center">
@@ -136,13 +137,17 @@ export function ProfileConnectPrompt() {
       </p>
       <button
         type="button"
-        onClick={() => void connectWallet()}
+        onClick={() => {
+          clearConnectError();
+          void connectWallet().catch(() => undefined);
+        }}
         disabled={isConnecting}
-        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-[0_0_24px_var(--neon)] hover:brightness-110 disabled:opacity-60"
+        className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-[0_0_24px_var(--neon)] hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <Wallet className="h-4 w-4" />
         {isConnecting ? "Connecting…" : "Connect Base wallet"}
       </button>
+      {connectError && <p className="mt-3 text-sm text-destructive">{connectError}</p>}
     </div>
   );
 }

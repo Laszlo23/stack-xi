@@ -12,4 +12,10 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  nitro: {
+    preset: process.env.NITRO_PRESET ?? "node_server",
+    routeRules: {
+      "/**": { headers: { "cache-control": "public, max-age=0, must-revalidate" } },
+    },
+  },
 });

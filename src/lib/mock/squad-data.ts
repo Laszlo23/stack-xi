@@ -1,14 +1,5 @@
-import p1 from "@/assets/player-1.jpg";
-import p2 from "@/assets/player-2.jpg";
-import p3 from "@/assets/player-3.jpg";
-import p4 from "@/assets/player-4.jpg";
-import p5 from "@/assets/player-5.jpg";
-import p6 from "@/assets/player-6.jpg";
-import p7 from "@/assets/player-7.jpg";
-import p8 from "@/assets/player-8.jpg";
-import p10 from "@/assets/player-10.jpg";
-import p11 from "@/assets/player-11.jpg";
 import type { FoundingPlayer } from "@/domain/types";
+import { squadPlayerImageUrl } from "@/lib/squad/nft-images";
 
 export const FOUNDING_SQUAD: FoundingPlayer[] = [
   {
@@ -18,7 +9,7 @@ export const FOUNDING_SQUAD: FoundingPlayer[] = [
     rarity: "Legendary",
     form: 92,
     unlocked: true,
-    img: p2,
+    img: squadPlayerImageUrl(1),
     accent: "electric",
     winRate: 68,
     yieldEarned: 420,
@@ -31,7 +22,7 @@ export const FOUNDING_SQUAD: FoundingPlayer[] = [
     rarity: "Rare",
     form: 84,
     unlocked: true,
-    img: p4,
+    img: squadPlayerImageUrl(2),
     accent: "neon",
     winRate: 61,
     yieldEarned: 210,
@@ -44,7 +35,7 @@ export const FOUNDING_SQUAD: FoundingPlayer[] = [
     rarity: "Rare",
     form: 81,
     unlocked: true,
-    img: p5,
+    img: squadPlayerImageUrl(3),
     accent: "neon",
     winRate: 58,
     yieldEarned: 185,
@@ -57,7 +48,7 @@ export const FOUNDING_SQUAD: FoundingPlayer[] = [
     rarity: "Common",
     form: 76,
     unlocked: false,
-    img: p6,
+    img: squadPlayerImageUrl(4),
     accent: "electric",
     winRate: 0,
     yieldEarned: 0,
@@ -70,7 +61,7 @@ export const FOUNDING_SQUAD: FoundingPlayer[] = [
     rarity: "Common",
     form: 74,
     unlocked: false,
-    img: p8,
+    img: squadPlayerImageUrl(5),
     accent: "electric",
     winRate: 0,
     yieldEarned: 0,
@@ -83,7 +74,7 @@ export const FOUNDING_SQUAD: FoundingPlayer[] = [
     rarity: "Rare",
     form: 88,
     unlocked: true,
-    img: p1,
+    img: squadPlayerImageUrl(6),
     accent: "neon",
     winRate: 72,
     yieldEarned: 390,
@@ -96,7 +87,7 @@ export const FOUNDING_SQUAD: FoundingPlayer[] = [
     rarity: "Legendary",
     form: 91,
     unlocked: true,
-    img: p7,
+    img: squadPlayerImageUrl(7),
     accent: "magenta",
     winRate: 75,
     yieldEarned: 510,
@@ -109,7 +100,7 @@ export const FOUNDING_SQUAD: FoundingPlayer[] = [
     rarity: "Rare",
     form: 85,
     unlocked: false,
-    img: p3,
+    img: squadPlayerImageUrl(8),
     accent: "electric",
     winRate: 0,
     yieldEarned: 0,
@@ -122,7 +113,7 @@ export const FOUNDING_SQUAD: FoundingPlayer[] = [
     rarity: "Legendary",
     form: 94,
     unlocked: true,
-    img: p3,
+    img: squadPlayerImageUrl(9),
     accent: "magenta",
     winRate: 79,
     yieldEarned: 620,
@@ -135,7 +126,7 @@ export const FOUNDING_SQUAD: FoundingPlayer[] = [
     rarity: "Rare",
     form: 89,
     unlocked: false,
-    img: p10,
+    img: squadPlayerImageUrl(10),
     accent: "neon",
     winRate: 0,
     yieldEarned: 0,
@@ -148,7 +139,7 @@ export const FOUNDING_SQUAD: FoundingPlayer[] = [
     rarity: "Mythic",
     form: 99,
     unlocked: true,
-    img: p11,
+    img: squadPlayerImageUrl(11),
     accent: "magenta",
     winRate: 84,
     yieldEarned: 1200,

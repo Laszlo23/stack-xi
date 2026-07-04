@@ -7,6 +7,11 @@ import { useBccBalance } from "@/hooks/use-bcc-balance";
 import { useMemberTasksOptional } from "@/hooks/use-member-tasks";
 import { getCultureLevel } from "@/lib/profile/member-tasks";
 import { BCC_SYMBOL } from "@/lib/base/config";
+import {
+  AIRDROP_POOL_LABEL,
+  formatAirdropWeight,
+  getAirdropTier,
+} from "@/lib/growth/airdrop-tiers";
 
 export function LuckRewardsBlock() {
   const [hovered, setHovered] = useState(false);
@@ -15,6 +20,7 @@ export function LuckRewardsBlock() {
   const memberTasks = useMemberTasksOptional();
   const xp = memberTasks?.progress.totalXp ?? 0;
   const level = getCultureLevel(xp);
+  const airdropTier = getAirdropTier(xp);
   const luckPct = Math.min(
     100,
     40 + xp + (Number.parseFloat(formatted.replace(/,/g, "")) || 0) / 100,
@@ -39,6 +45,10 @@ export function LuckRewardsBlock() {
           </li>
           <li>
             LUCK unlocks whitelist access, prediction multipliers, and squad leaderboard rank.
+          </li>
+          <li>
+            {AIRDROP_POOL_LABEL} culture airdrop — your tier is {airdropTier.label} (
+            {formatAirdropWeight(airdropTier.weight)} weight).
           </li>
         </ul>
 

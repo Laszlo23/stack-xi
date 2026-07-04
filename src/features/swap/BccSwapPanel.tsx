@@ -2,7 +2,7 @@ import { ExternalLink, Repeat } from "lucide-react";
 import { useState } from "react";
 import { ZeroXSwapWidget } from "@/features/swap/ZeroXSwapWidget";
 import { BccTokenChip } from "@/features/defi/BccTokenChip";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { useMiniAppContext } from "@/hooks/use-mini-app-context";
 import { BCC_SYMBOL, UNISWAP_BCC_SWAP_URL } from "@/lib/base/config";
 import { SITE_LINKS } from "@/lib/site/links";
@@ -40,7 +40,7 @@ function SwapLinks({ preset }: { preset: SwapPreset }) {
 }
 
 export function BccSwapPanel({ compact }: { compact?: boolean }) {
-  const { isConnected, connectWallet, isConnecting } = useBaseWallet();
+  const { isConnected, connectWallet, isConnecting } = useConnectBaseWallet();
   const { isMiniApp } = useMiniAppContext();
   const [preset, setPreset] = useState<SwapPreset>("usdc-bcc");
 

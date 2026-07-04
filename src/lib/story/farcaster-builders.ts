@@ -7,6 +7,10 @@ export const FC_BUILDERS = [
   { handle: "@coopa", name: "Coopa", note: "culture acceleration" },
   { handle: "@horsefacts", name: "horsefacts", note: "technically correct chaos" },
   { handle: "@0xleonardo", name: "Leonardo", note: "starts the show" },
+  { handle: "@base", name: "Base", note: "onchain everywhere" },
+  { handle: "@coinbase", name: "Coinbase", note: "wallet gravity" },
+  { handle: "@a16zcrypto", name: "a16z crypto", note: "builder gravity" },
+  { handle: "@balajis", name: "Balaji", note: "network state energy" },
 ] as const;
 
 export const FC_CAST_HOOK =

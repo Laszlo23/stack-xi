@@ -23,8 +23,13 @@ export const SITE_LINKS = {
   dexScreenerBoost: DEXSCREENER_BOOST_URL,
   communityX: SOCIAL_LINKS.communityX,
   farcasterFollow: SOCIAL_LINKS.farcasterFollow,
-  telegram: import.meta.env.VITE_COMMUNITY_TELEGRAM_URL ?? "",
-  places: import.meta.env.VITE_PLACES_SITE_URL ?? "",
+  telegram:
+    import.meta.env.VITE_COMMUNITY_TELEGRAM_URL?.trim() ||
+    "https://t.me/+4zFH7-2tyW0yOTBk",
+  places:
+    import.meta.env.VITE_PLACES_SITE_URL?.trim() ||
+    "https://places.buildingcultureid.space",
+  team: "https://app.buildingcultureid.space/team",
 } as const;
 
 export function buildPartnerMailto(fields: {

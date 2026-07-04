@@ -96,9 +96,20 @@ export type MemberTaskId =
   | "make_post"
   | "follow_farcaster"
   | "mint_squad"
-  | "submit_prediction";
+  | "submit_prediction"
+  | "engage_x_post"
+  | "comment_x_post"
+  | "engage_farcaster_cast"
+  | "comment_farcaster_cast"
+  | "share_campaign"
+  | "connect_x"
+  | "connect_farcaster"
+  | "open_telegram_game"
+  | "invite_telegram_friend"
+  | "connect_telegram"
+  | "share_telegram_matchday";
 
-export type MemberTaskVerification = "auto" | "honor";
+export type MemberTaskVerification = "auto" | "honor" | "social";
 
 export type MemberTask = {
   id: MemberTaskId;

@@ -20,6 +20,7 @@ contracts/out
 .env
 .env.*
 !.env.example
+data/
 
 # Wrangler / Cloudflare
 .wrangler/

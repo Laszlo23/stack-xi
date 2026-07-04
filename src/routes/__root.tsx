@@ -11,13 +11,17 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { farcasterMiniAppMetaContent } from "../lib/farcaster/manifest-config";
+import { farcasterMiniAppMetaContent, farcasterFrameMetaContent } from "../lib/farcaster/manifest-config";
 import { THEME_COLOR } from "../lib/seo/site-config";
 import { ProtocolProvider } from "../hooks/use-protocol-state";
 import { PredictionSessionProvider } from "../hooks/use-prediction-session";
 import { MemberTasksProvider } from "../hooks/use-member-tasks";
 import { StacksWalletProvider } from "../hooks/use-stacks-wallet";
-import { BaseWagmiProvider } from "../lib/base/wagmi-config";
+import { Web3Providers } from "../lib/base/privy-config";
+import { FarcasterMiniAppReady } from "../features/farcaster/FarcasterMiniAppReady";
+import { TelegramMiniAppReady } from "../features/telegram/TelegramMiniAppReady";
+import { TelegramSessionTasks } from "../features/telegram/TelegramSessionTasks";
+import { TelegramSessionProvider } from "../hooks/use-telegram-session";
 
 function NotFoundComponent() {
   return (
@@ -86,6 +90,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: THEME_COLOR },
       { name: "fc:miniapp", content: farcasterMiniAppMetaContent() },
+      { name: "fc:frame", content: farcasterFrameMetaContent() },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -99,6 +104,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        src: "https://telegram.org/js/telegram-web-app.js",
+        defer: true,
       },
     ],
   }),
@@ -127,17 +138,22 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BaseWagmiProvider>
+      <Web3Providers>
         <ProtocolProvider>
           <StacksWalletProvider>
-            <MemberTasksProvider>
-              <PredictionSessionProvider>
-                <Outlet />
-              </PredictionSessionProvider>
-            </MemberTasksProvider>
+            <TelegramSessionProvider>
+              <MemberTasksProvider>
+                <PredictionSessionProvider>
+                  <FarcasterMiniAppReady />
+                  <TelegramMiniAppReady />
+                  <TelegramSessionTasks />
+                  <Outlet />
+                </PredictionSessionProvider>
+              </MemberTasksProvider>
+            </TelegramSessionProvider>
           </StacksWalletProvider>
         </ProtocolProvider>
-      </BaseWagmiProvider>
+      </Web3Providers>
     </QueryClientProvider>
   );
 }

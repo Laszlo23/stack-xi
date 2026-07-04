@@ -96,7 +96,7 @@ Fund the x402 payer wallet with USDC on Base before expecting Tier B quotes.
 
 - **DexScreener boost** — checklist on `/proof`
 - **Treasury** — transfer squad contract ownership to multisig when ready
-- **NFT metadata** — on-chain `tokenURI` may still reference legacy host until contract redeploy
+- **NFT metadata** — on-chain `tokenURI` points at `nftpepesoccer.4everbucket.com` after squad contract redeploy
 
 ## Project structure
 

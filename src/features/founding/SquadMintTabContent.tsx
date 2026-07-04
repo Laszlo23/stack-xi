@@ -4,7 +4,9 @@ import { usePublicClient, useReadContract } from "wagmi";
 import { decodeEventLog } from "viem";
 import type { FoundingPlayer } from "@/domain/types";
 import { BccAcquireGate } from "@/features/swap/BccAcquireGate";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { SquadSoldOutPanel } from "@/features/founding/SquadSoldOutPanel";
+import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
+import { useSquadMintStatus } from "@/hooks/use-squad-mint-status";
 import {
   BCC_SYMBOL,
   MINT_BASE_PRICE_BCC,
@@ -16,8 +18,6 @@ import {
 } from "@/lib/base/config";
 import { MINT_PERKS, nextMintPrice, currentMintPrice } from "@/lib/squad/mint-game";
 import { recordMintTx } from "@/lib/profile/task-storage";
-import { getAccount } from "wagmi/actions";
-import { wagmiConfig } from "@/lib/base/wagmi-config";
 import { FOUNDING_SQUAD } from "@/lib/mock/squad-data";
 import { MintArenaHeader, MintCelebration, type MintCelebrationData } from "./MintCelebration";
 
@@ -157,6 +157,7 @@ function PlayerMintCardWithStatus({
 }
 
 export function SquadMintTabContent() {
+  const { isSoldOut } = useSquadMintStatus();
   const publicClient = usePublicClient();
   const {
     isConnected,
@@ -166,7 +167,7 @@ export function SquadMintTabContent() {
     ensureBccAllowance,
     writeContractAsync,
     bccBalance,
-  } = useBaseWallet();
+  } = useConnectBaseWallet();
   const [mintingId, setMintingId] = useState<number | null>(null);
   const [mintError, setMintError] = useState<string | null>(null);
   const [celebration, setCelebration] = useState<MintCelebrationData | null>(null);
@@ -262,7 +263,7 @@ export function SquadMintTabContent() {
         }
       }
 
-      const wallet = getAccount(wagmiConfig).address ?? address;
+      const wallet = address;
       if (wallet) {
         recordMintTx(wallet, hash, playerId);
       }
@@ -284,76 +285,82 @@ export function SquadMintTabContent() {
 
   return (
     <div>
-      {isSquadContractConfigured() && (
-        <MintArenaHeader
-          mintCount={mintCount}
-          currentPrice={currentPrice}
-          nextPrice={nextPrice}
-          remaining={remaining}
-        />
-      )}
+      {isSoldOut ? (
+        <SquadSoldOutPanel />
+      ) : (
+        <>
+          {isSquadContractConfigured() && (
+            <MintArenaHeader
+              mintCount={mintCount}
+              currentPrice={currentPrice}
+              nextPrice={nextPrice}
+              remaining={remaining}
+            />
+          )}
 
-      {isConnected && !canMint && isSquadContractConfigured() && (
-        <div className="mt-6">
-          <BccAcquireGate
-            requiredAmount={currentPrice}
-            actionLabel="Mint squad NFT"
-            intent="mint"
-            compact
-          />
-        </div>
-      )}
+          {isConnected && !canMint && isSquadContractConfigured() && (
+            <div className="mt-6">
+              <BccAcquireGate
+                requiredAmount={currentPrice}
+                actionLabel="Mint squad NFT"
+                intent="mint"
+                compact
+              />
+            </div>
+          )}
 
-      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {MINT_PERKS.map((perk) => (
-          <div key={perk.id} className="glass rounded-xl p-4">
-            <div className="text-lg">{perk.emoji}</div>
-            <div className="mt-1 font-display text-sm font-bold">{perk.title}</div>
-            <p className="mt-1 text-xs text-muted-foreground">{perk.detail}</p>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {MINT_PERKS.map((perk) => (
+              <div key={perk.id} className="glass rounded-xl p-4">
+                <div className="text-lg">{perk.emoji}</div>
+                <div className="mt-1 font-display text-sm font-bold">{perk.title}</div>
+                <p className="mt-1 text-xs text-muted-foreground">{perk.detail}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {isEarlyBeliever && (
-        <p className="mt-4 rounded-xl border border-primary/40 bg-primary/10 px-4 py-3 font-mono text-sm text-primary">
-          Early believer flag active on-chain — director&apos;s cut + finals whitelist unlocked.
-        </p>
+          {isEarlyBeliever && (
+            <p className="mt-4 rounded-xl border border-primary/40 bg-primary/10 px-4 py-3 font-mono text-sm text-primary">
+              Early believer flag active on-chain — director&apos;s cut + finals whitelist unlocked.
+            </p>
+          )}
+
+          {!isSquadContractConfigured() && (
+            <p className="mt-6 rounded-xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+              Squad contract not configured. Deploy StackXISquad and set VITE_SQUAD_NFT_ADDRESS.
+            </p>
+          )}
+
+          {!isConnected && isSquadContractConfigured() && (
+            <button
+              type="button"
+              onClick={() => void connectWallet()}
+              disabled={isConnecting}
+              className="mt-6 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-[0_0_24px_var(--neon)] hover:brightness-110 disabled:opacity-60"
+            >
+              {isConnecting ? "Connecting…" : "Connect Base wallet to mint"}
+            </button>
+          )}
+
+          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {FOUNDING_SQUAD.map((player) => (
+              <PlayerMintCardWithStatus
+                key={player.id}
+                player={player}
+                onMint={handleMint}
+                minting={mintingId === player.id}
+                currentPrice={currentPrice}
+                canMint={canMint}
+              />
+            ))}
+          </div>
+
+          <p className="mt-6 text-center font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+            Bonding curve · {formatBcc(MINT_BASE_PRICE_BCC)} + {formatBcc(MINT_PRICE_INCREMENT_BCC)} ×
+            mints · Paid in {BCC_SYMBOL}
+          </p>
+        </>
       )}
-
-      {!isSquadContractConfigured() && (
-        <p className="mt-6 rounded-xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-          Squad contract not configured. Deploy StackXISquad and set VITE_SQUAD_NFT_ADDRESS.
-        </p>
-      )}
-
-      {!isConnected && isSquadContractConfigured() && (
-        <button
-          type="button"
-          onClick={() => void connectWallet()}
-          disabled={isConnecting}
-          className="mt-6 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-[0_0_24px_var(--neon)] hover:brightness-110 disabled:opacity-60"
-        >
-          {isConnecting ? "Connecting…" : "Connect Base wallet to mint"}
-        </button>
-      )}
-
-      <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        {FOUNDING_SQUAD.map((player) => (
-          <PlayerMintCardWithStatus
-            key={player.id}
-            player={player}
-            onMint={handleMint}
-            minting={mintingId === player.id}
-            currentPrice={currentPrice}
-            canMint={canMint}
-          />
-        ))}
-      </div>
-
-      <p className="mt-6 text-center font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-        Bonding curve · {formatBcc(MINT_BASE_PRICE_BCC)} + {formatBcc(MINT_PRICE_INCREMENT_BCC)} ×
-        mints · Paid in {BCC_SYMBOL}
-      </p>
 
       {mintError && <p className="mt-4 text-center text-sm text-destructive">{mintError}</p>}
 

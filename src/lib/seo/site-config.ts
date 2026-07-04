@@ -22,6 +22,10 @@ export const SITE_ORG = "Building Culture ID";
 export const THEME_COLOR = "#1f2937";
 
 export const DEFAULT_OG_IMAGE_PATH = "/og/stack-xi-bcc.png";
+/** 1024x1024 PNG for Farcaster manifest iconUrl (required by spec). */
+export const DEFAULT_APP_ICON_PATH = "/icons/farcaster-icon-1024.png";
+/** 200x200 PNG for fc:miniapp embed splash (not in manifest — URL max 32 chars). */
+export const DEFAULT_SPLASH_ICON_PATH = "/icons/farcaster-splash-200.png";
 export const DEFAULT_OG_IMAGE = `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`;
 export const DEFAULT_OG_IMAGE_WIDTH = 1200;
 export const DEFAULT_OG_IMAGE_HEIGHT = 630;

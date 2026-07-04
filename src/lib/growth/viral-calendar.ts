@@ -1,4 +1,5 @@
 import { FC_BUILDERS } from "@/lib/story/farcaster-builders";
+import { buildXPost, ensureShareUrl } from "@/lib/growth/share-copy";
 import { absoluteUrl } from "@/lib/seo/site-config";
 
 export type ViralCalendarDay = {
@@ -44,6 +45,14 @@ const TAG_ROTATIONS = [
 
 function tagsForDay(dayIndex: number): readonly string[] {
   return TAG_ROTATIONS[dayIndex % TAG_ROTATIONS.length].map((b) => b.handle);
+}
+
+function finalizeCalendarDay(day: ViralCalendarDay): ViralCalendarDay {
+  return {
+    ...day,
+    xPost: buildXPost(day.xPost, { tagSeed: day.dayNumber }),
+    farcasterPost: ensureShareUrl(day.farcasterPost, day.farcasterPost.includes("/#predict") ? "/" : "/"),
+  };
 }
 
 const KNOCKOUT_WEEK_DAYS: ViralCalendarDay[] = [
@@ -361,13 +370,13 @@ export const VIRAL_CALENDAR_WEEKS: ViralCalendarWeek[] = [
     id: "knockout",
     title: "Week 1 · Knockout Push",
     rangeLabel: "Jul 4 – 10, 2026",
-    days: KNOCKOUT_WEEK_DAYS,
+    days: KNOCKOUT_WEEK_DAYS.map(finalizeCalendarDay),
   },
   {
     id: "semifinal",
     title: "Week 2 · Semifinal Arc",
     rangeLabel: "Jul 11 – 17, 2026",
-    days: SEMIFINAL_WEEK_DAYS,
+    days: SEMIFINAL_WEEK_DAYS.map(finalizeCalendarDay),
   },
 ];
 

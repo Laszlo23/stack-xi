@@ -1,0 +1,19 @@
+[Unit]
+Description=STACK XI — pepe.buildingcultureid.space
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/pepe-buildingculture
+EnvironmentFile=/var/www/pepe-buildingculture/.env
+Environment=PORT=3014
+Environment=HOST=127.0.0.1
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node dist/server/index.mjs
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/var/log/pepe-buildingculture/app.log
+StandardError=append:/var/log/pepe-buildingculture/app.log
+
+[Install]
+WantedBy=multi-user.target

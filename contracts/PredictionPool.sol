@@ -10,6 +10,7 @@ contract PredictionPool is Ownable {
     using SafeERC20 for IERC20;
 
     IERC20 public immutable bcc;
+    address public sponsorGate;
 
     event Prediction(
         address indexed user,
@@ -23,9 +24,20 @@ contract PredictionPool is Ownable {
         bcc = IERC20(bccAddress);
     }
 
+    function setSponsorGate(address gate) external onlyOwner {
+        sponsorGate = gate;
+    }
+
     function predict(string calldata matchId, bool pickHome, uint256 amount) external {
         bcc.safeTransferFrom(msg.sender, address(this), amount);
         emit Prediction(msg.sender, matchId, pickHome, amount, block.timestamp);
+    }
+
+    /// @notice Sponsor contract pays stake on behalf of user
+    function predictFor(address user, string calldata matchId, bool pickHome, uint256 amount) external {
+        require(msg.sender == sponsorGate, "not sponsor");
+        bcc.safeTransferFrom(msg.sender, address(this), amount);
+        emit Prediction(user, matchId, pickHome, amount, block.timestamp);
     }
 
     function withdraw(address to, uint256 amount) external onlyOwner {

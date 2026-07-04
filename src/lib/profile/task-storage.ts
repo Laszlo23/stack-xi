@@ -4,8 +4,28 @@ import { MEMBER_TASKS } from "@/lib/profile/member-tasks";
 
 const STORAGE_PREFIX = "stackxi:member-tasks:";
 
-function storageKey(address: string): string {
-  return `${STORAGE_PREFIX}${address.toLowerCase()}`;
+export type ProgressIdentity =
+  | { kind: "wallet"; id: string }
+  | { kind: "telegram"; id: string }
+  | { kind: "none" };
+
+export function resolveProgressIdentity(input: {
+  walletAddress?: string;
+  telegramUserId?: number;
+}): ProgressIdentity {
+  if (input.walletAddress) {
+    return { kind: "wallet", id: input.walletAddress.toLowerCase() };
+  }
+  if (input.telegramUserId) {
+    return { kind: "telegram", id: String(input.telegramUserId) };
+  }
+  return { kind: "none" };
+}
+
+function storageKeyForIdentity(identity: ProgressIdentity): string {
+  if (identity.kind === "wallet") return `${STORAGE_PREFIX}${identity.id}`;
+  if (identity.kind === "telegram") return `${STORAGE_PREFIX}tg:${identity.id}`;
+  return `${STORAGE_PREFIX}anonymous`;
 }
 
 function emptyProgress(): MemberProgress {
@@ -26,46 +46,117 @@ function computeXp(completedIds: MemberTaskId[]): number {
   );
 }
 
-export function loadMemberProgress(address: string): MemberProgress {
-  if (typeof window === "undefined") return emptyProgress();
+function normalizeProgress(parsed: Partial<MemberProgress>): MemberProgress {
+  const completedTaskIds = parsed.completedTaskIds ?? [];
+  return {
+    ...emptyProgress(),
+    ...parsed,
+    completedTaskIds,
+    predictionTxIds: parsed.predictionTxIds ?? [],
+    mintTxIds: parsed.mintTxIds ?? [],
+    totalXp: computeXp(completedTaskIds),
+  };
+}
+
+export function loadMemberProgressForIdentity(identity: ProgressIdentity): MemberProgress {
+  if (typeof window === "undefined" || identity.kind === "none") return emptyProgress();
   try {
-    const raw = localStorage.getItem(storageKey(address));
+    const raw = localStorage.getItem(storageKeyForIdentity(identity));
     if (!raw) return emptyProgress();
-    const parsed = JSON.parse(raw) as MemberProgress;
-    return {
-      ...emptyProgress(),
-      ...parsed,
-      completedTaskIds: parsed.completedTaskIds ?? [],
-      predictionTxIds: parsed.predictionTxIds ?? [],
-      mintTxIds: parsed.mintTxIds ?? [],
-      totalXp: computeXp(parsed.completedTaskIds ?? []),
-    };
+    return normalizeProgress(JSON.parse(raw) as MemberProgress);
   } catch {
     return emptyProgress();
   }
 }
 
-export function saveMemberProgress(address: string, progress: MemberProgress): void {
-  if (typeof window === "undefined") return;
+export function saveMemberProgressForIdentity(
+  identity: ProgressIdentity,
+  progress: MemberProgress,
+): void {
+  if (typeof window === "undefined" || identity.kind === "none") return;
   const normalized: MemberProgress = {
     ...progress,
     totalXp: computeXp(progress.completedTaskIds),
   };
-  localStorage.setItem(storageKey(address), JSON.stringify(normalized));
-  publishLeaderboardEntry(address, normalized.totalXp);
+  localStorage.setItem(storageKeyForIdentity(identity), JSON.stringify(normalized));
+  if (identity.kind === "wallet") {
+    publishLeaderboardEntry(identity.id, normalized.totalXp);
+  }
 }
 
-export function completeMemberTask(address: string, taskId: MemberTaskId): MemberProgress {
-  const progress = loadMemberProgress(address);
+/** @deprecated Use loadMemberProgressForIdentity */
+export function loadMemberProgress(address: string): MemberProgress {
+  return loadMemberProgressForIdentity(
+    address ? { kind: "wallet", id: address.toLowerCase() } : { kind: "none" },
+  );
+}
+
+/** @deprecated Use saveMemberProgressForIdentity */
+export function saveMemberProgress(address: string, progress: MemberProgress): void {
+  saveMemberProgressForIdentity({ kind: "wallet", id: address.toLowerCase() }, progress);
+}
+
+function unionTaskIds(a: MemberTaskId[], b: MemberTaskId[]): MemberTaskId[] {
+  return [...new Set([...a, ...b])];
+}
+
+function mergeProgressRecords(primary: MemberProgress, secondary: MemberProgress): MemberProgress {
+  const completedTaskIds = unionTaskIds(primary.completedTaskIds, secondary.completedTaskIds);
+  const predictionTxIds = [...new Set([...primary.predictionTxIds, ...secondary.predictionTxIds])];
+  const mintTxMap = new Map(primary.mintTxIds.map((m) => [m.txId, m]));
+  for (const mint of secondary.mintTxIds) {
+    mintTxMap.set(mint.txId, mint);
+  }
+  const loginStreak = Math.max(primary.loginStreak, secondary.loginStreak);
+  const lastLoginDate =
+    primary.lastLoginDate > secondary.lastLoginDate
+      ? primary.lastLoginDate
+      : secondary.lastLoginDate;
+
+  return normalizeProgress({
+    completedTaskIds,
+    predictionTxIds,
+    mintTxIds: [...mintTxMap.values()],
+    loginStreak,
+    lastLoginDate,
+  });
+}
+
+export function mergeMemberProgress(wallet: string, telegramUserId: number): MemberProgress {
+  const walletIdentity = { kind: "wallet" as const, id: wallet.toLowerCase() };
+  const tgIdentity = { kind: "telegram" as const, id: String(telegramUserId) };
+  const walletProgress = loadMemberProgressForIdentity(walletIdentity);
+  const tgProgress = loadMemberProgressForIdentity(tgIdentity);
+  const merged = mergeProgressRecords(walletProgress, tgProgress);
+  saveMemberProgressForIdentity(walletIdentity, merged);
+  if (typeof window !== "undefined") {
+    localStorage.removeItem(storageKeyForIdentity(tgIdentity));
+  }
+  return merged;
+}
+
+export function completeMemberTaskForIdentity(
+  identity: ProgressIdentity,
+  taskId: MemberTaskId,
+): MemberProgress {
+  const progress = loadMemberProgressForIdentity(identity);
   if (progress.completedTaskIds.includes(taskId)) return progress;
   const completedTaskIds = [...progress.completedTaskIds, taskId];
   const next = { ...progress, completedTaskIds, totalXp: computeXp(completedTaskIds) };
-  saveMemberProgress(address, next);
+  saveMemberProgressForIdentity(identity, next);
   return next;
 }
 
-export function recordMintTx(address: string, txId: string, playerId: number): MemberProgress {
-  const progress = loadMemberProgress(address);
+export function completeMemberTask(address: string, taskId: MemberTaskId): MemberProgress {
+  return completeMemberTaskForIdentity({ kind: "wallet", id: address.toLowerCase() }, taskId);
+}
+
+export function recordMintTxForIdentity(
+  identity: ProgressIdentity,
+  txId: string,
+  playerId: number,
+): MemberProgress {
+  const progress = loadMemberProgressForIdentity(identity);
   const exists = progress.mintTxIds.some((m) => m.txId === txId);
   const mintTxIds = exists
     ? progress.mintTxIds
@@ -80,12 +171,19 @@ export function recordMintTx(address: string, txId: string, playerId: number): M
     completedTaskIds,
     totalXp: computeXp(completedTaskIds),
   };
-  saveMemberProgress(address, next);
+  saveMemberProgressForIdentity(identity, next);
   return next;
 }
 
-export function recordPredictionTx(address: string, txId: string): MemberProgress {
-  const progress = loadMemberProgress(address);
+export function recordMintTx(address: string, txId: string, playerId: number): MemberProgress {
+  return recordMintTxForIdentity({ kind: "wallet", id: address.toLowerCase() }, txId, playerId);
+}
+
+export function recordPredictionTxForIdentity(
+  identity: ProgressIdentity,
+  txId: string,
+): MemberProgress {
+  const progress = loadMemberProgressForIdentity(identity);
   const predictionTxIds = progress.predictionTxIds.includes(txId)
     ? progress.predictionTxIds
     : [...progress.predictionTxIds, txId];
@@ -99,8 +197,12 @@ export function recordPredictionTx(address: string, txId: string): MemberProgres
     completedTaskIds,
     totalXp: computeXp(completedTaskIds),
   };
-  saveMemberProgress(address, next);
+  saveMemberProgressForIdentity(identity, next);
   return next;
+}
+
+export function recordPredictionTx(address: string, txId: string): MemberProgress {
+  return recordPredictionTxForIdentity({ kind: "wallet", id: address.toLowerCase() }, txId);
 }
 
 function todayKey(): string {
@@ -113,12 +215,12 @@ function yesterdayKey(): string {
   return d.toISOString().slice(0, 10);
 }
 
-export function processDailyLogin(address: string): MemberProgress {
-  const progress = loadMemberProgress(address);
+export function processDailyLoginForIdentity(identity: ProgressIdentity): MemberProgress {
+  const progress = loadMemberProgressForIdentity(identity);
   const today = todayKey();
   if (progress.lastLoginDate === today) {
     if (!progress.completedTaskIds.includes("daily_login")) {
-      return completeMemberTask(address, "daily_login");
+      return completeMemberTaskForIdentity(identity, "daily_login");
     }
     return progress;
   }
@@ -135,20 +237,31 @@ export function processDailyLogin(address: string): MemberProgress {
     completedTaskIds,
     totalXp: computeXp(completedTaskIds),
   };
-  saveMemberProgress(address, next);
+  saveMemberProgressForIdentity(identity, next);
   return next;
+}
+
+export function processDailyLogin(address: string): MemberProgress {
+  return processDailyLoginForIdentity({ kind: "wallet", id: address.toLowerCase() });
+}
+
+export function syncAutoTasksForIdentity(
+  identity: ProgressIdentity,
+  options: { ownsSquadNft: boolean; hasPrediction: boolean },
+): MemberProgress {
+  let progress = loadMemberProgressForIdentity(identity);
+  if (options.ownsSquadNft && !progress.completedTaskIds.includes("mint_squad")) {
+    progress = completeMemberTaskForIdentity(identity, "mint_squad");
+  }
+  if (options.hasPrediction && !progress.completedTaskIds.includes("submit_prediction")) {
+    progress = completeMemberTaskForIdentity(identity, "submit_prediction");
+  }
+  return progress;
 }
 
 export function syncAutoTasks(
   address: string,
   options: { ownsSquadNft: boolean; hasPrediction: boolean },
 ): MemberProgress {
-  let progress = loadMemberProgress(address);
-  if (options.ownsSquadNft && !progress.completedTaskIds.includes("mint_squad")) {
-    progress = completeMemberTask(address, "mint_squad");
-  }
-  if (options.hasPrediction && !progress.completedTaskIds.includes("submit_prediction")) {
-    progress = completeMemberTask(address, "submit_prediction");
-  }
-  return progress;
+  return syncAutoTasksForIdentity({ kind: "wallet", id: address.toLowerCase() }, options);
 }

@@ -21,7 +21,7 @@ const NAV_ITEMS = [
 /** Primary destinations on small screens — wallet stays in the header. */
 const MOBILE_NAV_ITEMS = [
   NAV_ITEMS[0],
-  NAV_ITEMS[1],
+  NAV_ITEMS[6],
   NAV_ITEMS[4],
   NAV_ITEMS[3],
   NAV_ITEMS[7],
@@ -102,9 +102,9 @@ export function AppNav() {
                 </>
               )}{" "}
               Base BCC ·{" "}
-              <a href="/defi" className="underline decoration-primary/50 hover:text-primary">
+              <Link to="/defi" className="underline decoration-primary/50 hover:text-primary">
                 Building Culture layer
-              </a>
+              </Link>
             </span>
           </div>
         </div>
@@ -140,8 +140,8 @@ export function AppNav() {
 
 export function AppFooter() {
   return (
-    <footer className="border-t border-border/60 bg-background pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-0">
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+    <footer id="site-footer" className="border-t border-border/60 bg-background">
+      <div className="mx-auto max-w-7xl px-4 py-10 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] sm:px-6 lg:pb-10">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-3">
             <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary font-black text-primary-foreground shadow-[0_0_20px_var(--neon)]">
@@ -158,35 +158,39 @@ export function AppFooter() {
           <div className="flex flex-col gap-4 sm:items-end">
             <div className="flex flex-wrap gap-x-4 gap-y-2 font-mono text-xs text-muted-foreground">
               <a
-                className="hover:text-primary"
+                className="cursor-pointer hover:text-primary"
                 href={FOOTER_COMMUNITY.x}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 X
               </a>
-              {FOOTER_COMMUNITY.telegram && (
-                <a
-                  className="hover:text-primary"
-                  href={FOOTER_COMMUNITY.telegram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Telegram
-                </a>
-              )}
-              {FOOTER_COMMUNITY.places && (
-                <a
-                  className="hover:text-primary"
-                  href={FOOTER_COMMUNITY.places}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Places
-                </a>
-              )}
               <a
-                className="hover:text-primary"
+                className="cursor-pointer hover:text-primary"
+                href={FOOTER_COMMUNITY.telegram}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Telegram
+              </a>
+              <a
+                className="cursor-pointer hover:text-primary"
+                href={FOOTER_COMMUNITY.places}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Places
+              </a>
+              <a
+                className="cursor-pointer hover:text-primary"
+                href={FOOTER_COMMUNITY.team}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Team
+              </a>
+              <a
+                className="cursor-pointer hover:text-primary"
                 href={BCC_BASESCAN_URL}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -194,21 +198,21 @@ export function AppFooter() {
                 BCC Token
               </a>
               <a
-                className="hover:text-primary"
+                className="cursor-pointer hover:text-primary"
                 href={FOOTER_BASESCAN}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 BaseScan
               </a>
-              <Link to="/finals" className="hover:text-primary">
+              <Link to="/finals" className="cursor-pointer hover:text-primary">
                 Finals (Stacks)
               </Link>
             </div>
 
             <div className="flex flex-wrap gap-x-4 gap-y-2 font-mono text-xs text-muted-foreground">
               {FOOTER_SITE_ROUTES.map(({ to, label }) => (
-                <Link key={to} to={to} className="hover:text-primary">
+                <Link key={to} to={to} className="cursor-pointer hover:text-primary">
                   {label}
                 </Link>
               ))}
@@ -221,6 +225,11 @@ export function AppFooter() {
           squad mints are on Base mainnet — verify contract addresses before signing.
         </p>
       </div>
+      {/* Keeps footer links above the fixed mobile tab bar when scrolled to the bottom */}
+      <div
+        className="pointer-events-none h-[calc(5.5rem+env(safe-area-inset-bottom,0px))] lg:hidden"
+        aria-hidden
+      />
     </footer>
   );
 }

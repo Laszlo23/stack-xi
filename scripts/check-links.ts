@@ -60,5 +60,11 @@ for (const path of [...new Set([...sitemapPaths, ...footerRoutes])]) {
 
 assert(routePaths.includes("/partners"), "partners route registered");
 
+const imprintRoute = readFileSync(join(ROOT, "src/routes/imprint.tsx"), "utf8");
+assert(
+  imprintRoute.includes("sections={IMPRINT_SECTIONS}") && !imprintRoute.includes("IMRINT_SECTIONS"),
+  "imprint route uses IMPRINT_SECTIONS (no typo)",
+);
+
 console.log(`\n${failed === 0 ? "All checks passed" : `${failed} failed`}`);
 process.exit(failed > 0 ? 1 : 0);

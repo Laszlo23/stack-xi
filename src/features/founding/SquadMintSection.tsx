@@ -1,29 +1,42 @@
 import { SectionHead } from "@/components/layout/SectionHead";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MemberTasksPanel } from "@/features/profile/MemberTasksPanel";
+import { PointsQuickStart } from "@/features/growth/PointsQuickStart";
 import { SquadHoldingsPanel } from "@/features/profile/SquadHoldingsPanel";
 import { BccSwapPanel } from "@/features/swap/BccSwapPanel";
 import { SquadLeaderboardPanel } from "@/features/founding/SquadLeaderboardPanel";
 import { SquadMintTabContent } from "@/features/founding/SquadMintTabContent";
 import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { useSquadMintStatus } from "@/hooks/use-squad-mint-status";
 import { squadTabLabel, useSquadTab, type SquadTab } from "@/hooks/use-squad-tab";
 import { useUserSquadHoldings } from "@/hooks/use-user-squad-holdings";
 
 export function SquadMintSection() {
   const { tab, setTab } = useSquadTab();
+  const { isSoldOut } = useSquadMintStatus();
   const { address, isConnected } = useBaseWallet();
   const { holdings, isLoading, isConfigured } = useUserSquadHoldings(address);
 
   return (
     <section id="squad" className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
       <SectionHead
-        eyebrow="Founding Squad · Member hub"
+        eyebrow={isSoldOut ? "Founding Squad · Sold out" : "Founding Squad · Member hub"}
         title={
-          <>
-            Eleven players. <span className="text-gradient">Win-win mint game.</span>
-          </>
+          isSoldOut ? (
+            <>
+              All eleven minted. <span className="text-gradient">Culture locked in.</span>
+            </>
+          ) : (
+            <>
+              Eleven players. <span className="text-gradient">Win-win mint game.</span>
+            </>
+          )
         }
-        sub="Mint from 770 BCC — manage holdings, earn culture XP, climb the leaderboard, and swap more BCC."
+        sub={
+          isSoldOut
+            ? "The bonding curve is closed — view the founding XI on BaseScan, check your holdings, and predict the next Dallas matchday."
+            : "Mint from 770 BCC — manage holdings, earn culture XP, climb the leaderboard, and swap more BCC."
+        }
       />
 
       <Tabs value={tab} onValueChange={(value) => setTab(value as SquadTab)} className="mt-10">
@@ -59,7 +72,10 @@ export function SquadMintSection() {
               Connect Base wallet to track culture mission XP and mint with BCC.
             </p>
           ) : (
-            <MemberTasksPanel />
+            <div className="space-y-6">
+              <PointsQuickStart showCategoryBreakdown />
+              <MemberTasksPanel />
+            </div>
           )}
         </TabsContent>
 

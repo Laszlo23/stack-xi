@@ -29,6 +29,13 @@ const SQUAD_ABI = [
     outputs: [{ type: "uint256" }],
     stateMutability: "view",
   },
+  {
+    type: "function",
+    name: "mintCount",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+    stateMutability: "view",
+  },
 ] as const;
 
 const POOL_ABI = [
@@ -79,16 +86,25 @@ async function main() {
   const client = createPublicClient({ chain: base, transport: http(rpc) });
 
   if (squad?.startsWith("0x")) {
-    const [bccOnSquad, price] = await Promise.all([
+    const [bccOnSquad, price, mintCount] = await Promise.all([
       client.readContract({ address: squad as `0x${string}`, abi: SQUAD_ABI, functionName: "BCC" }),
       client.readContract({
         address: squad as `0x${string}`,
         abi: SQUAD_ABI,
         functionName: "currentMintPrice",
       }),
+      client.readContract({
+        address: squad as `0x${string}`,
+        abi: SQUAD_ABI,
+        functionName: "mintCount",
+      }),
     ]);
     assert(bccOnSquad.toLowerCase() === bcc.toLowerCase(), "squad contract uses BCC");
-    assert(price === MINT_BASE_PRICE_BCC, "squad mint price matches config (0 mints)");
+    const expectedPrice = MINT_BASE_PRICE_BCC + mintCount * MINT_PRICE_INCREMENT_BCC;
+    assert(
+      price === expectedPrice,
+      `squad mint price matches bonding curve (${mintCount} mints)`,
+    );
   }
 
   if (pool?.startsWith("0x")) {

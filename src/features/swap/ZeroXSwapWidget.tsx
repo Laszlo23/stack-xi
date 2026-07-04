@@ -1,6 +1,6 @@
 import { ExternalLink, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { useZeroXSwap } from "@/hooks/use-zero-x-swap";
 import { BASESCAN_URL, BCC_SYMBOL } from "@/lib/base/config";
 import { SITE_LINKS } from "@/lib/site/links";
@@ -93,7 +93,7 @@ export function ZeroXSwapWidget({
   defaultSellAmount = "10",
   onSuccess,
 }: ZeroXSwapWidgetProps) {
-  const { isConnected, connectWallet, isConnecting } = useBaseWallet();
+  const { isConnected, connectWallet, isConnecting } = useConnectBaseWallet();
   const [preset, setPreset] = useState<SwapPreset>(initialPreset);
   const [sellAmountInput, setSellAmountInput] = useState(defaultSellAmount);
   const [swapStatus, setSwapStatus] = useState<SwapStatus | null>(null);

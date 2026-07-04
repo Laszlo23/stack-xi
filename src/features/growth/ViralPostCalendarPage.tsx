@@ -14,6 +14,8 @@ import {
   DistributionReminderBanner,
   FarcasterDistributionPanel,
 } from "@/features/growth/FarcasterDistributionPanel";
+import { CampaignSharePanel } from "@/features/growth/CampaignSharePanel";
+import { AirdropAnnouncementBanner } from "@/features/growth/AirdropAnnouncementBanner";
 import { farcasterComposeUrl, xComposeUrl } from "@/lib/profile/social-links";
 
 function DayCard({ day, isToday }: { day: ViralCalendarDay; isToday: boolean }) {
@@ -231,6 +233,11 @@ export function ViralPostCalendarPage() {
         </div>
       </header>
 
+      <div className="mt-8 space-y-6">
+        <AirdropAnnouncementBanner compact />
+        <CampaignSharePanel compact />
+      </div>
+
       <div className="mt-6 flex flex-wrap gap-2">
         {VIRAL_CALENDAR_WEEKS.map((w) => (
           <button
@@ -250,8 +257,8 @@ export function ViralPostCalendarPage() {
 
       <div className="mt-6 rounded-xl border border-border/50 bg-muted/20 p-4 text-sm text-muted-foreground">
         <strong className="text-foreground">Daily loop:</strong> Farcaster first (long cast +
-        builder tags) → download PNG → X (short, no link, meme attach) → in-app action from each day
-        card.
+        builder tags + site URL) → download PNG → X (short copy + URL + tags) → in-app action from
+        each day card.
       </div>
 
       {today && (

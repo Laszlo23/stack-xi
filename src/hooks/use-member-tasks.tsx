@@ -9,38 +9,52 @@ import {
 } from "react";
 import type { MemberProgress, MemberTaskId } from "@/domain/types";
 import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { useTelegramSessionOptional } from "@/hooks/use-telegram-session";
 import { useUserSquadHoldings } from "@/hooks/use-user-squad-holdings";
 import { MEMBER_TASKS } from "@/lib/profile/member-tasks";
-import { completeMemberTask, loadMemberProgress, syncAutoTasks } from "@/lib/profile/task-storage";
+import {
+  completeMemberTaskForIdentity,
+  loadMemberProgressForIdentity,
+  resolveProgressIdentity,
+  syncAutoTasksForIdentity,
+} from "@/lib/profile/task-storage";
 
 type MemberTasksContextValue = {
   progress: MemberProgress;
   completeTask: (taskId: MemberTaskId) => void;
   refreshProgress: () => void;
   isTaskComplete: (taskId: MemberTaskId) => boolean;
+  hasIdentity: boolean;
 };
 
 const MemberTasksContext = createContext<MemberTasksContextValue | null>(null);
 
 export function MemberTasksProvider({ children }: { children: ReactNode }) {
   const { address } = useBaseWallet();
+  const telegram = useTelegramSessionOptional();
   const { ownedCount } = useUserSquadHoldings(address);
+
+  const identity = useMemo(
+    () =>
+      resolveProgressIdentity({
+        walletAddress: address,
+        telegramUserId: telegram?.user?.userId,
+      }),
+    [address, telegram?.user?.userId],
+  );
+
   const [progress, setProgress] = useState<MemberProgress>(() =>
-    address ? loadMemberProgress(address) : loadMemberProgress(""),
+    loadMemberProgressForIdentity(identity),
   );
 
   const refreshProgress = useCallback(() => {
-    if (!address) {
-      setProgress(loadMemberProgress(""));
-      return;
-    }
-    const stored = loadMemberProgress(address);
-    const next = syncAutoTasks(address, {
+    const stored = loadMemberProgressForIdentity(identity);
+    const next = syncAutoTasksForIdentity(identity, {
       ownsSquadNft: ownedCount > 0,
       hasPrediction: stored.predictionTxIds.length > 0,
     });
     setProgress(next);
-  }, [address, ownedCount]);
+  }, [identity, ownedCount]);
 
   useEffect(() => {
     refreshProgress();
@@ -48,11 +62,11 @@ export function MemberTasksProvider({ children }: { children: ReactNode }) {
 
   const completeTask = useCallback(
     (taskId: MemberTaskId) => {
-      if (!address) return;
-      const next = completeMemberTask(address, taskId);
+      if (identity.kind === "none") return;
+      const next = completeMemberTaskForIdentity(identity, taskId);
       setProgress(next);
     },
-    [address],
+    [identity],
   );
 
   const isTaskComplete = useCallback(
@@ -61,8 +75,14 @@ export function MemberTasksProvider({ children }: { children: ReactNode }) {
   );
 
   const value = useMemo(
-    () => ({ progress, completeTask, refreshProgress, isTaskComplete }),
-    [progress, completeTask, refreshProgress, isTaskComplete],
+    () => ({
+      progress,
+      completeTask,
+      refreshProgress,
+      isTaskComplete,
+      hasIdentity: identity.kind !== "none",
+    }),
+    [progress, completeTask, refreshProgress, isTaskComplete, identity.kind],
   );
 
   return <MemberTasksContext.Provider value={value}>{children}</MemberTasksContext.Provider>;

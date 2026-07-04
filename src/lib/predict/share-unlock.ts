@@ -1,6 +1,5 @@
-import { FC_BUILDERS } from "@/lib/story/farcaster-builders";
+import { buildSharePost, getRotatingBuilderTagsLine } from "@/lib/growth/share-copy";
 import { farcasterComposeUrl, xComposeUrl } from "@/lib/profile/social-links";
-import { absoluteUrl } from "@/lib/seo/site-config";
 
 const STORAGE_PREFIX = "stackxi:share-unlock:";
 
@@ -18,14 +17,9 @@ export function markShareUnlock(address: string, matchId: string): void {
   localStorage.setItem(storageKey(address, matchId), "1");
 }
 
-/** Rotate honor tags — story universe, not spam. */
+/** @deprecated Use getRotatingBuilderTagsLine from share-copy */
 export function getBuilderTags(count = 3): string {
-  const dayIndex = new Date().getDate() % FC_BUILDERS.length;
-  const picks = Array.from(
-    { length: count },
-    (_, i) => FC_BUILDERS[(dayIndex + i) % FC_BUILDERS.length],
-  );
-  return picks.map((b) => b.handle).join(" ");
+  return getRotatingBuilderTagsLine(count);
 }
 
 export function buildPredictionCastText(input: {
@@ -35,15 +29,15 @@ export function buildPredictionCastText(input: {
   stakeLabel: string;
   stage: string;
 }): string {
-  const tags = getBuilderTags(3);
-  return [
-    "STACK XI Matchday Prediction is live 🐸",
-    `${input.stage} · ${input.home} vs ${input.away}`,
-    `I just locked ${input.pick} onchain with ${input.stakeLabel} BCC`,
-    "Let Luck decide.",
-    tags,
-    absoluteUrl("/"),
-  ].join("\n");
+  return buildSharePost(
+    [
+      "STACK XI Matchday Prediction is live 🐸",
+      `${input.stage} · ${input.home} vs ${input.away}`,
+      `I just locked ${input.pick} onchain with ${input.stakeLabel} BCC`,
+      "Let Luck decide.",
+    ],
+    { path: "/" },
+  );
 }
 
 export function buildWinnerMemeText(input: {
@@ -52,12 +46,14 @@ export function buildWinnerMemeText(input: {
   pick: string;
   stakeLabel: string;
 }): string {
-  return [
-    "I just locked my prediction on STACK XI 🐸⚽",
-    `${input.home} vs ${input.away} → ${input.pick}`,
-    `${input.stakeLabel} BCC on Base. Luck hit different onchain.`,
-    getBuilderTags(2),
-  ].join("\n");
+  return buildSharePost(
+    [
+      "I just locked my prediction on STACK XI 🐸⚽",
+      `${input.home} vs ${input.away} → ${input.pick}`,
+      `${input.stakeLabel} BCC on Base. Luck hit different onchain.`,
+    ],
+    { path: "/" },
+  );
 }
 
 export function openCastShare(text: string): void {

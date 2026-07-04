@@ -1,13 +1,21 @@
 import { Link } from "@tanstack/react-router";
 import { Wallet } from "lucide-react";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 
 function truncateAddress(address: string): string {
   return `${address.slice(0, 4)}…${address.slice(-4)}`;
 }
 
 export function BaseWalletChip({ compact }: { compact?: boolean }) {
-  const { isConnected, isConnecting, address, bccBalanceLabel, connectWallet } = useBaseWallet();
+  const {
+    isConnected,
+    isConnecting,
+    address,
+    bccBalanceLabel,
+    connectWallet,
+    connectError,
+    clearConnectError,
+  } = useConnectBaseWallet();
 
   if (isConnected && address) {
     return (
@@ -26,14 +34,28 @@ export function BaseWalletChip({ compact }: { compact?: boolean }) {
   }
 
   return (
-    <button
-      type="button"
-      onClick={() => connectWallet()}
-      disabled={isConnecting}
-      className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-primary-foreground shadow-[0_0_20px_var(--neon)] transition hover:brightness-110 disabled:opacity-60"
-    >
-      <Wallet className="h-4 w-4" />
-      {isConnecting ? "Connecting…" : compact ? "Wallet" : "Connect Base"}
-    </button>
+    <div className="relative flex flex-col items-end gap-1">
+      <button
+        type="button"
+        onClick={() => {
+          clearConnectError();
+          void connectWallet().catch(() => {
+            // Error surfaced via connectError state.
+          });
+        }}
+        disabled={isConnecting}
+        aria-busy={isConnecting}
+        title={connectError ?? "Connect a Base wallet"}
+        className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-primary-foreground shadow-[0_0_20px_var(--neon)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        <Wallet className="h-4 w-4" />
+        {isConnecting ? "Connecting…" : compact ? "Wallet" : "Connect Base"}
+      </button>
+      {connectError && (
+        <p className="absolute top-full z-50 mt-1 max-w-[14rem] rounded-md border border-destructive/40 bg-background px-2 py-1 text-right text-[10px] leading-snug text-destructive shadow-lg">
+          {connectError}
+        </p>
+      )}
+    </div>
   );
 }

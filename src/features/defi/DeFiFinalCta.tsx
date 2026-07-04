@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { BCC_SYMBOL } from "@/lib/base/config";
 import { BccSwapPanel } from "@/features/swap/BccSwapPanel";
 
 export function DeFiFinalCta() {
-  const { isConnected, connectWallet, isConnecting } = useBaseWallet();
+  const { isConnected, connectWallet, isConnecting } = useConnectBaseWallet();
 
   return (
     <section className="defi-final-cta relative overflow-hidden border-t border-primary/30 py-16 sm:py-20">

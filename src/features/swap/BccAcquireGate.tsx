@@ -2,6 +2,7 @@ import { RefreshCw, ShoppingCart } from "lucide-react";
 import { useMemo, useState } from "react";
 import { BccBuyAdvisor } from "@/features/swap/BccBuyAdvisor";
 import { ZeroXSwapWidget } from "@/features/swap/ZeroXSwapWidget";
+import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { useBaseWallet } from "@/hooks/use-base-wallet";
 import { BCC_SYMBOL, CLANKER_BCC_URL, formatBcc } from "@/lib/base/config";
 import { SITE_LINKS } from "@/lib/site/links";
@@ -22,7 +23,7 @@ export function BccAcquireGate({
   compact,
 }: BccAcquireGateProps) {
   const { isConnected, bccBalance, refetchBccBalance, connectWallet, isConnecting } =
-    useBaseWallet();
+    useConnectBaseWallet();
   const [refreshing, setRefreshing] = useState(false);
   const [prefillUsdc, setPrefillUsdc] = useState("10");
 

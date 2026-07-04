@@ -15,7 +15,7 @@ const SITE_URL = (process.env.VITE_SITE_URL ?? "https://pepe.buildingcultureid.s
 const files = [
   { path: "public/sitemap.xml", mustInclude: [`<loc>${SITE_URL}/</loc>`] },
   { path: "public/robots.txt", mustInclude: [`Sitemap: ${SITE_URL}/sitemap.xml`] },
-  { path: "public/.well-known/farcaster.json", mustInclude: [`"homeUrl": "${SITE_URL}/"`] },
+  { path: "public/.well-known/farcaster.json", mustInclude: [`"homeUrl": "${SITE_URL}"`, `"iconUrl": "${SITE_URL}/icons/farcaster-icon-1024.png"`] },
 ];
 
 let failed = 0;

@@ -2,6 +2,7 @@ import type { PepeBeat } from "@/lib/story/pepe-script";
 import type { DallasMatch } from "@/lib/story/dallas-schedule";
 import { WORLD_CUP_WINNER_PICK } from "@/lib/story/dallas-schedule";
 import { FC_CAST_HOOK } from "@/lib/story/farcaster-builders";
+import { ensureShareUrl } from "@/lib/growth/share-copy";
 
 export type MatchdayStory = {
   matchId: string;
@@ -191,7 +192,11 @@ const STORY_BY_MATCH: Record<string, Omit<MatchdayStory, "matchId">> = {
 export function getMatchdayStory(match: DallasMatch): MatchdayStory {
   const custom = STORY_BY_MATCH[match.id];
   if (custom) {
-    return { matchId: match.id, ...custom };
+    return {
+      matchId: match.id,
+      ...custom,
+      sharePost: ensureShareUrl(custom.sharePost),
+    };
   }
 
   return {
@@ -203,6 +208,8 @@ export function getMatchdayStory(match: DallasMatch): MatchdayStory {
         line: `${match.home} vs ${match.away}. Pepe observes. Luck invests. You predict on Base and cast the recap.`,
       },
     ],
-    sharePost: `${match.home} vs ${match.away} — new STACK XI Pepe matchday story. Predict on Base. Mint the squad. 🐸`,
+    sharePost: ensureShareUrl(
+      `${match.home} vs ${match.away} — new STACK XI Pepe matchday story. Predict on Base. Mint the squad. 🐸`,
+    ),
   };
 }
