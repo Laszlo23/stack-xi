@@ -1,6 +1,13 @@
 import { useAccount, useConnect, useDisconnect, useReadContract, useWriteContract } from "wagmi";
 import { getAccount } from "wagmi/actions";
-import { ERC20_ABI, USDC_ADDRESS, formatUsdc } from "@/lib/base/config";
+import {
+  BCC_TOKEN_ADDRESS,
+  BCC_SYMBOL,
+  ERC20_ABI,
+  USDC_ADDRESS,
+  formatBcc,
+  formatUsdc,
+} from "@/lib/base/config";
 import { wagmiConfig } from "@/lib/base/wagmi-config";
 
 export function useBaseWallet() {
@@ -11,6 +18,14 @@ export function useBaseWallet() {
 
   const { data: usdcBalance = 0n } = useReadContract({
     address: USDC_ADDRESS,
+    abi: ERC20_ABI,
+    functionName: "balanceOf",
+    args: address ? [address] : undefined,
+    query: { enabled: Boolean(address) },
+  });
+
+  const { data: bccBalance = 0n, refetch: refetchBccBalance } = useReadContract({
+    address: BCC_TOKEN_ADDRESS,
     abi: ERC20_ABI,
     functionName: "balanceOf",
     args: address ? [address] : undefined,
@@ -29,15 +44,23 @@ export function useBaseWallet() {
     return connected;
   }
 
-  async function approveUsdc(spender: `0x${string}`, amount: bigint) {
+  async function approveToken(token: `0x${string}`, spender: `0x${string}`, amount: bigint) {
     const owner = getAccount(wagmiConfig).address ?? address;
     if (!owner) throw new Error("Wallet not connected");
     return writeContractAsync({
-      address: USDC_ADDRESS,
+      address: token,
       abi: ERC20_ABI,
       functionName: "approve",
       args: [spender, amount],
     });
+  }
+
+  async function approveBcc(spender: `0x${string}`, amount: bigint) {
+    return approveToken(BCC_TOKEN_ADDRESS, spender, amount);
+  }
+
+  async function approveUsdc(spender: `0x${string}`, amount: bigint) {
+    return approveToken(USDC_ADDRESS, spender, amount);
   }
 
   return {
@@ -46,9 +69,15 @@ export function useBaseWallet() {
     isConnecting,
     usdcBalance,
     usdcBalanceLabel: formatUsdc(usdcBalance),
+    bccBalance,
+    bccBalanceLabel: formatBcc(bccBalance),
+    bccSymbol: BCC_SYMBOL,
     connectWallet,
     disconnectWallet: disconnect,
     writeContractAsync,
     approveUsdc,
+    approveBcc,
+    approveToken,
+    refetchBccBalance,
   };
 }

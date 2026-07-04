@@ -10,18 +10,31 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as ProofRouteImport } from './routes/proof'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as LabsRouteImport } from './routes/labs'
 import { Route as ImprintRouteImport } from './routes/imprint'
 import { Route as FinalsRouteImport } from './routes/finals'
+import { Route as DefiRouteImport } from './routes/defi'
+import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as ApiSwapStatusRouteImport } from './routes/api/swap/status'
+import { Route as ApiSwapQuoteRouteImport } from './routes/api/swap/quote'
+import { Route as ApiSwapPriceRouteImport } from './routes/api/swap/price'
+import { Route as ApiFarcasterCastRouteImport } from './routes/api/farcaster/cast'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProofRoute = ProofRouteImport.update({
+  id: '/proof',
+  path: '/proof',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -32,6 +45,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnersRoute = PartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LabsRoute = LabsRouteImport.update({
@@ -49,6 +67,16 @@ const FinalsRoute = FinalsRouteImport.update({
   path: '/finals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DefiRoute = DefiRouteImport.update({
+  id: '/defi',
+  path: '/defi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarRoute = CalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -64,87 +92,163 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSwapStatusRoute = ApiSwapStatusRouteImport.update({
+  id: '/api/swap/status',
+  path: '/api/swap/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSwapQuoteRoute = ApiSwapQuoteRouteImport.update({
+  id: '/api/swap/quote',
+  path: '/api/swap/quote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSwapPriceRoute = ApiSwapPriceRouteImport.update({
+  id: '/api/swap/price',
+  path: '/api/swap/price',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiFarcasterCastRoute = ApiFarcasterCastRouteImport.update({
+  id: '/api/farcaster/cast',
+  path: '/api/farcaster/cast',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/calendar': typeof CalendarRoute
+  '/defi': typeof DefiRoute
   '/finals': typeof FinalsRoute
   '/imprint': typeof ImprintRoute
   '/labs': typeof LabsRoute
+  '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/proof': typeof ProofRoute
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/api/farcaster/cast': typeof ApiFarcasterCastRoute
+  '/api/swap/price': typeof ApiSwapPriceRoute
+  '/api/swap/quote': typeof ApiSwapQuoteRoute
+  '/api/swap/status': typeof ApiSwapStatusRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/calendar': typeof CalendarRoute
+  '/defi': typeof DefiRoute
   '/finals': typeof FinalsRoute
   '/imprint': typeof ImprintRoute
   '/labs': typeof LabsRoute
+  '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/proof': typeof ProofRoute
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/api/farcaster/cast': typeof ApiFarcasterCastRoute
+  '/api/swap/price': typeof ApiSwapPriceRoute
+  '/api/swap/quote': typeof ApiSwapQuoteRoute
+  '/api/swap/status': typeof ApiSwapStatusRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/calendar': typeof CalendarRoute
+  '/defi': typeof DefiRoute
   '/finals': typeof FinalsRoute
   '/imprint': typeof ImprintRoute
   '/labs': typeof LabsRoute
+  '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/proof': typeof ProofRoute
   '/terms': typeof TermsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/api/farcaster/cast': typeof ApiFarcasterCastRoute
+  '/api/swap/price': typeof ApiSwapPriceRoute
+  '/api/swap/quote': typeof ApiSwapQuoteRoute
+  '/api/swap/status': typeof ApiSwapStatusRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/calendar'
+    | '/defi'
     | '/finals'
     | '/imprint'
     | '/labs'
+    | '/partners'
     | '/privacy'
     | '/profile'
+    | '/proof'
     | '/terms'
     | '/blog/$slug'
     | '/blog/'
+    | '/api/farcaster/cast'
+    | '/api/swap/price'
+    | '/api/swap/quote'
+    | '/api/swap/status'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/calendar'
+    | '/defi'
     | '/finals'
     | '/imprint'
     | '/labs'
+    | '/partners'
     | '/privacy'
     | '/profile'
+    | '/proof'
     | '/terms'
     | '/blog/$slug'
     | '/blog'
+    | '/api/farcaster/cast'
+    | '/api/swap/price'
+    | '/api/swap/quote'
+    | '/api/swap/status'
   id:
     | '__root__'
     | '/'
+    | '/calendar'
+    | '/defi'
     | '/finals'
     | '/imprint'
     | '/labs'
+    | '/partners'
     | '/privacy'
     | '/profile'
+    | '/proof'
     | '/terms'
     | '/blog/$slug'
     | '/blog/'
+    | '/api/farcaster/cast'
+    | '/api/swap/price'
+    | '/api/swap/quote'
+    | '/api/swap/status'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CalendarRoute: typeof CalendarRoute
+  DefiRoute: typeof DefiRoute
   FinalsRoute: typeof FinalsRoute
   ImprintRoute: typeof ImprintRoute
   LabsRoute: typeof LabsRoute
+  PartnersRoute: typeof PartnersRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
+  ProofRoute: typeof ProofRoute
   TermsRoute: typeof TermsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  ApiFarcasterCastRoute: typeof ApiFarcasterCastRoute
+  ApiSwapPriceRoute: typeof ApiSwapPriceRoute
+  ApiSwapQuoteRoute: typeof ApiSwapQuoteRoute
+  ApiSwapStatusRoute: typeof ApiSwapStatusRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -154,6 +258,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/proof': {
+      id: '/proof'
+      path: '/proof'
+      fullPath: '/proof'
+      preLoaderRoute: typeof ProofRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -168,6 +279,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partners': {
+      id: '/partners'
+      path: '/partners'
+      fullPath: '/partners'
+      preLoaderRoute: typeof PartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/labs': {
@@ -191,6 +309,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinalsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/defi': {
+      id: '/defi'
+      path: '/defi'
+      fullPath: '/defi'
+      preLoaderRoute: typeof DefiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendar': {
+      id: '/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -212,19 +344,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/swap/status': {
+      id: '/api/swap/status'
+      path: '/api/swap/status'
+      fullPath: '/api/swap/status'
+      preLoaderRoute: typeof ApiSwapStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/swap/quote': {
+      id: '/api/swap/quote'
+      path: '/api/swap/quote'
+      fullPath: '/api/swap/quote'
+      preLoaderRoute: typeof ApiSwapQuoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/swap/price': {
+      id: '/api/swap/price'
+      path: '/api/swap/price'
+      fullPath: '/api/swap/price'
+      preLoaderRoute: typeof ApiSwapPriceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/farcaster/cast': {
+      id: '/api/farcaster/cast'
+      path: '/api/farcaster/cast'
+      fullPath: '/api/farcaster/cast'
+      preLoaderRoute: typeof ApiFarcasterCastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CalendarRoute: CalendarRoute,
+  DefiRoute: DefiRoute,
   FinalsRoute: FinalsRoute,
   ImprintRoute: ImprintRoute,
   LabsRoute: LabsRoute,
+  PartnersRoute: PartnersRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
+  ProofRoute: ProofRoute,
   TermsRoute: TermsRoute,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
+  ApiFarcasterCastRoute: ApiFarcasterCastRoute,
+  ApiSwapPriceRoute: ApiSwapPriceRoute,
+  ApiSwapQuoteRoute: ApiSwapQuoteRoute,
+  ApiSwapStatusRoute: ApiSwapStatusRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -11,7 +11,7 @@ function truncateAddress(address: string): string {
 }
 
 export function ProfileHeader() {
-  const { address, usdcBalanceLabel, disconnectWallet } = useBaseWallet();
+  const { address, bccBalanceLabel, disconnectWallet } = useBaseWallet();
   const { progress } = useMemberTasks();
   const { holdings, isEarlyBeliever } = useUserSquadHoldings(address);
   const [copied, setCopied] = useState(false);
@@ -66,7 +66,7 @@ export function ProfileHeader() {
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
               Pepe doesn&apos;t chase clout — but he respects members who show up daily.{" "}
-              {usdcBalanceLabel} USDC in wallet.
+              {bccBalanceLabel} BCC in wallet.
             </p>
           </div>
 

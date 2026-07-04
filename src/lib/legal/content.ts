@@ -5,7 +5,7 @@ export const LEGAL_CONTACT_EMAIL = "hello@buildingcultureid.space";
 export const PRIVACY_SECTIONS = [
   {
     title: "What we collect",
-    body: "When you connect a wallet, we read your public on-chain address and contract interactions (NFT mints, USDC predictions). Culture task progress (XP, streaks) is stored locally in your browser keyed to your wallet address — not on our servers in v1.",
+    body: "When you connect a wallet, we read your public on-chain address and contract interactions (NFT mints, BCC predictions). Culture task progress (XP, streaks) is stored locally in your browser keyed to your wallet address — not on our servers in v1.",
   },
   {
     title: "What we do not collect",
@@ -28,11 +28,11 @@ export const PRIVACY_SECTIONS = [
 export const TERMS_SECTIONS = [
   {
     title: "Overview",
-    body: "STACK XI is a culture and matchday experience on Base: Pepe storytelling, founding squad NFT mints, and optional USDC predictions for Dallas World Cup matchdays. By using the app you agree to these terms.",
+    body: "STACK XI is a Building Culture matchday experience on Base: Pepe storytelling, founding squad NFT mints paid in BCC, and optional BCC predictions for Dallas World Cup matchdays. By using the app you agree to these terms.",
   },
   {
     title: "Not financial advice",
-    body: "Nothing on this site is investment, legal, or tax advice. USDC predictions and NFT mints involve financial risk. Only use funds you can afford to lose.",
+    body: "Nothing on this site is investment, legal, or tax advice. BCC predictions and NFT mints involve financial risk. Only use funds you can afford to lose.",
   },
   {
     title: "Predictions & settlement",

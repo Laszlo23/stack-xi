@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { Check, Copy, PartyPopper, Trophy, Video } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { PartyPopper, Trophy, Video } from "lucide-react";
+import { FarcasterCastAssistant } from "@/features/farcaster/FarcasterCastAssistant";
 import { PepeBubble } from "@/features/story/PepeBubble";
+import { buildMintCast } from "@/lib/farcaster/cast-templates";
 import { MINT_SUCCESS_MESSAGE } from "@/lib/story/pepe-script";
 import { mintTierLabel } from "@/lib/squad/mint-game";
-import { BASESCAN_URL, formatUsdc } from "@/lib/base/config";
+import { BASESCAN_URL, BCC_SYMBOL, formatBcc } from "@/lib/base/config";
 import { FOUNDING_SQUAD } from "@/lib/mock/squad-data";
 
 export type MintCelebrationData = {
@@ -21,17 +23,15 @@ export function MintCelebration({
   data: MintCelebrationData;
   onClose: () => void;
 }) {
-  const [copied, setCopied] = useState(false);
   const player = FOUNDING_SQUAD.find((p) => p.id === data.playerId);
   const tier = mintTierLabel(data.mintOrder);
 
-  const castText = `Just minted ${player?.name ?? `Player #${data.playerId}`} on @stackxi 🐸⚽ Mint #${data.mintOrder} from ${formatUsdc(data.pricePaid)}. Personal video shout-out incoming from @0xleonardo — team culture > solo grind. @jessepollak @dwr builders who ship with heart 💜`;
-
-  async function copyCast() {
-    await navigator.clipboard.writeText(castText);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }
+  const castText = buildMintCast({
+    playerName: player?.name ?? `Player #${data.playerId}`,
+    mintOrder: data.mintOrder,
+    pricePaid: data.pricePaid,
+    txHash: data.txHash,
+  });
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 p-4 backdrop-blur-md">
@@ -42,8 +42,8 @@ export function MintCelebration({
         </div>
         <h3 className="mt-3 font-display text-2xl font-bold">{player?.name ?? "Squad player"}</h3>
         <p className="mt-1 font-mono text-sm text-muted-foreground">
-          Mint #{data.mintOrder} · {formatUsdc(data.pricePaid)} · Next mint{" "}
-          {formatUsdc(data.nextPrice)}
+          Mint #{data.mintOrder} · {formatBcc(data.pricePaid)} · Next mint{" "}
+          {formatBcc(data.nextPrice)}
         </p>
 
         <div className="mt-6 space-y-4">
@@ -64,16 +64,15 @@ export function MintCelebration({
             <div className="mb-2 font-mono text-[10px] uppercase text-muted-foreground">
               Copy for Farcaster
             </div>
-            <p className="text-sm leading-relaxed text-muted-foreground">{castText}</p>
-            <button
-              type="button"
-              onClick={() => void copyCast()}
-              className="mt-3 inline-flex items-center gap-2 rounded-lg border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary"
-            >
-              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              {copied ? "Copied" : "Copy cast"}
-            </button>
+            <FarcasterCastAssistant castText={castText} txHash={data.txHash} />
           </div>
+
+          <Link
+            to="/proof"
+            className="block text-center text-sm font-semibold text-primary hover:underline"
+          >
+            View all onchain proofs →
+          </Link>
 
           <a
             href={`${BASESCAN_URL}/tx/${data.txHash}`}
@@ -121,19 +120,17 @@ export function MintArenaHeader({
             Squad mint game
           </div>
           <p className="mt-2 max-w-md text-sm text-muted-foreground">
-            Starts at <strong className="text-foreground">$0.77</strong>. Every mint raises the
-            price by <strong className="text-foreground">$0.07</strong>. Early minters win on price
+            Starts at <strong className="text-foreground">770 BCC</strong>. Every mint raises the
+            price by <strong className="text-foreground">70 BCC</strong>. Early minters win on price
             + perks. Everyone gets a personal video shout-out.
           </p>
         </div>
         <div className="text-right">
           <div className="font-mono text-[10px] uppercase text-muted-foreground">Mint now</div>
           <div className="font-display text-3xl font-bold text-primary">
-            {formatUsdc(currentPrice)}
+            {formatBcc(currentPrice)}
           </div>
-          <div className="font-mono text-xs text-muted-foreground">
-            then {formatUsdc(nextPrice)}
-          </div>
+          <div className="font-mono text-xs text-muted-foreground">then {formatBcc(nextPrice)}</div>
         </div>
       </div>
 

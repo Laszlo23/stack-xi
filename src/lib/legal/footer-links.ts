@@ -18,6 +18,10 @@ export const LEGAL_ROUTES = [
 ] as const;
 
 export const FOOTER_SITE_ROUTES = [
+  { to: "/calendar" as const, label: "Post Calendar" },
+  { to: "/defi" as const, label: "DeFi Layer" },
+  { to: "/proof" as const, label: "Onchain Proof" },
+  { to: "/partners" as const, label: "Partners" },
   { to: "/blog" as const, label: "Blog" },
   ...LEGAL_ROUTES,
 ] as const;

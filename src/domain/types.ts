@@ -108,12 +108,19 @@ export type MemberTask = {
   verification: MemberTaskVerification;
 };
 
+export type MintTxRecord = {
+  txId: string;
+  playerId: number;
+  at: string;
+};
+
 export type MemberProgress = {
   completedTaskIds: MemberTaskId[];
   loginStreak: number;
   totalXp: number;
   lastLoginDate: string;
   predictionTxIds: string[];
+  mintTxIds: MintTxRecord[];
 };
 
 export type SquadHolding = {

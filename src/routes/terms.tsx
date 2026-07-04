@@ -8,7 +8,7 @@ export const Route = createFileRoute("/terms")({
     buildPageSeo({
       title: "Terms of Service",
       description:
-        "STACK XI terms — USDC predictions, ERC-721 squad mints on Base, social missions, and liability for matchday culture products.",
+        "STACK XI terms — BCC predictions, ERC-721 squad mints on Base, social missions, and liability for Building Culture matchday products.",
       path: "/terms",
       jsonLd: buildBreadcrumbJsonLd([
         { name: "Home", path: "/" },
@@ -22,7 +22,7 @@ function TermsPage() {
   return (
     <LegalDocument
       title="Terms of Service"
-      subtitle="Rules for using STACK XI matchday stories, NFT mints, and USDC predictions."
+      subtitle="Rules for using STACK XI matchday stories, NFT mints, and BCC predictions."
       sections={TERMS_SECTIONS}
     />
   );

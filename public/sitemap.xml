@@ -1,63 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://stackxi.xyz/</loc>
+    <loc>https://pepe.buildingcultureid.space/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://stackxi.xyz/blog</loc>
+    <loc>https://pepe.buildingcultureid.space/calendar</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pepe.buildingcultureid.space/defi</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://stackxi.xyz/blog/pepe-matchdays-on-base</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://pepe.buildingcultureid.space/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://stackxi.xyz/blog/bonding-curve-squad-mint</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://pepe.buildingcultureid.space/proof</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://stackxi.xyz/blog/usdc-predictions-dallas-2026</loc>
+    <loc>https://pepe.buildingcultureid.space/partners</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://stackxi.xyz/blog/from-base-believers-to-bitcoin-finals</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://stackxi.xyz/blog/member-profile-culture-missions</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://stackxi.xyz/profile</loc>
+    <loc>https://pepe.buildingcultureid.space/profile</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://stackxi.xyz/finals</loc>
+    <loc>https://pepe.buildingcultureid.space/finals</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://stackxi.xyz/privacy</loc>
+    <loc>https://pepe.buildingcultureid.space/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://stackxi.xyz/terms</loc>
+    <loc>https://pepe.buildingcultureid.space/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://stackxi.xyz/imprint</loc>
+    <loc>https://pepe.buildingcultureid.space/imprint</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://pepe.buildingcultureid.space/blog/pepe-matchdays-on-base</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.buildingcultureid.space/blog/bonding-curve-squad-mint</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.buildingcultureid.space/blog/usdc-predictions-dallas-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.buildingcultureid.space/blog/from-base-believers-to-bitcoin-finals</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.buildingcultureid.space/blog/member-profile-culture-missions</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

@@ -1,4 +1,5 @@
 import type { MemberProgress, MemberTaskId } from "@/domain/types";
+import { publishLeaderboardEntry } from "@/lib/profile/leaderboard-storage";
 import { MEMBER_TASKS } from "@/lib/profile/member-tasks";
 
 const STORAGE_PREFIX = "stackxi:member-tasks:";
@@ -14,6 +15,7 @@ function emptyProgress(): MemberProgress {
     totalXp: 0,
     lastLoginDate: "",
     predictionTxIds: [],
+    mintTxIds: [],
   };
 }
 
@@ -35,6 +37,7 @@ export function loadMemberProgress(address: string): MemberProgress {
       ...parsed,
       completedTaskIds: parsed.completedTaskIds ?? [],
       predictionTxIds: parsed.predictionTxIds ?? [],
+      mintTxIds: parsed.mintTxIds ?? [],
       totalXp: computeXp(parsed.completedTaskIds ?? []),
     };
   } catch {
@@ -49,6 +52,7 @@ export function saveMemberProgress(address: string, progress: MemberProgress): v
     totalXp: computeXp(progress.completedTaskIds),
   };
   localStorage.setItem(storageKey(address), JSON.stringify(normalized));
+  publishLeaderboardEntry(address, normalized.totalXp);
 }
 
 export function completeMemberTask(address: string, taskId: MemberTaskId): MemberProgress {
@@ -56,6 +60,26 @@ export function completeMemberTask(address: string, taskId: MemberTaskId): Membe
   if (progress.completedTaskIds.includes(taskId)) return progress;
   const completedTaskIds = [...progress.completedTaskIds, taskId];
   const next = { ...progress, completedTaskIds, totalXp: computeXp(completedTaskIds) };
+  saveMemberProgress(address, next);
+  return next;
+}
+
+export function recordMintTx(address: string, txId: string, playerId: number): MemberProgress {
+  const progress = loadMemberProgress(address);
+  const exists = progress.mintTxIds.some((m) => m.txId === txId);
+  const mintTxIds = exists
+    ? progress.mintTxIds
+    : [...progress.mintTxIds, { txId, playerId, at: new Date().toISOString() }];
+  let completedTaskIds = progress.completedTaskIds;
+  if (!completedTaskIds.includes("mint_squad")) {
+    completedTaskIds = [...completedTaskIds, "mint_squad"];
+  }
+  const next = {
+    ...progress,
+    mintTxIds,
+    completedTaskIds,
+    totalXp: computeXp(completedTaskIds),
+  };
   saveMemberProgress(address, next);
   return next;
 }

@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /labs
 
-Sitemap: https://stackxi.xyz/sitemap.xml
+Sitemap: https://pepe.buildingcultureid.space/sitemap.xml

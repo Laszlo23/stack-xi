@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { farcasterMiniAppMetaContent } from "../lib/farcaster/manifest-config";
 import { THEME_COLOR } from "../lib/seo/site-config";
 import { ProtocolProvider } from "../hooks/use-protocol-state";
 import { PredictionSessionProvider } from "../hooks/use-prediction-session";
@@ -84,11 +85,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: THEME_COLOR },
+      { name: "fc:miniapp", content: farcasterMiniAppMetaContent() },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
-      { rel: "apple-touch-icon", href: "/pepeheadball.jpg" },
+      { rel: "icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "icon", href: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },

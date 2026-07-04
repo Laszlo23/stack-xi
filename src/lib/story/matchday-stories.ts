@@ -1,5 +1,6 @@
 import type { PepeBeat } from "@/lib/story/pepe-script";
 import type { DallasMatch } from "@/lib/story/dallas-schedule";
+import { WORLD_CUP_WINNER_PICK } from "@/lib/story/dallas-schedule";
 import { FC_CAST_HOOK } from "@/lib/story/farcaster-builders";
 
 export type MatchdayStory = {
@@ -26,7 +27,7 @@ export const PEPE_ORIGIN_STORY: PepeBeat[] = [
   },
   {
     id: "fc",
-    line: "This isn't a protocol pitch. It's a group chat that accidentally became a World Cup watch party with USDC and heart.",
+    line: "This isn't a protocol pitch. It's a group chat that accidentally became a World Cup watch party with BCC and heart.",
     sub: FC_CAST_HOOK,
   },
 ];
@@ -90,7 +91,7 @@ const STORY_BY_MATCH: Record<string, Omit<MatchdayStory, "matchId">> = {
       },
     ],
     sharePost:
-      "Japan vs Sweden matchday story is live. Pepe stays rational. Luck stays chaotic. Predict with USDC on Base 🐸",
+      "Japan vs Sweden matchday story is live. Pepe stays rational. Luck stays chaotic. Predict with BCC on Base 🐸",
   },
   m5: {
     title: "Underdog Hour",
@@ -108,72 +109,82 @@ const STORY_BY_MATCH: Record<string, Omit<MatchdayStory, "matchId">> = {
       "Jordan vs Argentina. The plot thickens. Pepe narrates. You predict on Base. Tag a builder who believed early 🐸⚽",
   },
   m6: {
-    title: "Knockout Logic",
+    title: "Winter Warriors Advance",
     beats: [
       {
         id: "m6-1",
-        line: "Côte d'Ivoire vs Norway. First knockout in Dallas. Pepe upgraded from lurker to 'actually replies sometimes'.",
+        line: "Côte d'Ivoire vs Norway. First knockout in Dallas. Norway won 2-1 — winter warriors through to face Brazil in New Jersey.",
       },
       {
         id: "m6-2",
-        line: "Winter warriors meet African flair. Luck brought popcorn. Coopa probably brought the playlist.",
+        line: "Pepe watched from the channel. Luck had already moved on — Egypt and Portugal were writing louder scripts.",
       },
     ],
-    sharePost: "Round of 32: Côte d'Ivoire vs Norway. Knockout Pepe energy activated. STACK XI 🐸",
+    sharePost:
+      "Round of 32 in Dallas: Norway 2-1 Côte d'Ivoire. Knockout receipts posted. Next Dallas stop: Portugal vs Spain Jul 6 🐸⚽ STACK XI",
   },
   m7: {
-    title: "Desert Meets Discipline · Farcaster Edition",
+    title: "Pharaohs on Pens · History in Texas",
     beats: [
       {
         id: "m7-1",
-        line: "Australia brought discipline. Egypt brought history. Pepe brought a folding chair, zero expectations, and a draft cast thanking every builder who ever replied to a nervous first post.",
+        line: "Australia brought discipline. Egypt brought history — and for the first time ever, a men's World Cup knockout win. 1-1 after 120 minutes. Egypt 4-2 on pens.",
       },
       {
         id: "m7-2",
-        line: "Jessy — Jesse — ships Base so the rest of us can ship vibes. @dwr made a place where a frog can narrate football without irony poisoning. Linda, Varun, horsefacts, Coopa: y'all are why this feels like a team, not a pitch deck.",
-        sub: "If you've ever minted something at 2am and prayed someone would care — this one's for you.",
+        line: "Salah stayed calm when it mattered. Pepe stayed seated — this was bigger than a meme. Builders on Farcaster felt it in the group chat.",
+        sub: "Egypt face Argentina in Atlanta on Jul 7. Messi vs Salah. Luck is already scheduling the cast.",
       },
       {
         id: "m7-3",
-        line: "Mint from $0.77. Each mint raises the price $0.07. Leonardo records a personal video for every minter — your name, your handle, posted and tagged. Not marketing. Gratitude.",
+        line: "Mint from 770 BCC. Each mint raises the curve. Leonardo records a personal video for every minter — your name, your handle, posted and tagged.",
       },
       {
         id: "m7-4",
-        line: "Pick a side. Lock USDC on Base. Cast your pick. Watch in Decentraland. Pepe will be there — emotionally available for once.",
+        line: "Next Dallas matchday: Portugal vs Spain. Iberian derby. Ronaldo vs Yamal energy. Lock BCC before Jul 6 kickoff.",
       },
     ],
     sharePost:
-      "🇦🇺 vs 🇪🇬 · Dallas. Pepe wrote a love letter to Farcaster builders. Mint the founding squad from $0.77 (+$0.07 each mint). Every minter gets a personal video shout-out from @0xleonardo — tagged and posted. @jessepollak @dwr this is team culture 🐸⚽💜",
+      "🇪🇬 Egypt beat Australia 4-2 on pens in Dallas — first WC knockout win ever. Next: Argentina in Atlanta. Dallas R16: Portugal vs Spain Jul 6. Predict on Base 🐸⚽",
   },
   m8: {
-    title: "Winners Only",
+    title: "Iberian Derby · Dallas Round of 16",
     beats: [
       {
         id: "m8-1",
-        line: "Round of 16. Two winners, one channel. Pepe has seen this movie. Luck has executive-produced it.",
+        line: "Portugal 2-1 Croatia in Toronto — Ramos in the 93rd. Spain 3-0 Austria in LA — first knockout win since South Africa 2010. Now they collide in Dallas.",
       },
       {
         id: "m8-2",
-        line: "Nobody knows who's playing yet. Pepe finds that peaceful — like a Farcaster feed before the US wakes up.",
-      },
-    ],
-    sharePost: "Round of 16 in Dallas. Unknown teams, known vibes. STACK XI Pepe story 🐸",
-  },
-  m9: {
-    title: "Semifinal Serenity",
-    beats: [
-      {
-        id: "m9-1",
-        line: "Semifinal in Dallas. The stakes are high. Pepe's heart rate is not — he's learned that from watching builders stay calm during outages.",
+        line: "Ronaldo dedicated the win to Diogo Jota. Yamal and Oyarzabal are in form. Pepe brought neutral vibes and a BCC stake — Luck brought popcorn.",
+        sub: "Jul 6 · 2:00 PM CT · AT&T Stadium. Predictions open 90 minutes before kickoff.",
       },
       {
-        id: "m9-2",
-        line: "Soon the finals move to Bitcoin on Stacks. For now, Base believers play where the story started — in public, with heart.",
-        sub: "Early squad minters get the bridge pass and the director's cut.",
+        id: "m8-3",
+        line: `While Dallas hosts the Iberian storm, ${WORLD_CUP_WINNER_PICK} face Paraguay in Philadelphia tonight — Leonardo's bracket says Les Bleus lift the trophy Jul 19.`,
       },
     ],
     sharePost:
-      "Semifinal matchday. Pepe is zen. Luck is loud. Finals mint on Bitcoin coming for Base OGs. Cast if you're still here 🐸",
+      "🇵🇹 vs 🇪🇸 · Dallas Round of 16 · Jul 6. Portugal vs Spain after dramatic R32 wins. Lock BCC on STACK XI. Pepe picks vibes — Leonardo picks France to win it all 🐸⚽",
+  },
+  m9: {
+    title: "Semifinal Dream · France Path",
+    beats: [
+      {
+        id: "m9-1",
+        line: `Semifinal projection at Dallas: ${WORLD_CUP_WINNER_PICK} vs Portugal — if the bracket holds and Leonardo's luck arc pays off.`,
+        sub: "Projected fixture · Jul 14 · subject to knockout results",
+      },
+      {
+        id: "m9-2",
+        line: "Mbappé in form. France beat Sweden 3-0 in the R32. Paraguay stunned Germany on pens — but the crowd on Base is backing blue.",
+      },
+      {
+        id: "m9-3",
+        line: "Early squad minters get the bridge pass to Bitcoin finals on Stacks. For now, Base believers play where the story started — in public, with heart.",
+      },
+    ],
+    sharePost: `Semifinal horizon in Dallas · Jul 14. Leonardo's pick: ${WORLD_CUP_WINNER_PICK} win the World Cup Jul 19. Mint squad · predict with BCC · prove onchain 🐸`,
   },
 };
 

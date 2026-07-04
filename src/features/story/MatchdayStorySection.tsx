@@ -43,7 +43,13 @@ export function MatchdayStorySection() {
             <h3 className="mt-4 font-display text-2xl font-bold">{story.title}</h3>
             <p className="mt-2 text-lg text-primary">
               {match.home} vs {match.away}
+              {match.isProjected && (
+                <span className="ml-2 font-mono text-xs text-muted-foreground">· projected</span>
+              )}
             </p>
+            {match.result && (
+              <p className="mt-1 font-mono text-sm text-accent">Final: {match.result}</p>
+            )}
             <div className="mt-6 space-y-4">
               {story.beats.map((beat) => (
                 <PepeBubble key={beat.id} beat={beat} />

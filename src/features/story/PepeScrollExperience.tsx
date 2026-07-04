@@ -1,14 +1,20 @@
 import { Link } from "@tanstack/react-router";
 import { PROTOCOL_ONE_LINER, PROTOCOL_TAGLINE } from "@/domain/constants";
 import { DecentralandEventSection } from "@/features/community/DecentralandEventSection";
+import { DeFiLayerTeaser } from "@/features/defi/DeFiLayerTeaser";
 import { SquadMintSection } from "@/features/founding/SquadMintSection";
 import { GuidedPredictionFlow } from "@/features/predict/GuidedPredictionFlow";
 import { MatchdayStorySection } from "@/features/story/MatchdayStorySection";
 import { PepeVisualScroll } from "@/features/story/PepeVisualScroll";
-import { getActiveMatchday } from "@/lib/story/dallas-schedule";
+import {
+  getActiveMatchday,
+  getLastCompletedMatchday,
+  WORLD_CUP_WINNER_PICK,
+} from "@/lib/story/dallas-schedule";
 
 export function PepeScrollExperience() {
   const activeMatch = getActiveMatchday();
+  const lastResult = getLastCompletedMatchday();
 
   return (
     <div className="scroll-smooth">
@@ -30,8 +36,8 @@ export function PepeScrollExperience() {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/20 sm:via-background/70 sm:to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
 
-        <div className="relative mx-auto w-full max-w-3xl space-y-8 px-4 py-24 sm:px-6 sm:py-28">
-          <div>
+        <div className="relative mx-auto w-full max-w-7xl px-4 py-24 sm:px-6 sm:py-28">
+          <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full glass-neon px-3 py-1 font-mono text-xs uppercase tracking-widest">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
               {PROTOCOL_TAGLINE}
@@ -41,23 +47,32 @@ export function PepeScrollExperience() {
             </h1>
             <p className="mt-4 max-w-xl text-lg text-muted-foreground">{PROTOCOL_ONE_LINER}</p>
             <p className="mt-3 font-mono text-sm text-primary">
-              Next up: {activeMatch.home} vs {activeMatch.away} · {activeMatch.kickoffLabel}
+              Next: {activeMatch.home} vs {activeMatch.away} · {activeMatch.kickoffLabel}
+              {activeMatch.isProjected ? " · projected" : ""}
             </p>
-          </div>
+            {lastResult?.result && (
+              <p className="mt-2 font-mono text-xs text-muted-foreground">
+                Last in Dallas: {lastResult.home} vs {lastResult.away} · {lastResult.result}
+              </p>
+            )}
+            <p className="mt-2 font-mono text-xs text-accent">
+              Leonardo&apos;s pick to win it all: {WORLD_CUP_WINNER_PICK} · Final Jul 19
+            </p>
 
-          <div className="flex flex-wrap gap-3">
-            <a
-              href="#visual-story"
-              className="inline-flex rounded-xl border border-primary/40 bg-primary/10 px-6 py-3 text-sm font-bold text-primary transition hover:bg-primary/20"
-            >
-              Scroll Pepe lore →
-            </a>
-            <a
-              href="#predict"
-              className="inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-[0_0_32px_var(--neon)] transition hover:brightness-110"
-            >
-              Predict with USDC
-            </a>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="#visual-story"
+                className="inline-flex rounded-xl border border-primary/40 bg-primary/10 px-6 py-3 text-sm font-bold text-primary transition hover:bg-primary/20"
+              >
+                Scroll Pepe lore →
+              </a>
+              <a
+                href="#predict"
+                className="inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-[0_0_32px_var(--neon)] transition hover:brightness-110"
+              >
+                Predict with BCC
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -65,6 +80,7 @@ export function PepeScrollExperience() {
       <PepeVisualScroll />
       <MatchdayStorySection />
       <SquadMintSection />
+      <DeFiLayerTeaser />
       <GuidedPredictionFlow />
       <DecentralandEventSection />
 

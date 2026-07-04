@@ -5,7 +5,7 @@ export const SOCIAL_LINKS = {
 } as const;
 
 export const DEFAULT_POST_COPY =
-  "STACK XI matchday on Base — Pepe lore, USDC predictions, founding squad mint from $0.77. Team culture > solo grind 🐸⚽";
+  "STACK XI matchday on Base — Pepe lore, BCC predictions, founding squad mint from 770 BCC. Team culture > solo grind 🐸⚽";
 
 export function xComposeUrl(text: string): string {
   return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;

@@ -2,6 +2,8 @@ import {
   DEFAULT_KEYWORDS,
   DEFAULT_OG_IMAGE,
   DEFAULT_OG_IMAGE_ALT,
+  DEFAULT_OG_IMAGE_HEIGHT,
+  DEFAULT_OG_IMAGE_WIDTH,
   GOOGLE_SITE_VERIFICATION,
   SITE_DESCRIPTION,
   SITE_EMAIL,
@@ -75,8 +77,8 @@ export function buildPageSeo(input: PageSeoInput): SeoHead {
     { property: "og:image", content: ogImage },
     { property: "og:image:secure_url", content: ogImage },
     { property: "og:image:alt", content: ogImageAlt },
-    { property: "og:image:width", content: "1200" },
-    { property: "og:image:height", content: "630" },
+    { property: "og:image:width", content: String(DEFAULT_OG_IMAGE_WIDTH) },
+    { property: "og:image:height", content: String(DEFAULT_OG_IMAGE_HEIGHT) },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: TWITTER_HANDLE },
     { name: "twitter:creator", content: TWITTER_CREATOR },
@@ -163,7 +165,7 @@ export function buildHomeJsonLd(): object[] {
       "@type": "WebApplication",
       name: SITE_NAME,
       url: SITE_URL,
-      applicationCategory: "FinanceApplication",
+      applicationCategory: ["GameApplication", "SocialNetworkingApplication"],
       operatingSystem: "Web",
       description: SITE_DESCRIPTION,
       offers: {
@@ -172,7 +174,63 @@ export function buildHomeJsonLd(): object[] {
         priceCurrency: "USD",
       },
     },
+    buildFaqJsonLd(),
   ];
+}
+
+export function buildFaqJsonLd(): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "What is BCC on STACK XI?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "BCC (Building Culture Coin) is the Clanker-launched token on Base used to mint founding squad NFTs, stake matchday predictions, and swap via embedded 0x routes.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How do I mint a squad player?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Connect a Base wallet, acquire BCC via the in-app swap or external DEX, approve BCC for the squad contract, and mint from the bonding curve starting at 770 BCC.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Where is onchain proof?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Visit the Onchain Proof page for contract addresses, DexScreener liquidity, swap widget, and your mint and prediction transaction receipts on BaseScan.",
+        },
+      },
+    ],
+  };
+}
+
+export function buildContractRegistryJsonLd(
+  items: Array<{ name: string; address: string }>,
+): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${SITE_NAME} contract registry`,
+    description: "Verified BCC, squad NFT, and prediction pool contracts on Base mainnet.",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: `${SITE_URL}/proof#${item.name.toLowerCase().replace(/\s+/g, "-")}`,
+      item: {
+        "@type": "Thing",
+        name: item.name,
+        identifier: item.address,
+      },
+    })),
+  };
 }
 
 export function buildBlogIndexJsonLd(postCount: number): object {
@@ -181,7 +239,8 @@ export function buildBlogIndexJsonLd(postCount: number): object {
     "@type": "Blog",
     name: `${SITE_NAME} Blog`,
     url: absoluteUrl("/blog"),
-    description: "Matchday culture, Base onchain stories, and builder notes from STACK XI.",
+    description:
+      "Building Culture matchday stories, Base BCC onchain guides, and builder notes from STACK XI.",
     blogPost: postCount,
     publisher: {
       "@type": "Organization",

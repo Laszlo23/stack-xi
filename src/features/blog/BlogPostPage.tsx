@@ -83,7 +83,7 @@ export function BlogPostPage({ post }: { post: BlogPost }) {
       <footer className="mt-14 rounded-2xl border border-primary/30 bg-primary/5 p-6">
         <p className="font-display text-lg font-bold">Ready for matchday?</p>
         <p className="mt-2 text-sm text-muted-foreground">
-          Mint the founding squad, stake a USDC prediction, or complete culture missions on your
+          Mint the founding squad, stake a BCC prediction, or complete culture missions on your
           profile.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">

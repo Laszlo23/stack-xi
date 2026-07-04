@@ -1,0 +1,31 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "STACK XI",
+    "iconUrl": "https://pepe.buildingcultureid.space/og/stack-xi-bcc.png",
+    "homeUrl": "https://pepe.buildingcultureid.space/",
+    "splashImageUrl": "https://pepe.buildingcultureid.space/og/stack-xi-bcc.png",
+    "splashBackgroundColor": "#1f2937",
+    "subtitle": "Building Culture · BCC on Base",
+    "description": "Building Culture matchday hub on Base — mint the founding squad with BCC, predict World Cup picks, swap on 0x, and prove it onchain.",
+    "primaryCategory": "games",
+    "tags": [
+      "base",
+      "world-cup",
+      "predictions",
+      "bcc",
+      "nft",
+      "building-culture"
+    ],
+    "heroImageUrl": "https://pepe.buildingcultureid.space/og/stack-xi-bcc.png",
+    "tagline": "Mint · Predict · Prove on Base",
+    "ogTitle": "STACK XI",
+    "ogDescription": "Building Culture matchday hub on Base — mint the founding squad with BCC, predict World Cup picks, swap on 0x, and prove it onchain.",
+    "ogImageUrl": "https://pepe.buildingcultureid.space/og/stack-xi-bcc.png"
+  }
+}

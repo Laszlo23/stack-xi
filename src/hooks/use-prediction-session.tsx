@@ -5,17 +5,21 @@ export type PredictionPick = "home" | "away";
 export type PredictionSession = {
   matchId: string;
   pick: PredictionPick;
-  stakeUsdc: bigint;
+  stakeBcc: bigint;
   txId?: string;
   status: "draft" | "submitted";
+  shareUnlocked?: boolean;
 };
+
+export type PredictionStep = 1 | 2 | 3 | 4 | 5;
 
 type PredictionSessionContextValue = {
   session: PredictionSession | null;
-  step: 1 | 2 | 3 | 4;
-  setStep: (step: 1 | 2 | 3 | 4) => void;
+  step: PredictionStep;
+  setStep: (step: PredictionStep) => void;
   setPick: (matchId: string, pick: PredictionPick) => void;
-  setStake: (stakeUsdc: bigint) => void;
+  setStake: (stakeBcc: bigint) => void;
+  markShareUnlocked: () => void;
   markSubmitted: (txId: string) => void;
   reset: () => void;
 };
@@ -24,21 +28,26 @@ const PredictionSessionContext = createContext<PredictionSessionContextValue | n
 
 export function PredictionSessionProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<PredictionSession | null>(null);
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [step, setStep] = useState<PredictionStep>(1);
 
   const setPick = useCallback((matchId: string, pick: PredictionPick) => {
-    setSession({ matchId, pick, stakeUsdc: 0n, status: "draft" });
+    setSession({ matchId, pick, stakeBcc: 0n, status: "draft", shareUnlocked: false });
     setStep(2);
   }, []);
 
-  const setStake = useCallback((stakeUsdc: bigint) => {
-    setSession((prev) => (prev ? { ...prev, stakeUsdc } : prev));
+  const setStake = useCallback((stakeBcc: bigint) => {
+    setSession((prev) => (prev ? { ...prev, stakeBcc } : prev));
     setStep(3);
+  }, []);
+
+  const markShareUnlocked = useCallback(() => {
+    setSession((prev) => (prev ? { ...prev, shareUnlocked: true } : prev));
+    setStep(4);
   }, []);
 
   const markSubmitted = useCallback((txId: string) => {
     setSession((prev) => (prev ? { ...prev, txId, status: "submitted" } : prev));
-    setStep(4);
+    setStep(5);
   }, []);
 
   const reset = useCallback(() => {
@@ -47,8 +56,17 @@ export function PredictionSessionProvider({ children }: { children: ReactNode })
   }, []);
 
   const value = useMemo(
-    () => ({ session, step, setStep, setPick, setStake, markSubmitted, reset }),
-    [session, step, setPick, setStake, markSubmitted, reset],
+    () => ({
+      session,
+      step,
+      setStep,
+      setPick,
+      setStake,
+      markShareUnlocked,
+      markSubmitted,
+      reset,
+    }),
+    [session, step, setPick, setStake, markShareUnlocked, markSubmitted, reset],
   );
 
   return (

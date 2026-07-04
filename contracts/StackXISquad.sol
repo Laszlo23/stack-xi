@@ -8,12 +8,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-/// @title STACK XI Founding Squad — bonding-curve mint, on-chain metadata, builder perks
+/// @title STACK XI Founding Squad — bonding-curve mint paid in BCC culture token
 contract StackXISquad is ERC721, Ownable {
     using SafeERC20 for IERC20;
     using Strings for uint256;
 
-    IERC20 public immutable USDC;
+    IERC20 public immutable BCC;
     uint256 public immutable BASE_PRICE;
     uint256 public immutable PRICE_INCREMENT;
     uint256 public earlyBelieverLimit;
@@ -40,12 +40,12 @@ contract StackXISquad is ERC721, Ownable {
     error AlreadyMinted();
 
     constructor(
-        address usdcAddress,
+        address bccAddress,
         uint256 basePrice,
         uint256 priceIncrement,
         uint256 initialEarlyBelieverLimit
     ) ERC721("STACK XI Founding Squad", "SXIS") Ownable(msg.sender) {
-        USDC = IERC20(usdcAddress);
+        BCC = IERC20(bccAddress);
         BASE_PRICE = basePrice;
         PRICE_INCREMENT = priceIncrement;
         earlyBelieverLimit = initialEarlyBelieverLimit;
@@ -80,7 +80,7 @@ contract StackXISquad is ERC721, Ownable {
         if (minted[playerId]) revert AlreadyMinted();
 
         uint256 price = currentMintPrice();
-        USDC.safeTransferFrom(msg.sender, owner(), price);
+        BCC.safeTransferFrom(msg.sender, owner(), price);
 
         minted[playerId] = true;
         mintCount++;

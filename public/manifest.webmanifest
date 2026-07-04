@@ -1,7 +1,7 @@
 {
-  "name": "STACK XI — Pepe Matchdays on Base",
+  "name": "STACK XI — Building Culture Pepe on Base",
   "short_name": "STACK XI",
-  "description": "Dallas World Cup matchday stories, USDC predictions on Base, and the founding squad NFT mint.",
+  "description": "Building Culture matchday hub on Base — mint the founding squad with BCC, predict World Cup picks, swap on 0x, and prove it onchain.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -9,7 +9,7 @@
   "background_color": "#1f2937",
   "theme_color": "#1f2937",
   "lang": "en",
-  "categories": ["finance", "entertainment", "social"],
+  "categories": ["games", "entertainment", "social"],
   "icons": [
     {
       "src": "/favicon.ico",
@@ -17,9 +17,20 @@
       "type": "image/x-icon"
     },
     {
-      "src": "/pepeheadball.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg",
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]

@@ -1,10 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Glasses, Home, Sparkles, Target, User, Users } from "lucide-react";
+import { BookOpen, Glasses, Home, ShieldCheck, Sparkles, Target, User, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PROTOCOL_NAME } from "@/domain/constants";
 import { BaseWalletChip } from "@/features/wallet/BaseWalletChip";
 import { FOOTER_BASESCAN, FOOTER_COMMUNITY, FOOTER_SITE_ROUTES } from "@/lib/legal/footer-links";
-import { getActiveMatchday } from "@/lib/story/dallas-schedule";
+import { BCC_BASESCAN_URL } from "@/lib/base/config";
+import { getActiveMatchday, getLastCompletedMatchday } from "@/lib/story/dallas-schedule";
 
 const NAV_ITEMS = [
   { hash: undefined, route: "/" as const, label: "Home", icon: Home },
@@ -13,6 +14,7 @@ const NAV_ITEMS = [
   { hash: "squad", route: undefined, label: "Squad", icon: Users },
   { hash: "predict", route: undefined, label: "Predict", icon: Target },
   { hash: "decentraland", route: undefined, label: "Metaverse", icon: Glasses },
+  { hash: undefined, route: "/proof" as const, label: "Proof", icon: ShieldCheck },
   { hash: undefined, route: "/profile" as const, label: "Profile", icon: User },
 ] as const;
 
@@ -22,7 +24,7 @@ const MOBILE_NAV_ITEMS = [
   NAV_ITEMS[1],
   NAV_ITEMS[4],
   NAV_ITEMS[3],
-  NAV_ITEMS[6],
+  NAV_ITEMS[7],
 ] as const;
 
 function NavItem({
@@ -35,7 +37,7 @@ function NavItem({
   pathname,
 }: {
   hash?: string;
-  route?: "/" | "/profile";
+  route?: "/" | "/profile" | "/proof";
   label: string;
   icon: typeof Home;
   mobile?: boolean;
@@ -73,6 +75,7 @@ export function AppNav() {
   const [activeHash, setActiveHash] = useState("");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const activeMatch = getActiveMatchday();
+  const lastResult = getLastCompletedMatchday();
 
   useEffect(() => {
     const sync = () => setActiveHash(window.location.hash.replace("#", ""));
@@ -88,8 +91,20 @@ export function AppNav() {
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-2">
             <span className="inline-flex items-center gap-2">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-              Next: {activeMatch.home} vs {activeMatch.away} · {activeMatch.kickoffLabel} · Base
-              USDC
+              {lastResult?.result ? (
+                <>
+                  Last: {lastResult.home} vs {lastResult.away} · {lastResult.result} · Next:{" "}
+                  {activeMatch.home} vs {activeMatch.away} · {activeMatch.kickoffLabel} ·
+                </>
+              ) : (
+                <>
+                  Next: {activeMatch.home} vs {activeMatch.away} · {activeMatch.kickoffLabel} ·
+                </>
+              )}{" "}
+              Base BCC ·{" "}
+              <a href="/defi" className="underline decoration-primary/50 hover:text-primary">
+                Building Culture layer
+              </a>
             </span>
           </div>
         </div>
@@ -135,7 +150,7 @@ export function AppFooter() {
             <div>
               <div className="font-display font-bold">{PROTOCOL_NAME}</div>
               <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                Base USDC · Decentraland watch party
+                Base BCC · Decentraland watch party
               </div>
             </div>
           </div>
@@ -172,6 +187,14 @@ export function AppFooter() {
               )}
               <a
                 className="hover:text-primary"
+                href={BCC_BASESCAN_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                BCC Token
+              </a>
+              <a
+                className="hover:text-primary"
                 href={FOOTER_BASESCAN}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -194,7 +217,7 @@ export function AppFooter() {
         </div>
 
         <p className="mt-8 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-          Predictions and NFT mints involve financial risk. Not investment advice. USDC stakes and
+          Predictions and NFT mints involve financial risk. Not investment advice. BCC stakes and
           squad mints are on Base mainnet — verify contract addresses before signing.
         </p>
       </div>

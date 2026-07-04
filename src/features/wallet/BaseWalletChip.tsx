@@ -7,7 +7,7 @@ function truncateAddress(address: string): string {
 }
 
 export function BaseWalletChip({ compact }: { compact?: boolean }) {
-  const { isConnected, isConnecting, address, usdcBalanceLabel, connectWallet } = useBaseWallet();
+  const { isConnected, isConnecting, address, bccBalanceLabel, connectWallet } = useBaseWallet();
 
   if (isConnected && address) {
     return (
@@ -19,7 +19,7 @@ export function BaseWalletChip({ compact }: { compact?: boolean }) {
         <Wallet className="h-4 w-4 shrink-0" />
         <span className="truncate">{truncateAddress(address)}</span>
         {!compact && (
-          <span className="hidden text-muted-foreground sm:inline">· {usdcBalanceLabel}</span>
+          <span className="hidden text-muted-foreground sm:inline">· {bccBalanceLabel}</span>
         )}
       </Link>
     );

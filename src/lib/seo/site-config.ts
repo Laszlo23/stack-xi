@@ -5,7 +5,9 @@ export const SITE_TAGLINE = PROTOCOL_TAGLINE;
 export const SITE_DESCRIPTION = PROTOCOL_ONE_LINER;
 
 /** Canonical production URL — set VITE_SITE_URL in deploy env. */
-export const SITE_URL = (import.meta.env.VITE_SITE_URL ?? "https://stackxi.xyz").replace(/\/$/, "");
+export const SITE_URL = (
+  import.meta.env.VITE_SITE_URL ?? "https://pepe.buildingcultureid.space"
+).replace(/\/$/, "");
 
 export const SITE_LOCALE = "en_US";
 export const SITE_LANGUAGE = "en";
@@ -19,20 +21,27 @@ export const SITE_ORG = "Building Culture ID";
 /** Dark cyber football palette — matches :root background. */
 export const THEME_COLOR = "#1f2937";
 
-export const DEFAULT_OG_IMAGE = `${SITE_URL}/pepeheadball.jpg`;
+export const DEFAULT_OG_IMAGE_PATH = "/og/stack-xi-bcc.png";
+export const DEFAULT_OG_IMAGE = `${SITE_URL}${DEFAULT_OG_IMAGE_PATH}`;
+export const DEFAULT_OG_IMAGE_WIDTH = 1200;
+export const DEFAULT_OG_IMAGE_HEIGHT = 630;
 export const DEFAULT_OG_IMAGE_ALT =
-  "STACK XI — Pepe matchday culture on Base with USDC predictions and founding squad NFT mint";
+  "STACK XI — Building Culture Pepe on Base: mint squad NFTs with BCC, predict matchdays, prove onchain";
 
 export const DEFAULT_KEYWORDS = [
   "STACK XI",
+  "Building Culture",
+  "BCC token",
+  "Clanker",
   "Base blockchain",
-  "USDC predictions",
+  "Farcaster mini app",
   "World Cup 2026",
   "Dallas matchday",
   "Pepe NFT",
   "founding squad mint",
-  "Farcaster",
-  "onchain culture",
+  "onchain proof",
+  "DexScreener",
+  "0x swap",
   "Decentraland watch party",
 ] as const;
 
@@ -44,6 +53,6 @@ export function absoluteUrl(path: string): string {
 }
 
 export function pageTitle(title: string, options?: { home?: boolean }): string {
-  if (options?.home) return `${SITE_NAME} — Pepe Matchdays on Base`;
-  return `${title} | ${SITE_NAME}`;
+  if (options?.home) return `${SITE_NAME} — Building Culture Pepe on Base`;
+  return `${title} · ${SITE_NAME}`;
 }

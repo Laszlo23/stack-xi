@@ -1,11 +1,13 @@
-/** Bonding-curve mint math — mirrors on-chain BASE_PRICE + mintCount * PRICE_INCREMENT */
+/** Bonding-curve mint math — mirrors on-chain BASE_PRICE + mintCount * PRICE_INCREMENT (BCC) */
 
-export const MINT_BASE_PRICE_USDC = 770_000n; // $0.77
-export const MINT_PRICE_INCREMENT_USDC = 70_000n; // $0.07
+import { BCC_UNIT, MINT_BASE_PRICE_BCC, MINT_PRICE_INCREMENT_BCC } from "@/lib/base/config";
+
+export const MINT_BASE_PRICE_USDC = MINT_BASE_PRICE_BCC;
+export const MINT_PRICE_INCREMENT_USDC = MINT_PRICE_INCREMENT_BCC;
 export const TOTAL_SQUAD_PLAYERS = 11;
 
 export function priceAtMintCount(mintCount: bigint): bigint {
-  return MINT_BASE_PRICE_USDC + mintCount * MINT_PRICE_INCREMENT_USDC;
+  return MINT_BASE_PRICE_BCC + mintCount * MINT_PRICE_INCREMENT_BCC;
 }
 
 export function currentMintPrice(mintCount: bigint): bigint {
@@ -65,6 +67,6 @@ export const MINT_PERKS = [
     emoji: "🎯",
     title: "Prediction fee-share boost",
     detail:
-      "Founding squad holders get multiplier display on USDC prediction pools (manual settlement MVP).",
+      "Founding squad holders get multiplier display on BCC prediction pools (manual settlement MVP).",
   },
 ] as const;

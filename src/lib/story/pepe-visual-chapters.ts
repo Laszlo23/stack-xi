@@ -34,7 +34,7 @@ export const PEPE_VISUAL_CHAPTERS: PepeVisualChapter[] = [
     line: "Same pitch. Same penguin. Completely different energy. Pepe's face says: I did not budget for this level of abundance.",
     sub: "NO FEELS ONLY VIBE — the shirt lied. He felt everything. That's the plot twist.",
     sharePost:
-      "When Luck slide-tackles your whole personality 🐸💥 Pepe felt it. STACK XI · predict on Base · mint the squad from $0.77",
+      "When Luck slide-tackles your whole personality 🐸💥 Pepe felt it. STACK XI · predict on Base · mint the squad from 770 BCC",
     imagePosition: "right",
     accent: "magenta",
   },
@@ -58,9 +58,9 @@ export const PEPE_VISUAL_CHAPTERS: PepeVisualChapter[] = [
     chapter: "04",
     title: "Header your prediction",
     line: "Some people overthink the match. Pepe headers the ball and the narrative at the same time. NO FEELS ONLY GAINS.",
-    sub: "Pick a side. Lock USDC. Cast it. Touch grass until kickoff.",
+    sub: "Pick a side. Lock BCC. Cast it. Touch grass until kickoff.",
     sharePost:
-      "Pepe said header the prediction, not your feelings 🐸⚽ $1/$5/$10 USDC picks on Base · STACK XI Dallas matchday",
+      "Pepe said header the prediction, not your feelings 🐸⚽ 1K/5K/10K BCC picks on Base · STACK XI Dallas matchday",
     imagePosition: "right",
     accent: "neon",
   },
@@ -73,7 +73,7 @@ export const PEPE_VISUAL_CHAPTERS: PepeVisualChapter[] = [
     line: "When the splash hits and the stadium goes neon — that's not just a goal. That's a mint confirmation screen in real life.",
     sub: "Every founding minter gets a personal video shout-out. Leonardo tags you. The culture tags you back.",
     sharePost:
-      "Goal energy = mint energy 🐸⚽ Founding squad on Base from $0.77 (+$0.07 each mint). Video shout-out every minter. STACK XI",
+      "Goal energy = mint energy 🐸⚽ Founding squad on Base from 770 BCC (+70 BCC each mint). Video shout-out every minter. STACK XI",
     imagePosition: "left",
     accent: "magenta",
   },
@@ -86,7 +86,7 @@ export const PEPE_VISUAL_CHAPTERS: PepeVisualChapter[] = [
     line: "PEPE · THE ORIGINAL · 1/11 NFT. SHO 88. VIBES 999. Mint before the price curve makes your wallet emotional.",
     sub: "This squad is a team effort. Leonardo starts the show. You hold the card.",
     sharePost:
-      "1/11 · PEPE THE ORIGINAL 🐸⚽ Founding squad mint live on Base. $0.77 start · +$0.07 per mint · video shout-out included. @jessepollak @dwr builder love 💜 STACK XI",
+      "1/11 · PEPE THE ORIGINAL 🐸⚽ Founding squad mint live on Base. 770 BCC start · +70 BCC per mint · video shout-out included. @jessepollak @dwr builder love 💜 STACK XI",
     imagePosition: "right",
     accent: "neon",
   },

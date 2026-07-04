@@ -95,7 +95,7 @@ export function SquadHoldingsPanel({
             href="/#squad"
             className="mt-4 inline-flex rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
           >
-            Mint from $0.77 →
+            Mint from 770 BCC →
           </a>
         </div>
       )}

@@ -38,8 +38,8 @@ export const MEMBER_TASKS: MemberTask[] = [
   },
   {
     id: "submit_prediction",
-    label: "Lock a USDC prediction",
-    description: "Pick a winner and stake real USDC on Base.",
+    label: "Lock a BCC prediction",
+    description: "Pick a winner and stake real BCC on Base.",
     points: 40,
     verification: "auto",
   },

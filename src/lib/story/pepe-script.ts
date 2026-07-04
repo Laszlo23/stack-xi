@@ -7,7 +7,7 @@ export type PepeBeat = {
 export const PEPE_PREDICT_INTRO: PepeBeat = {
   id: "pick",
   line: "Pick a winner. I'm not asking for your origin story. Left team or right team.",
-  sub: "Two buttons. Real USDC on Base. Cast your pick on Farcaster after — Luck handles the rest.",
+  sub: "Two buttons. Real BCC on Base. Cast your pick on Farcaster after — Luck handles the rest.",
 };
 
 export const PEPE_STAKE_INTRO: PepeBeat = {
@@ -37,7 +37,7 @@ export const DCL_EVENT = {
   coordinates: "(-100, -100)",
   dclUrl: "https://play.decentraland.org/?position=-100,-100",
   predictionsNote:
-    "Live watch party + predictions open during the match · Base USDC · Farcaster recap casts",
+    "Live watch party + predictions open during the match · Base BCC · Farcaster recap casts",
 };
 
 export const EARLY_BELIEVER_PERKS = [

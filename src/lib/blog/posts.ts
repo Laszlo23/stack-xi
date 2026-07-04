@@ -22,7 +22,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "pepe-matchdays-on-base",
     title: "Pepe Matchdays on Base: Why STACK XI Exists",
     excerpt:
-      "Dallas World Cup energy meets onchain culture — USDC predictions, founding squad mints, and a Pepe luck arc built for builders who ship with heart.",
+      "Dallas World Cup energy meets Building Culture on Base — BCC predictions, founding squad mints, and a Pepe luck arc built for builders who ship with heart.",
     publishedAt: "2026-07-01T12:00:00.000Z",
     author: "Leonardo · STACK XI",
     category: "Culture",
@@ -39,7 +39,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "What you can do today",
         paragraphs: [
-          "Scroll the visual Pepe lore on the home page, stake real USDC on the active Dallas matchday, mint from the 11-player founding squad bonding curve, and track culture missions on your member profile.",
+          "Scroll the visual Pepe lore on the home page, stake BCC on the active Dallas matchday, mint from the 11-player founding squad bonding curve, and track culture missions on your member profile.",
           "Everything runs on Base mainnet. Connect a wallet, verify contract addresses on BaseScan, and treat predictions like a watch-party bet — not financial advice.",
         ],
       },
@@ -54,13 +54,13 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "bonding-curve-squad-mint",
-    title: "Founding Squad Mint: $0.77 Bonding Curve Explained",
+    title: "Founding Squad Mint: 770 BCC Bonding Curve Explained",
     excerpt:
-      "Eleven ERC-721 players, one global price curve on Base — starts at $0.77 USDC and rises $0.07 every mint. Here's how the game works.",
+      "Eleven ERC-721 players, one global price curve on Base — starts at 770 BCC and rises 70 BCC every mint. Here's how the game works.",
     publishedAt: "2026-07-02T10:00:00.000Z",
     author: "Leonardo · STACK XI",
     category: "NFT",
-    tags: ["ERC-721", "USDC", "bonding curve", "Base"],
+    tags: ["ERC-721", "BCC", "bonding curve", "Base"],
     readTimeMinutes: 5,
     heroImage: "/pepecard.jpg",
     sections: [
@@ -80,7 +80,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Before you sign",
         paragraphs: [
-          "Approve USDC for the exact current price at transaction time. Images move to IPFS as the collection matures; on-chain metadata already records mint order and early-believer status.",
+          "Approve BCC for the exact current price at transaction time. Images move to IPFS as the collection matures; on-chain metadata already records mint order and early-believer status.",
           "Only mint from the official StackXISquad contract linked in-app and on BaseScan.",
         ],
       },
@@ -88,19 +88,19 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "usdc-predictions-dallas-2026",
-    title: "USDC Predictions for Dallas World Cup 2026",
+    title: "BCC Predictions for Dallas World Cup 2026",
     excerpt:
-      "Pick home or away, choose a stake tier, and record your matchday conviction on Base — a guided Pepe flow from side selection to on-chain receipt.",
+      "Pick home or away, choose a BCC stake tier, and record your matchday conviction on Base — a guided Pepe flow from side selection to onchain receipt.",
     publishedAt: "2026-07-02T16:00:00.000Z",
     author: "Leonardo · STACK XI",
     category: "Predictions",
-    tags: ["USDC", "PredictionPool", "Dallas", "World Cup"],
+    tags: ["BCC", "PredictionPool", "Dallas", "World Cup"],
     readTimeMinutes: 4,
     heroImage: "/pepesoccerbeer.jpg",
     sections: [
       {
         paragraphs: [
-          "Predictions are the heartbeat of matchday. STACK XI wraps them in Pepe-guided steps: pick a team, choose $1 / $5 / $10 USDC conviction, connect Base wallet, approve, and submit.",
+          "Predictions are the heartbeat of matchday. STACK XI wraps them in Pepe-guided steps: pick a team, choose 1K / 5K / 10K BCC conviction, connect Base wallet, approve, and submit.",
           "Transactions go through the PredictionPool contract — not a raw token transfer — so your pick is recorded with matchId and side on-chain.",
         ],
       },
@@ -134,7 +134,7 @@ export const BLOG_POSTS: BlogPost[] = [
     sections: [
       {
         paragraphs: [
-          "Most of the app lives on Base because that's where our community ships daily: USDC, fast mints, Farcaster-native sharing.",
+          "Most of the app lives on Base because that's where our community ships daily: BCC, fast mints, Farcaster-native sharing.",
           "The /finals route is intentionally separate — a teaser for sBTC-era predictions and Bitcoin finals culture without confusing new users on day one.",
         ],
       },

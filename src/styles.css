@@ -252,4 +252,179 @@
     opacity: 1;
     transform: none;
   }
+  .defi-stadium-sweep,
+  .defi-usdc-particle,
+  .defi-curve-line,
+  .defi-flow-particle,
+  .defi-luck-fill {
+    animation: none !important;
+  }
+}
+
+/* STACK XI DeFi Layer */
+@keyframes defi-stadium-sweep {
+  0%,
+  100% {
+    transform: translateX(-8%) skewX(-6deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateX(8%) skewX(6deg);
+    opacity: 0.45;
+  }
+}
+
+.defi-stadium-sweep {
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    oklch(0.88 0.28 145 / 0.08) 35%,
+    oklch(0.75 0.22 240 / 0.12) 50%,
+    oklch(0.88 0.28 145 / 0.08) 65%,
+    transparent 100%
+  );
+  animation: defi-stadium-sweep 14s ease-in-out infinite;
+}
+
+.defi-grid-fog {
+  background-image:
+    linear-gradient(oklch(0.88 0.28 145 / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.75 0.22 240 / 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+}
+
+@keyframes defi-particle-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(-24px) scale(1.2);
+    opacity: 0.75;
+  }
+}
+
+.defi-usdc-particle {
+  box-shadow: 0 0 12px oklch(0.88 0.28 145 / 0.5);
+  animation: defi-particle-float 8s ease-in-out infinite;
+}
+
+.defi-tilt-card {
+  transform: rotate(-0.35deg);
+}
+
+.defi-tilt-card-reverse {
+  transform: rotate(0.35deg);
+}
+
+@keyframes defi-curve-draw {
+  from {
+    stroke-dashoffset: 400;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.defi-curve-line {
+  stroke-dasharray: 400;
+  animation: defi-curve-draw 2s ease-out forwards;
+}
+
+.defi-curve-dot {
+  filter: drop-shadow(0 0 8px oklch(0.88 0.28 145 / 0.8));
+}
+
+.defi-energy-btn:active {
+  animation: defi-energy-pulse 0.45s ease-out;
+}
+
+@keyframes defi-energy-pulse {
+  0% {
+    box-shadow: 0 0 0 0 oklch(0.88 0.28 145 / 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 16px oklch(0.88 0.28 145 / 0);
+  }
+}
+
+.defi-pool-pulse {
+  animation: defi-pool-flash 0.6s ease-out;
+}
+
+@keyframes defi-pool-flash {
+  0% {
+    filter: brightness(1);
+  }
+  40% {
+    filter: brightness(1.35);
+    text-shadow: 0 0 20px oklch(0.88 0.28 145 / 0.6);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+.defi-position-tile:hover {
+  box-shadow: 0 0 32px oklch(0.88 0.28 145 / 0.35);
+  outline: 1px solid oklch(0.88 0.28 145 / 0.45);
+}
+
+@keyframes defi-luck-glow {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.15);
+  }
+}
+
+.defi-luck-fill {
+  animation: defi-luck-glow 3s ease-in-out infinite;
+}
+
+@keyframes defi-flow-drop {
+  0% {
+    transform: translate(-50%, -48px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 8px);
+    opacity: 0;
+  }
+}
+
+.defi-flow-particle {
+  animation: defi-flow-drop 2.5s ease-in infinite;
+}
+
+.defi-final-cta {
+  background: linear-gradient(180deg, oklch(0.14 0.02 240 / 0), oklch(0.88 0.28 145 / 0.06));
+}
+
+.prediction-stake-blur {
+  text-shadow: 0 0 20px oklch(0.88 0.28 145 / 0.45);
+  filter: drop-shadow(0 0 8px oklch(0.88 0.28 145 / 0.35));
+}
+
+@keyframes prediction-meme-in {
+  0% {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.prediction-meme-card {
+  animation: prediction-meme-in 0.8s ease-out;
 }

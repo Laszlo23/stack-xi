@@ -10,7 +10,7 @@ export const Route = createFileRoute("/blog/")({
     const seo = buildPageSeo({
       title: "Blog",
       description:
-        "STACK XI blog — Pepe matchday culture, Base USDC predictions, founding squad NFT mint guides, and Dallas World Cup 2026 builder stories.",
+        "STACK XI blog — Building Culture Pepe matchdays, Base BCC predictions, founding squad NFT mint guides, and Dallas World Cup 2026 builder stories.",
       path: "/blog",
       keywords: ["STACK XI blog", "Base crypto culture", "World Cup predictions", "NFT mint guide"],
       jsonLd: [

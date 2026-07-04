@@ -6,7 +6,7 @@ import { StacksWalletChip } from "@/features/wallet/StacksWalletChip";
 const FINALS_BEATS = [
   {
     id: "bridge",
-    line: "You minted on Base. You predicted in USDC. Now the tournament asks for the Bitcoin finals arc.",
+    line: "You minted on Base. You predicted in BCC. France is the arc now — Leonardo's pick to win Jul 19 before the Bitcoin finals on Stacks.",
     sub: "Semifinal + Final mint lands on Stacks — sBTC, culture, chaos.",
   },
   {
