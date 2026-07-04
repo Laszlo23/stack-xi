@@ -7,6 +7,11 @@ export type SubmitBasePredictionParams = {
   useContract: boolean;
 };
 
+export type EnsureBccAllowanceFn = (
+  spender: `0x${string}`,
+  amount: bigint,
+) => Promise<`0x${string}` | null>;
+
 export async function submitBasePrediction(
   writeContract: (args: {
     address: `0x${string}`;
@@ -14,14 +19,14 @@ export async function submitBasePrediction(
     functionName: string;
     args: unknown[];
   }) => Promise<`0x${string}`>,
-  approveBcc: (spender: `0x${string}`, amount: bigint) => Promise<`0x${string}`>,
+  ensureAllowance: EnsureBccAllowanceFn,
   params: SubmitBasePredictionParams,
 ): Promise<`0x${string}`> {
   if (!isPredictionPoolConfigured() || !PREDICTION_POOL_ADDRESS) {
     throw new Error("Prediction pool not configured. Set VITE_PREDICTION_POOL_ADDRESS.");
   }
 
-  await approveBcc(PREDICTION_POOL_ADDRESS, params.amount);
+  await ensureAllowance(PREDICTION_POOL_ADDRESS, params.amount);
   return writeContract({
     address: PREDICTION_POOL_ADDRESS,
     abi: PREDICTION_POOL_ABI,

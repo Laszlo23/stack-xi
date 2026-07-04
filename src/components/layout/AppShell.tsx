@@ -5,7 +5,7 @@ import { PROTOCOL_NAME } from "@/domain/constants";
 import { BaseWalletChip } from "@/features/wallet/BaseWalletChip";
 import { FOOTER_BASESCAN, FOOTER_COMMUNITY, FOOTER_SITE_ROUTES } from "@/lib/legal/footer-links";
 import { BCC_BASESCAN_URL } from "@/lib/base/config";
-import { getActiveMatchday, getLastCompletedMatchday } from "@/lib/story/dallas-schedule";
+import { getActiveMarket, getLastCompletedMarket } from "@/lib/story/match-markets";
 
 const NAV_ITEMS = [
   { hash: undefined, route: "/" as const, label: "Home", icon: Home },
@@ -74,8 +74,8 @@ function NavItem({
 export function AppNav() {
   const [activeHash, setActiveHash] = useState("");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const activeMatch = getActiveMatchday();
-  const lastResult = getLastCompletedMatchday();
+  const activeMatch = getActiveMarket();
+  const lastResult = getLastCompletedMarket();
 
   useEffect(() => {
     const sync = () => setActiveHash(window.location.hash.replace("#", ""));

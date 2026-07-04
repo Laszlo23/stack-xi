@@ -6,10 +6,13 @@ export function PredictionReceiptPanel({
   home,
   away,
   stage,
+  settlementStatus = "pending",
 }: {
   home: string;
   away: string;
   stage: string;
+  /** pending | settled — MVP uses off-chain pool payout after match */
+  settlementStatus?: "pending" | "settled";
 }) {
   const summary = getMockReceiptsForMatch(`${stage} · ${home} vs ${away}`, home, away);
   const winners = summary.receipts.filter(
@@ -24,11 +27,24 @@ export function PredictionReceiptPanel({
           Prediction receipts
         </div>
         <h3 className="mt-2 font-display text-xl font-bold">
-          Top {summary.topLuckPercent}% earn LUCK
+          Top {summary.topLuckPercent}% earn LUCK + BCC pool share
         </h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Result: <strong className="text-foreground">{summary.winnerTeam}</strong> · Leaderboard
-          updates after final whistle (MVP).
+          Result: <strong className="text-foreground">{summary.winnerTeam}</strong>
+        </p>
+        <div
+          className={`mt-3 inline-flex rounded-lg border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest ${
+            settlementStatus === "settled"
+              ? "border-primary/40 bg-primary/10 text-primary"
+              : "border-accent/40 bg-accent/10 text-accent"
+          }`}
+        >
+          Settlement:{" "}
+          {settlementStatus === "settled" ? "BCC rewards distributed" : "Awaiting final whistle"}
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          MVP: winners receive BCC from the prediction pool via treasury multisig after match
+          settlement. On-chain claim contracts coming in v2.
         </p>
 
         <ol className="mt-6 space-y-2">

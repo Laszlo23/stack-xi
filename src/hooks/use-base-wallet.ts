@@ -1,4 +1,11 @@
-import { useAccount, useConnect, useDisconnect, useReadContract, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useConnect,
+  useDisconnect,
+  usePublicClient,
+  useReadContract,
+  useWriteContract,
+} from "wagmi";
 import { getAccount } from "wagmi/actions";
 import {
   BCC_TOKEN_ADDRESS,
@@ -8,6 +15,7 @@ import {
   formatBcc,
   formatUsdc,
 } from "@/lib/base/config";
+import { ensureBccAllowance } from "@/lib/base/ensure-bcc-allowance";
 import { wagmiConfig } from "@/lib/base/wagmi-config";
 
 export function useBaseWallet() {
@@ -15,6 +23,7 @@ export function useBaseWallet() {
   const { connectors, connectAsync } = useConnect();
   const { disconnect } = useDisconnect();
   const { writeContractAsync } = useWriteContract();
+  const publicClient = usePublicClient();
 
   const { data: usdcBalance = 0n } = useReadContract({
     address: USDC_ADDRESS,
@@ -55,8 +64,15 @@ export function useBaseWallet() {
     });
   }
 
+  async function ensureBccAllowanceFor(spender: `0x${string}`, amount: bigint) {
+    const owner = getAccount(wagmiConfig).address ?? address;
+    if (!owner) throw new Error("Wallet not connected");
+    if (!publicClient) throw new Error("RPC client not ready");
+    return ensureBccAllowance(publicClient, writeContractAsync, owner, spender, amount);
+  }
+
   async function approveBcc(spender: `0x${string}`, amount: bigint) {
-    return approveToken(BCC_TOKEN_ADDRESS, spender, amount);
+    return ensureBccAllowanceFor(spender, amount);
   }
 
   async function approveUsdc(spender: `0x${string}`, amount: bigint) {
@@ -77,7 +93,9 @@ export function useBaseWallet() {
     writeContractAsync,
     approveUsdc,
     approveBcc,
+    ensureBccAllowance: ensureBccAllowanceFor,
     approveToken,
     refetchBccBalance,
+    publicClient,
   };
 }

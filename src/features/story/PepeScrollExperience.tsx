@@ -7,14 +7,17 @@ import { GuidedPredictionFlow } from "@/features/predict/GuidedPredictionFlow";
 import { MatchdayStorySection } from "@/features/story/MatchdayStorySection";
 import { PepeVisualScroll } from "@/features/story/PepeVisualScroll";
 import {
-  getActiveMatchday,
-  getLastCompletedMatchday,
-  WORLD_CUP_WINNER_PICK,
-} from "@/lib/story/dallas-schedule";
+  getActiveMarket,
+  getActiveMarketKind,
+  getLastCompletedMarket,
+} from "@/lib/story/match-markets";
+import { AUSTRIAN_LEAGUE_TAGLINE } from "@/lib/story/austrian-bundesliga-schedule";
+import { WORLD_CUP_WINNER_PICK } from "@/lib/story/dallas-schedule";
 
 export function PepeScrollExperience() {
-  const activeMatch = getActiveMatchday();
-  const lastResult = getLastCompletedMatchday();
+  const activeMatch = getActiveMarket();
+  const lastResult = getLastCompletedMarket();
+  const isAustrianMarket = getActiveMarketKind() === "austrian_bundesliga";
 
   return (
     <div className="scroll-smooth">
@@ -43,7 +46,15 @@ export function PepeScrollExperience() {
               {PROTOCOL_TAGLINE}
             </div>
             <h1 className="mt-6 font-display text-4xl font-bold leading-tight sm:text-6xl">
-              Dallas Matchdays on <span className="text-gradient">Base</span>
+              {isAustrianMarket ? (
+                <>
+                  Austrian Bundesliga on <span className="text-gradient">Base</span>
+                </>
+              ) : (
+                <>
+                  Dallas Matchdays on <span className="text-gradient">Base</span>
+                </>
+              )}
             </h1>
             <p className="mt-4 max-w-xl text-lg text-muted-foreground">{PROTOCOL_ONE_LINER}</p>
             <p className="mt-3 font-mono text-sm text-primary">
@@ -55,9 +66,14 @@ export function PepeScrollExperience() {
                 Last in Dallas: {lastResult.home} vs {lastResult.away} · {lastResult.result}
               </p>
             )}
-            <p className="mt-2 font-mono text-xs text-accent">
-              Leonardo&apos;s pick to win it all: {WORLD_CUP_WINNER_PICK} · Final Jul 19
-            </p>
+            {!isAustrianMarket && (
+              <p className="mt-2 font-mono text-xs text-accent">
+                Leonardo&apos;s pick to win it all: {WORLD_CUP_WINNER_PICK} · Final Jul 19
+              </p>
+            )}
+            {isAustrianMarket && (
+              <p className="mt-2 font-mono text-xs text-accent">{AUSTRIAN_LEAGUE_TAGLINE}</p>
+            )}
 
             <div className="mt-8 flex flex-wrap gap-3">
               <a

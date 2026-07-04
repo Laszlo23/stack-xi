@@ -1,17 +1,27 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { proxyZeroXQuote, isZeroXConfigured } from "@/lib/swap/zerox-proxy";
+import { validateSellAmount, validateSwapPair } from "@/lib/swap/validate-swap-params";
+import {
+  checkRateLimit,
+  jsonError,
+  requireTrustedOrigin,
+  securityHeaders,
+} from "@/lib/server/api-guard";
 
 export const Route = createFileRoute("/api/swap/quote")({
   server: {
     handlers: {
       GET: async ({ request }) => {
+        const rateLimited = checkRateLimit(request, { routeId: "swap-quote", maxPerWindow: 20 });
+        if (rateLimited) return rateLimited;
+
+        const forbidden = requireTrustedOrigin(request);
+        if (forbidden) return forbidden;
+
         if (!isZeroXConfigured()) {
           return new Response(
             JSON.stringify({ error: "Swap API not configured", mode: "deeplink_only" }),
-            {
-              status: 503,
-              headers: { "content-type": "application/json" },
-            },
+            { status: 503, headers: securityHeaders() },
           );
         }
 
@@ -28,11 +38,14 @@ export const Route = createFileRoute("/api/swap/quote")({
           !sellAmount ||
           !taker?.startsWith("0x")
         ) {
-          return new Response(JSON.stringify({ error: "Missing swap params" }), {
-            status: 400,
-            headers: { "content-type": "application/json" },
-          });
+          return jsonError(400, "Missing swap params");
         }
+
+        const pairCheck = validateSwapPair(sellToken, buyToken);
+        if (!pairCheck.ok) return jsonError(400, pairCheck.error);
+
+        const amountCheck = validateSellAmount(sellAmount);
+        if (!amountCheck.ok) return jsonError(400, amountCheck.error);
 
         try {
           const data = await proxyZeroXQuote({
@@ -42,14 +55,12 @@ export const Route = createFileRoute("/api/swap/quote")({
             taker: taker as `0x${string}`,
             slippageBps: slippageBps ? Number(slippageBps) : undefined,
           });
-          return new Response(JSON.stringify(data), {
-            headers: { "content-type": "application/json" },
-          });
+          return new Response(JSON.stringify(data), { headers: securityHeaders() });
         } catch (err) {
           const message = err instanceof Error ? err.message : "0x quote failed";
           return new Response(JSON.stringify({ error: message }), {
             status: 502,
-            headers: { "content-type": "application/json" },
+            headers: securityHeaders(),
           });
         }
       },

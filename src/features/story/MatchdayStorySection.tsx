@@ -1,13 +1,13 @@
-import { getActiveMatchday, getNextMatchday } from "@/lib/story/dallas-schedule";
+import { getActiveMarket, getNextMarket } from "@/lib/story/match-markets";
 import { getMatchdayStory, PEPE_ORIGIN_STORY } from "@/lib/story/matchday-stories";
 import { PepeBubble } from "@/features/story/PepeBubble";
 import { SharePostCard } from "@/features/story/ShareActions";
 import { BuilderShoutOutStrip } from "@/features/story/BuilderShoutOutStrip";
 
 export function MatchdayStorySection() {
-  const match = getActiveMatchday();
+  const match = getActiveMarket();
   const story = getMatchdayStory(match);
-  const next = getNextMatchday(match);
+  const next = getNextMarket(match);
 
   return (
     <section id="story" className="border-y border-border/60 bg-surface/40 py-16 sm:py-24">

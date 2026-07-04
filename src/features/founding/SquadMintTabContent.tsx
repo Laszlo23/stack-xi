@@ -163,7 +163,7 @@ export function SquadMintTabContent() {
     connectWallet,
     isConnecting,
     address,
-    approveBcc,
+    ensureBccAllowance,
     writeContractAsync,
     bccBalance,
   } = useBaseWallet();
@@ -226,7 +226,7 @@ export function SquadMintTabContent() {
         throw new Error(`Insufficient ${BCC_SYMBOL}. Buy BCC first, then mint.`);
       }
 
-      await approveBcc(SQUAD_NFT_ADDRESS, freshPrice);
+      await ensureBccAllowance(SQUAD_NFT_ADDRESS, freshPrice);
 
       const hash = await writeContractAsync({
         address: SQUAD_NFT_ADDRESS,

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Loader2, Timer } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { FarcasterCastAssistant } from "@/features/farcaster/FarcasterCastAssistant";
 import { PepeBubble } from "@/features/story/PepeBubble";
 import { BccAcquireGate } from "@/features/swap/BccAcquireGate";
@@ -19,12 +19,16 @@ import {
 } from "@/lib/base/config";
 import { useEffect, useState } from "react";
 import { buildPredictCast } from "@/lib/farcaster/cast-templates";
-import { formatCountdown, getPredictionWindow } from "@/lib/predict/match-window";
+import {
+  formatCountdown,
+  getPredictionWindow,
+  isPredictionSubmitAllowed,
+} from "@/lib/predict/match-window";
 import { hasShareUnlock } from "@/lib/predict/share-unlock";
 import { getAccount } from "wagmi/actions";
 import { submitBasePrediction } from "@/lib/base/submit-prediction";
 import { recordPredictionTx } from "@/lib/profile/task-storage";
-import { getActiveMatchday } from "@/lib/story/dallas-schedule";
+import { getActiveMarket } from "@/lib/story/match-markets";
 import { wagmiConfig } from "@/lib/base/wagmi-config";
 import {
   PEPE_CONFIRM_INTRO,
@@ -45,14 +49,14 @@ export function GuidedPredictionFlow() {
     connectWallet,
     isConnecting,
     writeContractAsync,
-    approveBcc,
+    ensureBccAllowance,
   } = useBaseWallet();
   const memberTasks = useMemberTasksOptional();
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [, tick] = useState(0);
 
-  const match = getActiveMatchday();
+  const match = getActiveMarket();
   const window = getPredictionWindow(match);
   const pickedTeam =
     session?.pick === "home" ? match.home : session?.pick === "away" ? match.away : null;
@@ -73,6 +77,12 @@ export function GuidedPredictionFlow() {
   async function handleSubmit() {
     if (!session || session.stakeBcc <= 0n || !session.shareUnlocked) return;
 
+    const liveWindow = getPredictionWindow(match);
+    if (!isPredictionSubmitAllowed(liveWindow)) {
+      setSubmitError("Prediction window closed — match has started or strict mode not open yet.");
+      return;
+    }
+
     setSubmitting(true);
     setSubmitError(null);
     try {
@@ -92,7 +102,7 @@ export function GuidedPredictionFlow() {
             functionName: args.functionName,
             args: args.args,
           }),
-        approveBcc,
+        ensureBccAllowance,
         {
           matchId: session.matchId,
           pickHome: session.pick === "home",
@@ -113,7 +123,22 @@ export function GuidedPredictionFlow() {
   }
 
   const windowClosed = window.status === "closed";
-  const windowUpcoming = window.status === "upcoming";
+  const canSubmitOnchain =
+    Boolean(session?.shareUnlocked) &&
+    isPredictionPoolConfigured() &&
+    Boolean(session && session.stakeBcc <= bccBalance) &&
+    isPredictionSubmitAllowed(window);
+
+  const submitBlockers: string[] = [];
+  if (session && !session.shareUnlocked)
+    submitBlockers.push("Complete the cast-to-predict unlock (step 3)");
+  if (!isPredictionPoolConfigured()) {
+    submitBlockers.push("Prediction pool not configured (VITE_PREDICTION_POOL_ADDRESS)");
+  }
+  if (session && session.stakeBcc > bccBalance) {
+    submitBlockers.push(`Insufficient ${BCC_SYMBOL} balance for stake`);
+  }
+  if (windowClosed) submitBlockers.push("Match window closed — predictions lock at kickoff");
 
   return (
     <section id="predict" className="py-16 sm:py-24">
@@ -137,19 +162,6 @@ export function GuidedPredictionFlow() {
           </div>
         )}
 
-        {windowUpcoming && step === 1 && (
-          <div className="mb-8 rounded-xl border border-accent/30 bg-accent/5 px-4 py-4">
-            <div className="flex items-center gap-2 font-mono text-xs uppercase text-accent">
-              <Timer className="h-4 w-4" />
-              Live window opens in {formatCountdown(window.msUntilOpen)}
-            </div>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Predictions unlock {formatCountdown(window.msUntilOpen)} before kickoff. Set your pick
-              early — share gate still applies.
-            </p>
-          </div>
-        )}
-
         {step === 1 && !windowClosed && (
           <div className="space-y-8">
             <PepeBubble beat={PEPE_PREDICT_INTRO} />
@@ -157,12 +169,14 @@ export function GuidedPredictionFlow() {
               <div className="font-mono text-xs uppercase tracking-widest text-primary">
                 Next up · {match.kickoffLabel}
               </div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Predictions stay open until kickoff · {formatCountdown(window.msUntilClose)} left
+              </p>
               <div className="mt-6 flex items-center justify-between gap-4">
                 <button
                   type="button"
                   onClick={() => setPick(match.id, "home")}
-                  disabled={windowUpcoming}
-                  className="glass flex-1 rounded-xl px-4 py-8 transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_32px_var(--neon)] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="glass flex-1 rounded-xl px-4 py-8 transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_32px_var(--neon)]"
                 >
                   <div className="font-display text-2xl font-bold">{match.home}</div>
                 </button>
@@ -170,8 +184,7 @@ export function GuidedPredictionFlow() {
                 <button
                   type="button"
                   onClick={() => setPick(match.id, "away")}
-                  disabled={windowUpcoming}
-                  className="glass flex-1 rounded-xl px-4 py-8 transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_32px_var(--neon)] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="glass flex-1 rounded-xl px-4 py-8 transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_32px_var(--neon)]"
                 >
                   <div className="font-display text-2xl font-bold">{match.away}</div>
                 </button>
@@ -279,13 +292,7 @@ export function GuidedPredictionFlow() {
               <button
                 type="button"
                 onClick={() => void handleSubmit()}
-                disabled={
-                  submitting ||
-                  !session.shareUnlocked ||
-                  !isPredictionPoolConfigured() ||
-                  session.stakeBcc > bccBalance ||
-                  window.status !== "open"
-                }
+                disabled={submitting || !canSubmitOnchain}
                 className="defi-energy-btn flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-base font-bold text-primary-foreground shadow-[0_0_32px_var(--neon)] hover:brightness-110 disabled:opacity-60"
               >
                 {submitting && <Loader2 className="h-5 w-5 animate-spin" />}
@@ -293,10 +300,23 @@ export function GuidedPredictionFlow() {
               </button>
             )}
 
-            {window.status !== "open" && (
+            {!canSubmitOnchain && submitBlockers.length > 0 && (
+              <ul className="space-y-1 rounded-lg border border-border/60 bg-muted/20 px-4 py-3 text-sm text-muted-foreground">
+                {submitBlockers.map((blocker) => (
+                  <li key={blocker}>• {blocker}</li>
+                ))}
+              </ul>
+            )}
+
+            {windowClosed && (
               <p className="text-center text-sm text-muted-foreground">
-                Onchain lock requires an open live window ({formatCountdown(window.msUntilClose)}{" "}
-                left).
+                Predictions lock at kickoff. This match window is closed.
+              </p>
+            )}
+
+            {!windowClosed && window.status === "open" && (
+              <p className="text-center text-sm text-muted-foreground">
+                Open until kickoff · {formatCountdown(window.msUntilClose)} left
               </p>
             )}
 
@@ -329,6 +349,10 @@ export function GuidedPredictionFlow() {
               >
                 View on BaseScan →
               </a>
+              <p className="mt-4 text-sm text-muted-foreground">
+                Winners share the culture pool when the match settles — BCC rewards sent from the
+                prediction pool after final whistle.
+              </p>
             </div>
             <FarcasterCastAssistant
               castText={buildPredictCast({
@@ -361,16 +385,20 @@ export function GuidedPredictionFlow() {
 }
 
 function LiveWindowBadge({ window }: { window: ReturnType<typeof getPredictionWindow> }) {
-  if (window.status === "open") {
+  if (window.status === "closed") {
+    return <span className="text-muted-foreground">Window closed</span>;
+  }
+  if (window.status === "upcoming") {
     return (
-      <span className="inline-flex items-center gap-1.5 text-primary">
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-        Live · {formatCountdown(window.msUntilClose)} left
+      <span className="text-accent">
+        Strict mode · opens in {formatCountdown(window.msUntilOpen)}
       </span>
     );
   }
-  if (window.status === "upcoming") {
-    return <span className="text-accent">Opens in {formatCountdown(window.msUntilOpen)}</span>;
-  }
-  return <span className="text-muted-foreground">Window closed</span>;
+  return (
+    <span className="inline-flex items-center gap-1.5 text-primary">
+      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
+      Open · {formatCountdown(window.msUntilClose)} until kickoff
+    </span>
+  );
 }

@@ -7,12 +7,10 @@ export const USDC_ADDRESS =
   ("0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as const);
 
 export const SQUAD_NFT_ADDRESS = import.meta.env.VITE_SQUAD_NFT_ADDRESS as
-  | `0x${string}`
-  | undefined;
+  `0x${string}` | undefined;
 
 export const PREDICTION_POOL_ADDRESS = import.meta.env.VITE_PREDICTION_POOL_ADDRESS as
-  | `0x${string}`
-  | undefined;
+  `0x${string}` | undefined;
 
 export const USDC_DECIMALS = 6;
 
