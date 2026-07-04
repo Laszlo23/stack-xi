@@ -22,7 +22,11 @@ export function readOfficialXOAuthEnv(): {
 }
 
 export function readLuckAgentAdminSecret(): string | undefined {
-  return readXEnv("LUCK_AGENT_ADMIN_SECRET", "X_MARKETING_ADMIN_SECRET");
+  return readXEnv(
+    "LUCK_AGENT_ADMIN_SECRET",
+    "X_MARKETING_ADMIN_SECRET",
+    "FEEDBACK_ADMIN_SECRET",
+  );
 }
 
 export function serverSiteUrl(): string {

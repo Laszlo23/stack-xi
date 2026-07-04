@@ -21,7 +21,7 @@ export const Route = createFileRoute("/api/farcaster/cast")({
         if (unauthorized) return unauthorized;
 
         const apiKey = process.env.NEYNAR_API_KEY;
-        const signerUuid = process.env.NEYNAR_SIGNER_UUID;
+        const signerUuid = process.env.NEYNAR_SIGNER_UUID ?? process.env.GROVE_NEYNAR_SIGNER_UUID;
 
         if (!apiKey || !signerUuid) {
           return new Response(

@@ -40,7 +40,12 @@ const dryRun = process.argv.includes("--dry-run");
 const origin = String(env.VITE_SITE_URL || env.LUCK_AGENT_PUBLIC_ORIGIN || "")
   .trim()
   .replace(/\/$/, "");
-const secret = String(env.LUCK_AGENT_ADMIN_SECRET || env.X_MARKETING_ADMIN_SECRET || "").trim();
+const secret = String(
+  env.LUCK_AGENT_ADMIN_SECRET ||
+    env.X_MARKETING_ADMIN_SECRET ||
+    env.FEEDBACK_ADMIN_SECRET ||
+    "",
+).trim();
 
 if (!origin) {
   console.error("Missing VITE_SITE_URL or LUCK_AGENT_PUBLIC_ORIGIN in", envPath);
