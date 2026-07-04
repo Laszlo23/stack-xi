@@ -7,7 +7,6 @@ import { DecentralandEventSection } from "@/features/community/DecentralandEvent
 import { DeFiLayerTeaser } from "@/features/defi/DeFiLayerTeaser";
 import { SquadMintSection } from "@/features/founding/SquadMintSection";
 import { GuidedPredictionFlow } from "@/features/predict/GuidedPredictionFlow";
-import { QuickPredictBar } from "@/features/predict/QuickPredictBar";
 import { TelegramConnectWallet } from "@/features/telegram/TelegramConnectWallet";
 import { useSquadMintStatus } from "@/hooks/use-squad-mint-status";
 import { TelegramGamePanel } from "@/features/telegram/TelegramGamePanel";
@@ -37,7 +36,6 @@ export function PepeScrollExperience() {
 
   return (
     <div className="scroll-smooth">
-      <QuickPredictBar />
       <section className="relative flex min-h-[90vh] flex-col justify-center overflow-hidden">
         <div
           className="pointer-events-none absolute inset-0 opacity-40"

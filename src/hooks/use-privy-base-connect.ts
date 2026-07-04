@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import {
-  useActiveWallet,
+  useConnectWallet,
   useLogin,
   usePrivy,
   useWallets,
@@ -8,16 +8,13 @@ import {
 } from "@privy-io/react-auth";
 import { useSetActiveWallet } from "@privy-io/wagmi";
 import { useConfig } from "wagmi";
-import { getAccount, switchChain } from "wagmi/actions";
+import { getAccount, getConnectors, switchChain } from "wagmi/actions";
 import { base } from "wagmi/chains";
 import { useBaseWallet } from "@/hooks/use-base-wallet";
-import { isPrivyEnabled } from "@/lib/base/privy-config";
 import {
   formatWalletConnectError,
   isWalletConnectUserRejection,
 } from "@/lib/base/pick-wallet-connector";
-import { shouldUsePrivyConnectFlow } from "@/lib/base/privy-env";
-import { isTelegramMiniApp } from "@/lib/telegram/types";
 
 async function waitUntil(check: () => boolean, timeoutMs: number, label: string): Promise<void> {
   const deadline = Date.now() + timeoutMs;
@@ -38,19 +35,28 @@ function pickEthereumWallet(wallets: ConnectedWallet[]): ConnectedWallet | undef
   );
 }
 
+function walletConnectorId(wallet: ConnectedWallet): string {
+  return wallet.walletClientType === "privy"
+    ? `${wallet.meta.id}.${wallet.address}`
+    : wallet.meta.id;
+}
+
 export function usePrivyBaseConnect() {
   const config = useConfig();
-  const privyConnectFlow = shouldUsePrivyConnectFlow() && isPrivyEnabled();
   const { authenticated, ready: privyReady } = usePrivy();
   const { wallets, ready: walletsReady } = useWallets();
-  const { connect: privyWalletConnect } = useActiveWallet();
   const { setActiveWallet } = useSetActiveWallet();
-  const { address, connectWallet: wagmiConnect, clearConnectError } = useBaseWallet();
+  const { address, clearConnectError } = useBaseWallet();
   const [connectPending, setConnectPending] = useState(false);
   const [connectError, setConnectError] = useState<string | null>(null);
 
   const loginWaiterRef = useRef<{
     resolve: () => void;
+    reject: (error: Error) => void;
+  } | null>(null);
+
+  const connectModalWaiterRef = useRef<{
+    resolve: (wallet: ConnectedWallet) => void;
     reject: (error: Error) => void;
   } | null>(null);
 
@@ -65,6 +71,23 @@ export function usePrivyBaseConnect() {
     },
   });
 
+  const { connectWallet: openConnectWalletModal } = useConnectWallet({
+    onSuccess: ({ wallet }) => {
+      if (wallet?.type === "ethereum") {
+        connectModalWaiterRef.current?.resolve(wallet as ConnectedWallet);
+      } else {
+        connectModalWaiterRef.current?.reject(
+          new Error("Connect an Ethereum wallet on Base to continue."),
+        );
+      }
+      connectModalWaiterRef.current = null;
+    },
+    onError: (error) => {
+      connectModalWaiterRef.current?.reject(new Error(String(error)));
+      connectModalWaiterRef.current = null;
+    },
+  });
+
   const privyReadyRef = useRef(privyReady);
   const walletsReadyRef = useRef(walletsReady);
   const walletsRef = useRef(wallets);
@@ -74,8 +97,21 @@ export function usePrivyBaseConnect() {
   walletsRef.current = wallets;
   authenticatedRef.current = authenticated;
 
+  const waitForWalletConnector = useCallback(
+    async (wallet: ConnectedWallet): Promise<void> => {
+      const expectedId = walletConnectorId(wallet);
+      await waitUntil(
+        () => getConnectors(config).some((connector) => connector.id === expectedId),
+        15_000,
+        "Privy connector setup",
+      );
+    },
+    [config],
+  );
+
   const syncPrivyWalletToWagmi = useCallback(
     async (wallet: ConnectedWallet): Promise<`0x${string}`> => {
+      await waitForWalletConnector(wallet);
       await setActiveWallet(wallet);
 
       await waitUntil(() => {
@@ -102,7 +138,7 @@ export function usePrivyBaseConnect() {
 
       return synced;
     },
-    [config, setActiveWallet],
+    [config, setActiveWallet, waitForWalletConnector],
   );
 
   const waitForPrivyLogin = useCallback((): Promise<void> => {
@@ -111,6 +147,13 @@ export function usePrivyBaseConnect() {
       login({ loginMethods: ["wallet"] });
     });
   }, [login]);
+
+  const promptConnectWallet = useCallback((): Promise<ConnectedWallet> => {
+    return new Promise<ConnectedWallet>((resolve, reject) => {
+      connectModalWaiterRef.current = { resolve, reject };
+      openConnectWalletModal();
+    });
+  }, [openConnectWalletModal]);
 
   const connectWallet = useCallback(async (): Promise<`0x${string}`> => {
     const active = getAccount(config).address ?? address;
@@ -121,40 +164,45 @@ export function usePrivyBaseConnect() {
     setConnectPending(true);
 
     try {
-      if (isTelegramMiniApp() || !privyConnectFlow) {
-        return await wagmiConnect();
-      }
+      await waitUntil(() => privyReadyRef.current, 20_000, "Wallet service");
 
-      await waitUntil(() => privyReadyRef.current, 12_000, "Wallet service");
-
-      if (authenticatedRef.current && walletsReadyRef.current && walletsRef.current.length > 0) {
+      if (authenticatedRef.current && walletsRef.current.length > 0) {
+        if (!walletsReadyRef.current) {
+          await waitUntil(() => walletsReadyRef.current, 8_000, "Wallet list");
+        }
         const existing = pickEthereumWallet(walletsRef.current);
         if (existing) {
           return await syncPrivyWalletToWagmi(existing);
         }
       }
 
-      const connectResult = await privyWalletConnect();
-      if (connectResult.wallet && connectResult.wallet.type === "ethereum") {
-        return await syncPrivyWalletToWagmi(connectResult.wallet as ConnectedWallet);
+      try {
+        const connectedWallet = await promptConnectWallet();
+        return await syncPrivyWalletToWagmi(connectedWallet);
+      } catch (modalError) {
+        if (isWalletConnectUserRejection(modalError)) {
+          throw modalError;
+        }
+
+        if (!authenticatedRef.current) {
+          await waitForPrivyLogin();
+        }
+
+        await waitUntil(
+          () => walletsReadyRef.current && walletsRef.current.length > 0,
+          20_000,
+          "Wallet selection",
+        );
+
+        const wallet = pickEthereumWallet(walletsRef.current);
+        if (!wallet) {
+          throw new Error(
+            "No wallet found after login — connect an external wallet or create one.",
+          );
+        }
+
+        return await syncPrivyWalletToWagmi(wallet);
       }
-
-      if (!authenticatedRef.current) {
-        await waitForPrivyLogin();
-      }
-
-      await waitUntil(
-        () => walletsReadyRef.current && walletsRef.current.length > 0,
-        20_000,
-        "Wallet selection",
-      );
-
-      const wallet = pickEthereumWallet(walletsRef.current);
-      if (!wallet) {
-        throw new Error("No wallet found after login — connect an external wallet or create one.");
-      }
-
-      return await syncPrivyWalletToWagmi(wallet);
     } catch (error) {
       if (!isWalletConnectUserRejection(error)) {
         const message = formatWalletConnectError(error);
@@ -164,16 +212,7 @@ export function usePrivyBaseConnect() {
     } finally {
       setConnectPending(false);
     }
-  }, [
-    address,
-    clearConnectError,
-    config,
-    privyConnectFlow,
-    privyWalletConnect,
-    syncPrivyWalletToWagmi,
-    waitForPrivyLogin,
-    wagmiConnect,
-  ]);
+  }, [address, clearConnectError, config, promptConnectWallet, syncPrivyWalletToWagmi, waitForPrivyLogin]);
 
   return {
     connectWallet,

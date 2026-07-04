@@ -18,6 +18,9 @@
     "test:sponsor-security": "bun run scripts/test-sponsor-security.ts",
     "deploy:vps": "bash scripts/deploy-vps.sh",
     "setup:telegram": "bun run scripts/setup-telegram-bot.ts",
+    "setup:cdp-swap-payer": "bun run scripts/setup-cdp-swap-payer.ts",
+    "setup:alchemy-swap-payer": "bun run scripts/setup-alchemy-swap-payer.ts",
+    "sync:alchemy-cli-wallet": "bun run scripts/sync-alchemy-cli-wallet.ts",
     "luck:tick": "node scripts/luck-agent-tick.mjs",
     "luck:tick:dry": "node scripts/luck-agent-tick.mjs --dry-run",
     "luck:post": "node scripts/luck-x-post.mjs",
@@ -34,6 +37,7 @@
     "contracts:build": "forge build"
   },
   "dependencies": {
+    "@coinbase/cdp-sdk": "^1.51.2",
     "@farcaster/miniapp-sdk": "^0.3.0",
     "@hookform/resolvers": "^5.4.0",
     "@privy-io/react-auth": "^3.33.1",

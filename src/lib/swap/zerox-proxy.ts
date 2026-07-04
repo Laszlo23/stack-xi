@@ -4,7 +4,8 @@ import type {
   ZeroXQuoteParams,
   ZeroXQuoteResponse,
 } from "./zerox-types";
-import { fetchZeroXWithX402, getSwapMode, isX402PayerConfigured } from "./zerox-x402-server";
+import { isAlchemyPayerAddressMismatch } from "@/lib/server/alchemy-config";
+import { fetchZeroXWithX402, getSwapMode, getX402PayerKind, isX402PayerConfigured } from "./zerox-x402-server";
 
 const ZEROX_BASE = "https://api.0x.org";
 
@@ -73,7 +74,8 @@ export async function proxyZeroXQuote(params: ZeroXQuoteParams): Promise<ZeroXQu
 }
 
 export function isZeroXConfigured(): boolean {
+  if (isAlchemyPayerAddressMismatch()) return false;
   return getSwapMode() !== "deeplink_only";
 }
 
-export { getSwapMode, isX402PayerConfigured };
+export { getSwapMode, getX402PayerKind, isX402PayerConfigured };

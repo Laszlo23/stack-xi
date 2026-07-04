@@ -75,12 +75,15 @@ In-app swap for USDC/ETH → BCC uses a **fallback chain** — no 0x dashboard k
 | Tier | Mode | Env |
 |------|------|-----|
 | **A** | Classic 0x API key (server proxy) | `ZEROX_API_KEY` |
-| **B** | x402 micropayments (~$0.01 USDC/request) from **project payer wallet** | `X402_SWAP_PAYER_PRIVATE_KEY` |
+| **B** | x402 micropayments via **Alchemy agent wallet** (no Coinbase verification) | `ALCHEMY_WALLET_KEY` or `PRIVATE_KEY` + `ALCHEMY_API_KEY` |
+| **B′** | x402 via dedicated hot-wallet key | `X402_SWAP_PAYER_PRIVATE_KEY` |
+| **B″** | x402 via CDP API wallet (Coinbase portal) | `CDP_API_KEY_*` + `CDP_WALLET_SECRET` |
 | **C** | Deeplinks — Uniswap, Base App, Clanker, Aerodrome | always available |
 
 - **Quotes** are fetched server-side (`/api/swap/price`, `/api/swap/quote`).
 - **Execution** uses the **user's connected wallet** (approve + swap tx from 0x calldata).
-- Check mode: `GET /api/swap/status` → `{ configured, mode }`.
+- Check mode: `GET /api/swap/status` → `{ configured, mode, payer }`.
+- Alchemy setup: `bun run setup:alchemy-swap-payer` (uses `PRIVATE_KEY` or `ALCHEMY_WALLET_KEY`).
 
 Fund the x402 payer wallet with USDC on Base before expecting Tier B quotes.
 

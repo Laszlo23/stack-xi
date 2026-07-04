@@ -7,7 +7,7 @@ SSH_KEY="${SSH_KEY:-$HOME/.ssh/id_ed25519_wgsdex}"
 SSH_HOST="${SSH_HOST:-root@187.124.18.204}"
 APP_DIR="/var/www/pepe-buildingculture"
 DOMAIN="pepe.buildingcultureid.space"
-PORT=3014
+PORT=3015
 SERVICE="stack-xi-pepe"
 
 echo "==> Building production bundle (node_server)..."
@@ -88,11 +88,20 @@ REMOTE
 
 echo "==> Smoke checks..."
 HOME_CODE="$(curl -sf -o /dev/null -w "%{http_code}" "https://${DOMAIN}/" || echo "000")"
+HOME_HTML="$(curl -sf "https://${DOMAIN}/" || true)"
 if [[ "$HOME_CODE" != "200" ]]; then
   echo "FAIL: home returned HTTP $HOME_CODE (expected 200)"
   exit 1
 fi
-echo "  ✓ home HTTP 200"
+if echo "$HOME_HTML" | grep -qi "RESET by Building Culture"; then
+  echo "FAIL: home is serving RESET app — check nginx port and stack-xi-pepe service"
+  exit 1
+fi
+if ! echo "$HOME_HTML" | grep -qi "STACK"; then
+  echo "FAIL: home missing STACK XI branding"
+  exit 1
+fi
+echo "  ✓ home HTTP 200 (STACK XI)"
 
 IMPRINT_HTML="$(curl -sf "https://${DOMAIN}/imprint" || true)"
 IMPRINT_CODE="$(curl -sf -o /dev/null -w "%{http_code}" "https://${DOMAIN}/imprint" || echo "000")"

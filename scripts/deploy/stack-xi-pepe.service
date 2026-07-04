@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 WorkingDirectory=/var/www/pepe-buildingculture
 EnvironmentFile=/var/www/pepe-buildingculture/.env
-Environment=PORT=3014
+Environment=PORT=3015
 Environment=HOST=127.0.0.1
 Environment=NODE_ENV=production
 ExecStart=/usr/bin/node dist/server/index.mjs

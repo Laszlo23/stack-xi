@@ -2,7 +2,7 @@ import { PrivyProvider } from "@privy-io/react-auth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { base } from "wagmi/chains";
-import { isPrivySecureContext, shouldUsePrivyConnectFlow } from "@/lib/base/privy-env";
+import { isPrivySecureContext } from "@/lib/base/privy-env";
 import { BaseWagmiProvider, createWagmiConfig } from "@/lib/base/wagmi-config";
 import { createPrivyConfig, PrivyWagmiProvider } from "@/lib/base/privy-wagmi-config";
 import {
@@ -17,11 +17,7 @@ export function isPrivyEnabled(): boolean {
 }
 
 function PrivyConnectLayer({ children }: { children: ReactNode }) {
-  const privyConnectFlow = shouldUsePrivyConnectFlow();
-  if (privyConnectFlow) {
-    return <PrivyConnectBridge>{children}</PrivyConnectBridge>;
-  }
-  return <ConnectBaseWalletProvider>{children}</ConnectBaseWalletProvider>;
+  return <PrivyConnectBridge>{children}</PrivyConnectBridge>;
 }
 
 export function Web3Providers({

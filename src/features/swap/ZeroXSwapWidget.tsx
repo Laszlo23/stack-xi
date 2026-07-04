@@ -14,6 +14,7 @@ import {
 type SwapStatus = {
   configured: boolean;
   mode: "api_key" | "x402" | "deeplink_only";
+  payer?: "cdp" | "alchemy" | "hot_wallet" | null;
   hint?: string;
 };
 
@@ -139,7 +140,13 @@ export function ZeroXSwapWidget({
     >
       {swapStatus?.mode === "x402" && !compact && (
         <p className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-[10px] text-muted-foreground">
-          Quotes via project x402 wallet · you sign the swap with your connected wallet
+          Quotes via{" "}
+          {swapStatus.payer === "cdp"
+            ? "CDP API wallet"
+            : swapStatus.payer === "alchemy"
+              ? "Alchemy agent wallet"
+              : "project x402 wallet"}{" "}
+          · you sign the swap with your connected wallet
         </p>
       )}
 

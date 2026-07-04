@@ -1,11 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { BookOpen, Glasses, Home, ShieldCheck, Sparkles, Target, User, Users } from "lucide-react";
 import { useEffect, useState } from "react";
+import { MatchdayTicker } from "@/components/layout/MatchdayTicker";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 import { PROTOCOL_NAME } from "@/domain/constants";
 import { BaseWalletChip } from "@/features/wallet/BaseWalletChip";
-import { FOOTER_BASESCAN, FOOTER_COMMUNITY, FOOTER_SITE_ROUTES } from "@/lib/legal/footer-links";
-import { BCC_BASESCAN_URL } from "@/lib/base/config";
-import { getActiveMarket, getLastCompletedMarket } from "@/lib/story/match-markets";
 
 const NAV_ITEMS = [
   { hash: undefined, route: "/" as const, label: "Home", icon: Home },
@@ -74,8 +73,6 @@ function NavItem({
 export function AppNav() {
   const [activeHash, setActiveHash] = useState("");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const activeMatch = getActiveMarket();
-  const lastResult = getLastCompletedMarket();
 
   useEffect(() => {
     const sync = () => setActiveHash(window.location.hash.replace("#", ""));
@@ -87,26 +84,8 @@ export function AppNav() {
   return (
     <>
       <header className="sticky top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-xl">
-        <div className="border-b border-primary/20 bg-primary/5 px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs">
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-              {lastResult?.result ? (
-                <>
-                  Last: {lastResult.home} vs {lastResult.away} · {lastResult.result} · Next:{" "}
-                  {activeMatch.home} vs {activeMatch.away} · {activeMatch.kickoffLabel} ·
-                </>
-              ) : (
-                <>
-                  Next: {activeMatch.home} vs {activeMatch.away} · {activeMatch.kickoffLabel} ·
-                </>
-              )}{" "}
-              Base BCC ·{" "}
-              <Link to="/defi" className="underline decoration-primary/50 hover:text-primary">
-                Building Culture layer
-              </Link>
-            </span>
-          </div>
+        <div className="border-b border-primary/20 bg-primary/5 px-4 py-1.5">
+          <MatchdayTicker />
         </div>
 
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
@@ -139,99 +118,7 @@ export function AppNav() {
 }
 
 export function AppFooter() {
-  return (
-    <footer id="site-footer" className="border-t border-border/60 bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-10 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] sm:px-6 lg:pb-10">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary font-black text-primary-foreground shadow-[0_0_20px_var(--neon)]">
-              XI
-            </div>
-            <div>
-              <div className="font-display font-bold">{PROTOCOL_NAME}</div>
-              <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                Base BCC · Decentraland watch party
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-4 sm:items-end">
-            <div className="flex flex-wrap gap-x-4 gap-y-2 font-mono text-xs text-muted-foreground">
-              <a
-                className="cursor-pointer hover:text-primary"
-                href={FOOTER_COMMUNITY.x}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                X
-              </a>
-              <a
-                className="cursor-pointer hover:text-primary"
-                href={FOOTER_COMMUNITY.telegram}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Telegram
-              </a>
-              <a
-                className="cursor-pointer hover:text-primary"
-                href={FOOTER_COMMUNITY.places}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Places
-              </a>
-              <a
-                className="cursor-pointer hover:text-primary"
-                href={FOOTER_COMMUNITY.team}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Team
-              </a>
-              <a
-                className="cursor-pointer hover:text-primary"
-                href={BCC_BASESCAN_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                BCC Token
-              </a>
-              <a
-                className="cursor-pointer hover:text-primary"
-                href={FOOTER_BASESCAN}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                BaseScan
-              </a>
-              <Link to="/finals" className="cursor-pointer hover:text-primary">
-                Finals (Stacks)
-              </Link>
-            </div>
-
-            <div className="flex flex-wrap gap-x-4 gap-y-2 font-mono text-xs text-muted-foreground">
-              {FOOTER_SITE_ROUTES.map(({ to, label }) => (
-                <Link key={to} to={to} className="cursor-pointer hover:text-primary">
-                  {label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <p className="mt-8 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-          Predictions and NFT mints involve financial risk. Not investment advice. BCC stakes and
-          squad mints are on Base mainnet — verify contract addresses before signing.
-        </p>
-      </div>
-      {/* Keeps footer links above the fixed mobile tab bar when scrolled to the bottom */}
-      <div
-        className="pointer-events-none h-[calc(5.5rem+env(safe-area-inset-bottom,0px))] lg:hidden"
-        aria-hidden
-      />
-    </footer>
-  );
+  return <SiteFooter />;
 }
 
 export function PageShell({ children }: { children: React.ReactNode }) {
