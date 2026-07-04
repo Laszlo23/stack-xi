@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
@@ -137,23 +137,21 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Web3Providers>
-        <ProtocolProvider>
-          <StacksWalletProvider>
-            <TelegramSessionProvider>
-              <MemberTasksProvider>
-                <PredictionSessionProvider>
-                  <FarcasterMiniAppReady />
-                  <TelegramMiniAppReady />
-                  <TelegramSessionTasks />
-                  <Outlet />
-                </PredictionSessionProvider>
-              </MemberTasksProvider>
-            </TelegramSessionProvider>
-          </StacksWalletProvider>
-        </ProtocolProvider>
-      </Web3Providers>
-    </QueryClientProvider>
+    <Web3Providers queryClient={queryClient}>
+      <ProtocolProvider>
+        <StacksWalletProvider>
+          <TelegramSessionProvider>
+            <MemberTasksProvider>
+              <PredictionSessionProvider>
+                <FarcasterMiniAppReady />
+                <TelegramMiniAppReady />
+                <TelegramSessionTasks />
+                <Outlet />
+              </PredictionSessionProvider>
+            </MemberTasksProvider>
+          </TelegramSessionProvider>
+        </StacksWalletProvider>
+      </ProtocolProvider>
+    </Web3Providers>
   );
 }

@@ -1,4 +1,5 @@
 import { PrivyProvider } from "@privy-io/react-auth";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { base } from "wagmi/chains";
 import { isPrivySecureContext, shouldUsePrivyConnectFlow } from "@/lib/base/privy-env";
@@ -23,16 +24,24 @@ function PrivyConnectLayer({ children }: { children: ReactNode }) {
   return <ConnectBaseWalletProvider>{children}</ConnectBaseWalletProvider>;
 }
 
-export function Web3Providers({ children }: { children: ReactNode }) {
+export function Web3Providers({
+  children,
+  queryClient,
+}: {
+  children: ReactNode;
+  queryClient: QueryClient;
+}) {
   const [wagmiConfig] = useState(createWagmiConfig);
   const [privyConfig] = useState(createPrivyConfig);
   const secureContext = isPrivySecureContext();
 
   if (!privyAppId) {
     return (
-      <BaseWagmiProvider config={wagmiConfig}>
-        <ConnectBaseWalletProvider>{children}</ConnectBaseWalletProvider>
-      </BaseWagmiProvider>
+      <QueryClientProvider client={queryClient}>
+        <BaseWagmiProvider config={wagmiConfig}>
+          <ConnectBaseWalletProvider>{children}</ConnectBaseWalletProvider>
+        </BaseWagmiProvider>
+      </QueryClientProvider>
     );
   }
 
@@ -40,7 +49,7 @@ export function Web3Providers({ children }: { children: ReactNode }) {
     <PrivyProvider
       appId={privyAppId}
       config={{
-        loginMethods: ["email", "wallet"],
+        loginMethods: ["wallet", "email"],
         appearance: {
           theme: "dark",
           accentColor: "#22c55e",
@@ -56,9 +65,11 @@ export function Web3Providers({ children }: { children: ReactNode }) {
         supportedChains: [base],
       }}
     >
-      <PrivyWagmiProvider config={privyConfig}>
-        <PrivyConnectLayer>{children}</PrivyConnectLayer>
-      </PrivyWagmiProvider>
+      <QueryClientProvider client={queryClient}>
+        <PrivyWagmiProvider config={privyConfig}>
+          <PrivyConnectLayer>{children}</PrivyConnectLayer>
+        </PrivyWagmiProvider>
+      </QueryClientProvider>
     </PrivyProvider>
   );
 }
