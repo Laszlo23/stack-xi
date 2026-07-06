@@ -17,11 +17,13 @@ import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as LabsRouteImport } from './routes/labs'
 import { Route as ImprintRouteImport } from './routes/imprint'
 import { Route as FinalsRouteImport } from './routes/finals'
+import { Route as FeedRouteImport } from './routes/feed'
 import { Route as DefiRouteImport } from './routes/defi'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as ApiFeedIndexRouteImport } from './routes/api/feed/index'
 import { Route as ApiTelegramWebhookRouteImport } from './routes/api/telegram/webhook'
 import { Route as ApiTelegramPrepareShareRouteImport } from './routes/api/telegram/prepare-share'
 import { Route as ApiSwapStatusRouteImport } from './routes/api/swap/status'
@@ -30,14 +32,20 @@ import { Route as ApiSwapPriceRouteImport } from './routes/api/swap/price'
 import { Route as ApiSponsorEligibilityRouteImport } from './routes/api/sponsor/eligibility'
 import { Route as ApiSocialVerifyRouteImport } from './routes/api/social/verify'
 import { Route as ApiSocialStatusRouteImport } from './routes/api/social/status'
+import { Route as ApiPredictionsHistoryRouteImport } from './routes/api/predictions/history'
 import { Route as ApiMarketingXPostRouteImport } from './routes/api/marketing/x-post'
 import { Route as ApiFarcasterCastRouteImport } from './routes/api/farcaster/cast'
 import { Route as ApiAuthXStartRouteImport } from './routes/api/auth/x/start'
 import { Route as ApiAuthXCallbackRouteImport } from './routes/api/auth/x/callback'
+import { Route as ApiAuthWorldVerifyRouteImport } from './routes/api/auth/world/verify'
+import { Route as ApiAuthWorldStartRouteImport } from './routes/api/auth/world/start'
 import { Route as ApiAuthTelegramVerifyRouteImport } from './routes/api/auth/telegram/verify'
 import { Route as ApiAuthFarcasterVerifyRouteImport } from './routes/api/auth/farcaster/verify'
+import { Route as ApiAgentsPepeTickRouteImport } from './routes/api/agents/pepe/tick'
+import { Route as ApiAgentsPepeApproveRouteImport } from './routes/api/agents/pepe/approve'
 import { Route as ApiAgentsLuckTickRouteImport } from './routes/api/agents/luck/tick'
 import { Route as ApiAgentsLuckApproveRouteImport } from './routes/api/agents/luck/approve'
+import { Route as ApiAgentsCultureOpsTickRouteImport } from './routes/api/agents/culture-ops/tick'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -79,6 +87,11 @@ const FinalsRoute = FinalsRouteImport.update({
   path: '/finals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedRoute = FeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DefiRoute = DefiRouteImport.update({
   id: '/defi',
   path: '/defi',
@@ -102,6 +115,11 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiFeedIndexRoute = ApiFeedIndexRouteImport.update({
+  id: '/api/feed/',
+  path: '/api/feed/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiTelegramWebhookRoute = ApiTelegramWebhookRouteImport.update({
@@ -144,6 +162,11 @@ const ApiSocialStatusRoute = ApiSocialStatusRouteImport.update({
   path: '/api/social/status',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPredictionsHistoryRoute = ApiPredictionsHistoryRouteImport.update({
+  id: '/api/predictions/history',
+  path: '/api/predictions/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiMarketingXPostRoute = ApiMarketingXPostRouteImport.update({
   id: '/api/marketing/x-post',
   path: '/api/marketing/x-post',
@@ -164,6 +187,16 @@ const ApiAuthXCallbackRoute = ApiAuthXCallbackRouteImport.update({
   path: '/api/auth/x/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthWorldVerifyRoute = ApiAuthWorldVerifyRouteImport.update({
+  id: '/api/auth/world/verify',
+  path: '/api/auth/world/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthWorldStartRoute = ApiAuthWorldStartRouteImport.update({
+  id: '/api/auth/world/start',
+  path: '/api/auth/world/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthTelegramVerifyRoute = ApiAuthTelegramVerifyRouteImport.update({
   id: '/api/auth/telegram/verify',
   path: '/api/auth/telegram/verify',
@@ -172,6 +205,16 @@ const ApiAuthTelegramVerifyRoute = ApiAuthTelegramVerifyRouteImport.update({
 const ApiAuthFarcasterVerifyRoute = ApiAuthFarcasterVerifyRouteImport.update({
   id: '/api/auth/farcaster/verify',
   path: '/api/auth/farcaster/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAgentsPepeTickRoute = ApiAgentsPepeTickRouteImport.update({
+  id: '/api/agents/pepe/tick',
+  path: '/api/agents/pepe/tick',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAgentsPepeApproveRoute = ApiAgentsPepeApproveRouteImport.update({
+  id: '/api/agents/pepe/approve',
+  path: '/api/agents/pepe/approve',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAgentsLuckTickRoute = ApiAgentsLuckTickRouteImport.update({
@@ -184,11 +227,17 @@ const ApiAgentsLuckApproveRoute = ApiAgentsLuckApproveRouteImport.update({
   path: '/api/agents/luck/approve',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAgentsCultureOpsTickRoute = ApiAgentsCultureOpsTickRouteImport.update({
+  id: '/api/agents/culture-ops/tick',
+  path: '/api/agents/culture-ops/tick',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/defi': typeof DefiRoute
+  '/feed': typeof FeedRoute
   '/finals': typeof FinalsRoute
   '/imprint': typeof ImprintRoute
   '/labs': typeof LabsRoute
@@ -201,6 +250,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/api/farcaster/cast': typeof ApiFarcasterCastRoute
   '/api/marketing/x-post': typeof ApiMarketingXPostRoute
+  '/api/predictions/history': typeof ApiPredictionsHistoryRoute
   '/api/social/status': typeof ApiSocialStatusRoute
   '/api/social/verify': typeof ApiSocialVerifyRoute
   '/api/sponsor/eligibility': typeof ApiSponsorEligibilityRoute
@@ -209,10 +259,16 @@ export interface FileRoutesByFullPath {
   '/api/swap/status': typeof ApiSwapStatusRoute
   '/api/telegram/prepare-share': typeof ApiTelegramPrepareShareRoute
   '/api/telegram/webhook': typeof ApiTelegramWebhookRoute
+  '/api/feed/': typeof ApiFeedIndexRoute
+  '/api/agents/culture-ops/tick': typeof ApiAgentsCultureOpsTickRoute
   '/api/agents/luck/approve': typeof ApiAgentsLuckApproveRoute
   '/api/agents/luck/tick': typeof ApiAgentsLuckTickRoute
+  '/api/agents/pepe/approve': typeof ApiAgentsPepeApproveRoute
+  '/api/agents/pepe/tick': typeof ApiAgentsPepeTickRoute
   '/api/auth/farcaster/verify': typeof ApiAuthFarcasterVerifyRoute
   '/api/auth/telegram/verify': typeof ApiAuthTelegramVerifyRoute
+  '/api/auth/world/start': typeof ApiAuthWorldStartRoute
+  '/api/auth/world/verify': typeof ApiAuthWorldVerifyRoute
   '/api/auth/x/callback': typeof ApiAuthXCallbackRoute
   '/api/auth/x/start': typeof ApiAuthXStartRoute
 }
@@ -220,6 +276,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/defi': typeof DefiRoute
+  '/feed': typeof FeedRoute
   '/finals': typeof FinalsRoute
   '/imprint': typeof ImprintRoute
   '/labs': typeof LabsRoute
@@ -232,6 +289,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/api/farcaster/cast': typeof ApiFarcasterCastRoute
   '/api/marketing/x-post': typeof ApiMarketingXPostRoute
+  '/api/predictions/history': typeof ApiPredictionsHistoryRoute
   '/api/social/status': typeof ApiSocialStatusRoute
   '/api/social/verify': typeof ApiSocialVerifyRoute
   '/api/sponsor/eligibility': typeof ApiSponsorEligibilityRoute
@@ -240,10 +298,16 @@ export interface FileRoutesByTo {
   '/api/swap/status': typeof ApiSwapStatusRoute
   '/api/telegram/prepare-share': typeof ApiTelegramPrepareShareRoute
   '/api/telegram/webhook': typeof ApiTelegramWebhookRoute
+  '/api/feed': typeof ApiFeedIndexRoute
+  '/api/agents/culture-ops/tick': typeof ApiAgentsCultureOpsTickRoute
   '/api/agents/luck/approve': typeof ApiAgentsLuckApproveRoute
   '/api/agents/luck/tick': typeof ApiAgentsLuckTickRoute
+  '/api/agents/pepe/approve': typeof ApiAgentsPepeApproveRoute
+  '/api/agents/pepe/tick': typeof ApiAgentsPepeTickRoute
   '/api/auth/farcaster/verify': typeof ApiAuthFarcasterVerifyRoute
   '/api/auth/telegram/verify': typeof ApiAuthTelegramVerifyRoute
+  '/api/auth/world/start': typeof ApiAuthWorldStartRoute
+  '/api/auth/world/verify': typeof ApiAuthWorldVerifyRoute
   '/api/auth/x/callback': typeof ApiAuthXCallbackRoute
   '/api/auth/x/start': typeof ApiAuthXStartRoute
 }
@@ -252,6 +316,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/defi': typeof DefiRoute
+  '/feed': typeof FeedRoute
   '/finals': typeof FinalsRoute
   '/imprint': typeof ImprintRoute
   '/labs': typeof LabsRoute
@@ -264,6 +329,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/api/farcaster/cast': typeof ApiFarcasterCastRoute
   '/api/marketing/x-post': typeof ApiMarketingXPostRoute
+  '/api/predictions/history': typeof ApiPredictionsHistoryRoute
   '/api/social/status': typeof ApiSocialStatusRoute
   '/api/social/verify': typeof ApiSocialVerifyRoute
   '/api/sponsor/eligibility': typeof ApiSponsorEligibilityRoute
@@ -272,10 +338,16 @@ export interface FileRoutesById {
   '/api/swap/status': typeof ApiSwapStatusRoute
   '/api/telegram/prepare-share': typeof ApiTelegramPrepareShareRoute
   '/api/telegram/webhook': typeof ApiTelegramWebhookRoute
+  '/api/feed/': typeof ApiFeedIndexRoute
+  '/api/agents/culture-ops/tick': typeof ApiAgentsCultureOpsTickRoute
   '/api/agents/luck/approve': typeof ApiAgentsLuckApproveRoute
   '/api/agents/luck/tick': typeof ApiAgentsLuckTickRoute
+  '/api/agents/pepe/approve': typeof ApiAgentsPepeApproveRoute
+  '/api/agents/pepe/tick': typeof ApiAgentsPepeTickRoute
   '/api/auth/farcaster/verify': typeof ApiAuthFarcasterVerifyRoute
   '/api/auth/telegram/verify': typeof ApiAuthTelegramVerifyRoute
+  '/api/auth/world/start': typeof ApiAuthWorldStartRoute
+  '/api/auth/world/verify': typeof ApiAuthWorldVerifyRoute
   '/api/auth/x/callback': typeof ApiAuthXCallbackRoute
   '/api/auth/x/start': typeof ApiAuthXStartRoute
 }
@@ -285,6 +357,7 @@ export interface FileRouteTypes {
     | '/'
     | '/calendar'
     | '/defi'
+    | '/feed'
     | '/finals'
     | '/imprint'
     | '/labs'
@@ -297,6 +370,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/api/farcaster/cast'
     | '/api/marketing/x-post'
+    | '/api/predictions/history'
     | '/api/social/status'
     | '/api/social/verify'
     | '/api/sponsor/eligibility'
@@ -305,10 +379,16 @@ export interface FileRouteTypes {
     | '/api/swap/status'
     | '/api/telegram/prepare-share'
     | '/api/telegram/webhook'
+    | '/api/feed/'
+    | '/api/agents/culture-ops/tick'
     | '/api/agents/luck/approve'
     | '/api/agents/luck/tick'
+    | '/api/agents/pepe/approve'
+    | '/api/agents/pepe/tick'
     | '/api/auth/farcaster/verify'
     | '/api/auth/telegram/verify'
+    | '/api/auth/world/start'
+    | '/api/auth/world/verify'
     | '/api/auth/x/callback'
     | '/api/auth/x/start'
   fileRoutesByTo: FileRoutesByTo
@@ -316,6 +396,7 @@ export interface FileRouteTypes {
     | '/'
     | '/calendar'
     | '/defi'
+    | '/feed'
     | '/finals'
     | '/imprint'
     | '/labs'
@@ -328,6 +409,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/api/farcaster/cast'
     | '/api/marketing/x-post'
+    | '/api/predictions/history'
     | '/api/social/status'
     | '/api/social/verify'
     | '/api/sponsor/eligibility'
@@ -336,10 +418,16 @@ export interface FileRouteTypes {
     | '/api/swap/status'
     | '/api/telegram/prepare-share'
     | '/api/telegram/webhook'
+    | '/api/feed'
+    | '/api/agents/culture-ops/tick'
     | '/api/agents/luck/approve'
     | '/api/agents/luck/tick'
+    | '/api/agents/pepe/approve'
+    | '/api/agents/pepe/tick'
     | '/api/auth/farcaster/verify'
     | '/api/auth/telegram/verify'
+    | '/api/auth/world/start'
+    | '/api/auth/world/verify'
     | '/api/auth/x/callback'
     | '/api/auth/x/start'
   id:
@@ -347,6 +435,7 @@ export interface FileRouteTypes {
     | '/'
     | '/calendar'
     | '/defi'
+    | '/feed'
     | '/finals'
     | '/imprint'
     | '/labs'
@@ -359,6 +448,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/api/farcaster/cast'
     | '/api/marketing/x-post'
+    | '/api/predictions/history'
     | '/api/social/status'
     | '/api/social/verify'
     | '/api/sponsor/eligibility'
@@ -367,10 +457,16 @@ export interface FileRouteTypes {
     | '/api/swap/status'
     | '/api/telegram/prepare-share'
     | '/api/telegram/webhook'
+    | '/api/feed/'
+    | '/api/agents/culture-ops/tick'
     | '/api/agents/luck/approve'
     | '/api/agents/luck/tick'
+    | '/api/agents/pepe/approve'
+    | '/api/agents/pepe/tick'
     | '/api/auth/farcaster/verify'
     | '/api/auth/telegram/verify'
+    | '/api/auth/world/start'
+    | '/api/auth/world/verify'
     | '/api/auth/x/callback'
     | '/api/auth/x/start'
   fileRoutesById: FileRoutesById
@@ -379,6 +475,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalendarRoute: typeof CalendarRoute
   DefiRoute: typeof DefiRoute
+  FeedRoute: typeof FeedRoute
   FinalsRoute: typeof FinalsRoute
   ImprintRoute: typeof ImprintRoute
   LabsRoute: typeof LabsRoute
@@ -391,6 +488,7 @@ export interface RootRouteChildren {
   BlogIndexRoute: typeof BlogIndexRoute
   ApiFarcasterCastRoute: typeof ApiFarcasterCastRoute
   ApiMarketingXPostRoute: typeof ApiMarketingXPostRoute
+  ApiPredictionsHistoryRoute: typeof ApiPredictionsHistoryRoute
   ApiSocialStatusRoute: typeof ApiSocialStatusRoute
   ApiSocialVerifyRoute: typeof ApiSocialVerifyRoute
   ApiSponsorEligibilityRoute: typeof ApiSponsorEligibilityRoute
@@ -399,10 +497,16 @@ export interface RootRouteChildren {
   ApiSwapStatusRoute: typeof ApiSwapStatusRoute
   ApiTelegramPrepareShareRoute: typeof ApiTelegramPrepareShareRoute
   ApiTelegramWebhookRoute: typeof ApiTelegramWebhookRoute
+  ApiFeedIndexRoute: typeof ApiFeedIndexRoute
+  ApiAgentsCultureOpsTickRoute: typeof ApiAgentsCultureOpsTickRoute
   ApiAgentsLuckApproveRoute: typeof ApiAgentsLuckApproveRoute
   ApiAgentsLuckTickRoute: typeof ApiAgentsLuckTickRoute
+  ApiAgentsPepeApproveRoute: typeof ApiAgentsPepeApproveRoute
+  ApiAgentsPepeTickRoute: typeof ApiAgentsPepeTickRoute
   ApiAuthFarcasterVerifyRoute: typeof ApiAuthFarcasterVerifyRoute
   ApiAuthTelegramVerifyRoute: typeof ApiAuthTelegramVerifyRoute
+  ApiAuthWorldStartRoute: typeof ApiAuthWorldStartRoute
+  ApiAuthWorldVerifyRoute: typeof ApiAuthWorldVerifyRoute
   ApiAuthXCallbackRoute: typeof ApiAuthXCallbackRoute
   ApiAuthXStartRoute: typeof ApiAuthXStartRoute
 }
@@ -465,6 +569,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinalsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/feed': {
+      id: '/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/defi': {
       id: '/defi'
       path: '/defi'
@@ -498,6 +609,13 @@ declare module '@tanstack/react-router' {
       path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/feed/': {
+      id: '/api/feed/'
+      path: '/api/feed'
+      fullPath: '/api/feed/'
+      preLoaderRoute: typeof ApiFeedIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/telegram/webhook': {
@@ -556,6 +674,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSocialStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/predictions/history': {
+      id: '/api/predictions/history'
+      path: '/api/predictions/history'
+      fullPath: '/api/predictions/history'
+      preLoaderRoute: typeof ApiPredictionsHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/marketing/x-post': {
       id: '/api/marketing/x-post'
       path: '/api/marketing/x-post'
@@ -584,6 +709,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthXCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/world/verify': {
+      id: '/api/auth/world/verify'
+      path: '/api/auth/world/verify'
+      fullPath: '/api/auth/world/verify'
+      preLoaderRoute: typeof ApiAuthWorldVerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/world/start': {
+      id: '/api/auth/world/start'
+      path: '/api/auth/world/start'
+      fullPath: '/api/auth/world/start'
+      preLoaderRoute: typeof ApiAuthWorldStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/telegram/verify': {
       id: '/api/auth/telegram/verify'
       path: '/api/auth/telegram/verify'
@@ -596,6 +735,20 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/farcaster/verify'
       fullPath: '/api/auth/farcaster/verify'
       preLoaderRoute: typeof ApiAuthFarcasterVerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/agents/pepe/tick': {
+      id: '/api/agents/pepe/tick'
+      path: '/api/agents/pepe/tick'
+      fullPath: '/api/agents/pepe/tick'
+      preLoaderRoute: typeof ApiAgentsPepeTickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/agents/pepe/approve': {
+      id: '/api/agents/pepe/approve'
+      path: '/api/agents/pepe/approve'
+      fullPath: '/api/agents/pepe/approve'
+      preLoaderRoute: typeof ApiAgentsPepeApproveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/agents/luck/tick': {
@@ -612,6 +765,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAgentsLuckApproveRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/agents/culture-ops/tick': {
+      id: '/api/agents/culture-ops/tick'
+      path: '/api/agents/culture-ops/tick'
+      fullPath: '/api/agents/culture-ops/tick'
+      preLoaderRoute: typeof ApiAgentsCultureOpsTickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -619,6 +779,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalendarRoute: CalendarRoute,
   DefiRoute: DefiRoute,
+  FeedRoute: FeedRoute,
   FinalsRoute: FinalsRoute,
   ImprintRoute: ImprintRoute,
   LabsRoute: LabsRoute,
@@ -631,6 +792,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogIndexRoute: BlogIndexRoute,
   ApiFarcasterCastRoute: ApiFarcasterCastRoute,
   ApiMarketingXPostRoute: ApiMarketingXPostRoute,
+  ApiPredictionsHistoryRoute: ApiPredictionsHistoryRoute,
   ApiSocialStatusRoute: ApiSocialStatusRoute,
   ApiSocialVerifyRoute: ApiSocialVerifyRoute,
   ApiSponsorEligibilityRoute: ApiSponsorEligibilityRoute,
@@ -639,10 +801,16 @@ const rootRouteChildren: RootRouteChildren = {
   ApiSwapStatusRoute: ApiSwapStatusRoute,
   ApiTelegramPrepareShareRoute: ApiTelegramPrepareShareRoute,
   ApiTelegramWebhookRoute: ApiTelegramWebhookRoute,
+  ApiFeedIndexRoute: ApiFeedIndexRoute,
+  ApiAgentsCultureOpsTickRoute: ApiAgentsCultureOpsTickRoute,
   ApiAgentsLuckApproveRoute: ApiAgentsLuckApproveRoute,
   ApiAgentsLuckTickRoute: ApiAgentsLuckTickRoute,
+  ApiAgentsPepeApproveRoute: ApiAgentsPepeApproveRoute,
+  ApiAgentsPepeTickRoute: ApiAgentsPepeTickRoute,
   ApiAuthFarcasterVerifyRoute: ApiAuthFarcasterVerifyRoute,
   ApiAuthTelegramVerifyRoute: ApiAuthTelegramVerifyRoute,
+  ApiAuthWorldStartRoute: ApiAuthWorldStartRoute,
+  ApiAuthWorldVerifyRoute: ApiAuthWorldVerifyRoute,
   ApiAuthXCallbackRoute: ApiAuthXCallbackRoute,
   ApiAuthXStartRoute: ApiAuthXStartRoute,
 }

@@ -1,20 +1,14 @@
 import { useCallback, useRef, useState } from "react";
-import {
-  useConnectWallet,
-  useLogin,
-  usePrivy,
-  useWallets,
-  type ConnectedWallet,
-} from "@privy-io/react-auth";
+import { useConnectWallet, useLogin, usePrivy, useWallets, type ConnectedWallet } from "@privy-io/react-auth";
 import { useSetActiveWallet } from "@privy-io/wagmi";
 import { useConfig } from "wagmi";
 import { getAccount, getConnectors, switchChain } from "wagmi/actions";
 import { base } from "wagmi/chains";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
 import {
   formatWalletConnectError,
   isWalletConnectUserRejection,
 } from "@/lib/base/pick-wallet-connector";
+import { pickEthereumWallet, walletConnectorId } from "@/lib/base/privy-wallet-utils";
 
 async function waitUntil(check: () => boolean, timeoutMs: number, label: string): Promise<void> {
   const deadline = Date.now() + timeoutMs;
@@ -25,28 +19,11 @@ async function waitUntil(check: () => boolean, timeoutMs: number, label: string)
   throw new Error(`${label} timed out — try again`);
 }
 
-function pickEthereumWallet(wallets: ConnectedWallet[]): ConnectedWallet | undefined {
-  const ethereum = wallets.filter((w) => w.type === "ethereum");
-  return (
-    ethereum.find((w) => w.walletClientType !== "privy") ??
-    ethereum.find((w) => w.walletClientType === "privy") ??
-    ethereum[0] ??
-    wallets[0]
-  );
-}
-
-function walletConnectorId(wallet: ConnectedWallet): string {
-  return wallet.walletClientType === "privy"
-    ? `${wallet.meta.id}.${wallet.address}`
-    : wallet.meta.id;
-}
-
 export function usePrivyBaseConnect() {
   const config = useConfig();
   const { authenticated, ready: privyReady } = usePrivy();
   const { wallets, ready: walletsReady } = useWallets();
   const { setActiveWallet } = useSetActiveWallet();
-  const { address, clearConnectError } = useBaseWallet();
   const [connectPending, setConnectPending] = useState(false);
   const [connectError, setConnectError] = useState<string | null>(null);
 
@@ -156,11 +133,10 @@ export function usePrivyBaseConnect() {
   }, [openConnectWalletModal]);
 
   const connectWallet = useCallback(async (): Promise<`0x${string}`> => {
-    const active = getAccount(config).address ?? address;
-    if (active) return active;
+    const wagmiAddress = getAccount(config).address;
+    if (wagmiAddress) return wagmiAddress;
 
     setConnectError(null);
-    clearConnectError();
     setConnectPending(true);
 
     try {
@@ -212,15 +188,12 @@ export function usePrivyBaseConnect() {
     } finally {
       setConnectPending(false);
     }
-  }, [address, clearConnectError, config, promptConnectWallet, syncPrivyWalletToWagmi, waitForPrivyLogin]);
+  }, [config, promptConnectWallet, syncPrivyWalletToWagmi, waitForPrivyLogin]);
 
   return {
     connectWallet,
     connectPending,
     connectError,
-    clearConnectError: () => {
-      setConnectError(null);
-      clearConnectError();
-    },
+    clearConnectError: () => setConnectError(null),
   };
 }

@@ -12,6 +12,7 @@ import { useSquadMintStatus } from "@/hooks/use-squad-mint-status";
 import { TelegramGamePanel } from "@/features/telegram/TelegramGamePanel";
 import { MatchdayStorySection } from "@/features/story/MatchdayStorySection";
 import { PepeVisualScroll } from "@/features/story/PepeVisualScroll";
+import { WorldCupSnapshotSection } from "@/features/story/WorldCupSnapshotSection";
 import {
   getActiveMarket,
   getActiveMarketKind,
@@ -85,6 +86,11 @@ export function PepeScrollExperience() {
               </p>
             )}
             {!isAustrianMarket && (
+              <p className="mt-2 font-mono text-xs text-muted-foreground">
+                QF so far: Morocco · France · Norway · England
+              </p>
+            )}
+            {!isAustrianMarket && (
               <p className="mt-2 font-mono text-xs text-accent">
                 Leonardo&apos;s pick to win it all: {WORLD_CUP_WINNER_PICK} · Final Jul 19
               </p>
@@ -126,6 +132,7 @@ export function PepeScrollExperience() {
         </div>
       </section>
 
+      {!isAustrianMarket && <WorldCupSnapshotSection />}
       <PepeVisualScroll />
       <MatchdayStorySection />
       <SquadMintSection />

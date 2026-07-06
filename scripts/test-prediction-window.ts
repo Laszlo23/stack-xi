@@ -32,13 +32,19 @@ const windowBeforeKickoff = getPredictionWindow(portugalSpain, twoDaysBefore);
 assert(windowBeforeKickoff.status === "open", "window open 2 days before kickoff (default)");
 assert(isPredictionSubmitAllowed(windowBeforeKickoff), "submit allowed before kickoff");
 
+const active = getActiveMarket(twoDaysBefore);
+assert(active.id === "m8", "active market is Portugal vs Spain before WC end");
+
 const afterKickoff = new Date(portugalSpain.kickoffAt.getTime() + 60_000);
 const windowClosed = getPredictionWindow(portugalSpain, afterKickoff);
 assert(windowClosed.status === "closed", "window closed after kickoff");
 assert(!isPredictionSubmitAllowed(windowClosed), "submit blocked after kickoff");
 
-const active = getActiveMarket(twoDaysBefore);
-assert(active.id === "m8", "active market is Portugal vs Spain before WC end");
+const afterKickoffActive = getActiveMarket(afterKickoff);
+assert(
+  afterKickoffActive.id === "m8",
+  "active market stays Portugal vs Spain until result is recorded",
+);
 
 const afterWc = new Date(WORLD_CUP_END_AT.getTime() + 60_000);
 assert(

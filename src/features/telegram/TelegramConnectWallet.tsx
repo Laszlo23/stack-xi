@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Link2, Loader2, Wallet } from "lucide-react";
-import { useCreateWallet, usePrivy, useWallets } from "@privy-io/react-auth";
-import { useSetActiveWallet } from "@privy-io/wagmi";
+import { useCreateWallet, useLogin, usePrivy } from "@privy-io/react-auth";
 import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
 import { useTelegramSession } from "@/hooks/use-telegram-session";
 import { isPrivyEnabled } from "@/lib/base/privy-config";
 import { shouldUsePrivyConnectFlow } from "@/lib/base/privy-env";
@@ -11,7 +9,7 @@ import { shouldUsePrivyConnectFlow } from "@/lib/base/privy-env";
 export function TelegramConnectWallet() {
   const { isTelegram, user, needsWalletLink, linkWallet, error, clearError } =
     useTelegramSession();
-  const { isConnected, address, isConnecting } = useBaseWallet();
+  const { isConnected, address, isConnecting } = useConnectBaseWallet();
   const [linkBusy, setLinkBusy] = useState(false);
 
   if (!isTelegram) return null;
@@ -102,7 +100,7 @@ function TelegramWalletConnectButton({ disabled }: { disabled: boolean }) {
         {busy ? (
           <Loader2 className="inline h-3.5 w-3.5 animate-spin" />
         ) : (
-          "Connect with WalletConnect"
+          "Connect wallet"
         )}
       </button>
       {displayError && <p className="w-full text-xs text-destructive">{displayError}</p>}
@@ -112,9 +110,8 @@ function TelegramWalletConnectButton({ disabled }: { disabled: boolean }) {
 
 function TelegramPrivyWalletButton() {
   const { login, authenticated, ready: privyReady } = usePrivy();
-  const { wallets } = useWallets();
   const { createWallet } = useCreateWallet();
-  const { setActiveWallet } = useSetActiveWallet();
+  const { connectWallet } = useConnectBaseWallet();
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -125,13 +122,15 @@ function TelegramPrivyWalletButton() {
       if (!authenticated) {
         await login();
       }
-      let wallet = wallets.find((w) => w.walletClientType === "privy") ?? wallets[0];
-      if (!wallet) {
-        wallet = await createWallet();
+      try {
+        await createWallet();
+      } catch (createError) {
+        const message = createError instanceof Error ? createError.message.toLowerCase() : "";
+        if (!message.includes("already")) {
+          throw createError;
+        }
       }
-      if (wallet) {
-        await setActiveWallet(wallet);
-      }
+      await connectWallet();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Embedded wallet failed");
     } finally {

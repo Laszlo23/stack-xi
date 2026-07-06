@@ -3,6 +3,7 @@ import { http } from "wagmi";
 import { base } from "wagmi/chains";
 import type { ReactNode } from "react";
 import { buildConnectors } from "@/lib/base/wagmi-config";
+import { getClientBaseRpcUrl } from "@/lib/base/client-rpc";
 
 /** Wagmi config for @privy-io/wagmi — disables multi-injected discovery (avoids TON/Telegram wallets). */
 export function createPrivyConfig(): Config {
@@ -10,7 +11,7 @@ export function createPrivyConfig(): Config {
     chains: [base],
     connectors: buildConnectors(),
     transports: {
-      [base.id]: http(),
+      [base.id]: http(getClientBaseRpcUrl()),
     },
   });
 }

@@ -9,7 +9,10 @@ import { PredictionShareCard } from "@/features/predict/PredictionShareCard";
 import { ShareUnlockStep } from "@/features/predict/ShareUnlockStep";
 import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { useMemberTasksOptional } from "@/hooks/use-member-tasks";
+import { useMiniAppContext } from "@/hooks/use-mini-app-context";
 import { usePredictionSession } from "@/hooks/use-prediction-session";
+import { useWorldVerification } from "@/hooks/use-world-verification";
+import { WorldVerifyPanel } from "@/features/world/WorldVerifyPanel";
 import { useSponsoredPrediction } from "@/hooks/use-sponsored-prediction";
 import {
   BASESCAN_URL,
@@ -41,7 +44,7 @@ import {
 } from "@/lib/story/pepe-script";
 
 export function GuidedPredictionFlow() {
-  const { session, step, setPick, setStake, markShareUnlocked, markSubmitted, reset } =
+  const { session, step, setPick, setStake, applyShareUnlock, markShareUnlocked, markSubmitted, reset } =
     usePredictionSession();
   const {
     isConnected,
@@ -54,6 +57,8 @@ export function GuidedPredictionFlow() {
     ensureBccAllowance,
   } = useConnectBaseWallet();
   const memberTasks = useMemberTasksOptional();
+  const { isWorldApp } = useMiniAppContext();
+  const { verified: worldVerified, refresh: refreshWorldVerification } = useWorldVerification();
   const sponsor = useSponsoredPrediction();
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -73,12 +78,17 @@ export function GuidedPredictionFlow() {
   useEffect(() => {
     if (!address || !session || session.shareUnlocked) return;
     if (hasShareUnlock(address, session.matchId)) {
-      markShareUnlocked();
+      // Cast gate already passed for this match — do not skip stake selection.
+      applyShareUnlock(false);
     }
-  }, [address, session, markShareUnlocked]);
+  }, [address, session, applyShareUnlock]);
 
   async function handleSubmit() {
     if (!session || session.stakeBcc <= 0n || !session.shareUnlocked) return;
+    if (isWorldApp && !worldVerified) {
+      setSubmitError("Verify with World ID before submitting from World App.");
+      return;
+    }
 
     const liveWindow = getPredictionWindow(match);
     if (!isPredictionSubmitAllowed(liveWindow)) {
@@ -146,13 +156,18 @@ export function GuidedPredictionFlow() {
   const isSponsoredStake = Boolean(session?.sponsored);
   const canSubmitOnchain =
     Boolean(session?.shareUnlocked) &&
+    Boolean(session && session.stakeBcc > 0n) &&
     isPredictionPoolConfigured() &&
+    (!isWorldApp || worldVerified) &&
     (isSponsoredStake
       ? isSponsorConfigured() && sponsor.isEligible
       : Boolean(session && session.stakeBcc <= bccBalance)) &&
     isPredictionSubmitAllowed(window);
 
   const submitBlockers: string[] = [];
+  if (session && session.stakeBcc <= 0n) {
+    submitBlockers.push("Select a BCC stake tier before locking");
+  }
   if (session && !session.shareUnlocked)
     submitBlockers.push("Complete the cast-to-predict unlock (step 3)");
   if (!isPredictionPoolConfigured()) {
@@ -174,6 +189,9 @@ export function GuidedPredictionFlow() {
     submitBlockers.push(`Insufficient ${BCC_SYMBOL} balance for stake`);
   }
   if (windowClosed) submitBlockers.push("Match window closed — predictions lock at kickoff");
+  if (isWorldApp && !worldVerified) {
+    submitBlockers.push("Verify with World ID to submit from World App");
+  }
 
   return (
     <section id="predict" className="py-16 sm:py-24">
@@ -262,6 +280,11 @@ export function GuidedPredictionFlow() {
             <div className="rounded-xl border border-primary/30 bg-primary/5 px-4 py-3 font-mono text-sm text-primary">
               Your pick: <strong>{pickedTeam}</strong>
             </div>
+            {session?.shareUnlocked && (
+              <p className="rounded-xl border border-primary/30 bg-primary/5 px-4 py-3 text-sm text-muted-foreground">
+                Cast gate already passed for this match — pick your stake and lock another prediction.
+              </p>
+            )}
             <div className="grid gap-3">
               {sponsor.isEligible && (
                 <button
@@ -314,7 +337,50 @@ export function GuidedPredictionFlow() {
           />
         )}
 
-        {step === 4 && session && pickedTeam && (
+        {step === 4 && session && pickedTeam && session.stakeBcc <= 0n && (
+          <div className="space-y-6">
+            <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+              You skipped stake selection — pick how much {BCC_SYMBOL} to lock for this prediction.
+            </div>
+            <div className="grid gap-3">
+              {sponsor.isEligible && (
+                <button
+                  type="button"
+                  onClick={() => setStake(SPONSORED_STAKE_BCC, true)}
+                  className="flex items-center justify-between rounded-xl border-2 border-accent/50 bg-accent/10 px-5 py-4 text-left transition hover:border-accent hover:bg-accent/15"
+                >
+                  <div>
+                    <div className="font-display text-xl font-bold text-accent">
+                      {formatBcc(SPONSORED_STAKE_BCC)} · Sponsored
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Founding member stake — free from treasury ({sponsor.remainingSlots} left)
+                    </div>
+                  </div>
+                  <span className="font-mono text-xs uppercase text-accent">Free →</span>
+                </button>
+              )}
+              {STAKE_TIERS_BCC.map((tier) => (
+                <button
+                  key={tier.label}
+                  type="button"
+                  onClick={() => setStake(tier.amount, false)}
+                  className="glass flex items-center justify-between rounded-xl px-5 py-4 text-left transition hover:border-primary/50 hover:bg-primary/5"
+                >
+                  <div>
+                    <div className="font-display text-xl font-bold">
+                      {tier.label} {BCC_SYMBOL}
+                    </div>
+                    <div className="text-sm text-muted-foreground">{tier.tag}</div>
+                  </div>
+                  <span className="text-primary">→</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {step === 4 && session && pickedTeam && session.stakeBcc > 0n && (
           <div className="space-y-8">
             <PepeBubble beat={PEPE_CONFIRM_INTRO} />
             <div className="glass space-y-4 rounded-2xl p-6">
@@ -365,6 +431,12 @@ export function GuidedPredictionFlow() {
                   actionLabel="Submit prediction"
                   intent="predict"
                   compact
+                />
+              )}
+              {isWorldApp && !worldVerified && (
+                <WorldVerifyPanel
+                  compact
+                  onVerified={() => void refreshWorldVerification()}
                 />
               )}
             </div>

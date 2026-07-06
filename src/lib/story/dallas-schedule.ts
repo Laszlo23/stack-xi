@@ -98,8 +98,18 @@ export const DALLAS_SCHEDULE: DallasMatch[] = [
 ];
 
 export function getActiveMatchday(now = new Date()): DallasMatch {
-  const upcoming = DALLAS_SCHEDULE.find((m) => m.kickoffAt.getTime() > now.getTime());
-  return upcoming ?? DALLAS_SCHEDULE[DALLAS_SCHEDULE.length - 1];
+  // Keep the open Dallas fixture active until a result is recorded — kickoff alone
+  // must not advance to bracket projections (e.g. France vs Portugal semifinal).
+  const openFixture = DALLAS_SCHEDULE.find((m) => !m.result && !m.isProjected);
+  if (openFixture) return openFixture;
+
+  const upcoming = DALLAS_SCHEDULE.find(
+    (m) => !m.isProjected && m.kickoffAt.getTime() > now.getTime(),
+  );
+  if (upcoming) return upcoming;
+
+  const realFixtures = DALLAS_SCHEDULE.filter((m) => !m.isProjected);
+  return realFixtures.at(-1) ?? DALLAS_SCHEDULE[DALLAS_SCHEDULE.length - 1]!;
 }
 
 export function getLastCompletedMatchday(now = new Date()): DallasMatch | null {
@@ -111,6 +121,10 @@ export function getLastCompletedMatchday(now = new Date()): DallasMatch | null {
 
 export function getNextMatchday(after: DallasMatch): DallasMatch | null {
   const idx = DALLAS_SCHEDULE.findIndex((m) => m.id === after.id);
-  if (idx < 0 || idx >= DALLAS_SCHEDULE.length - 1) return null;
-  return DALLAS_SCHEDULE[idx + 1];
+  if (idx < 0) return null;
+  for (let i = idx + 1; i < DALLAS_SCHEDULE.length; i++) {
+    const candidate = DALLAS_SCHEDULE[i]!;
+    if (!candidate.isProjected) return candidate;
+  }
+  return null;
 }

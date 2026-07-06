@@ -54,7 +54,8 @@ export function BccSwapPanel({ compact }: { compact?: boolean }) {
           </div>
           <h3 className="font-display text-2xl font-bold">Swap for {BCC_SYMBOL}</h3>
           <p className="max-w-xl text-sm text-muted-foreground">
-            Buy {BCC_SYMBOL} in-app via 0x — aggregates Clanker V4, Uniswap, and Base liquidity.
+            Buy {BCC_SYMBOL} in-app — on-chain via Aerodrome (no 0x API). Your wallet signs the swap
+            directly on Base.
           </p>
         </>
       )}
@@ -63,7 +64,7 @@ export function BccSwapPanel({ compact }: { compact?: boolean }) {
 
       {isMiniApp && (
         <p className="rounded-lg border border-primary/30 bg-primary/5 px-3 py-2 text-xs text-primary">
-          Mini-app detected — 0x swap runs in your connected wallet.
+          Mini-app detected — swap runs in your connected wallet on Aerodrome.
         </p>
       )}
 

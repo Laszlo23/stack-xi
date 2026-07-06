@@ -1,6 +1,7 @@
 import { ExternalLink, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
+import { useDirectPoolSwap } from "@/hooks/use-direct-pool-swap";
 import { useZeroXSwap } from "@/hooks/use-zero-x-swap";
 import { BASESCAN_URL, BCC_SYMBOL } from "@/lib/base/config";
 import { SITE_LINKS } from "@/lib/site/links";
@@ -13,7 +14,7 @@ import {
 
 type SwapStatus = {
   configured: boolean;
-  mode: "api_key" | "x402" | "deeplink_only";
+  mode: "api_key" | "x402" | "direct" | "deeplink_only";
   payer?: "cdp" | "alchemy" | "hot_wallet" | null;
   hint?: string;
 };
@@ -99,6 +100,9 @@ export function ZeroXSwapWidget({
   const [sellAmountInput, setSellAmountInput] = useState(defaultSellAmount);
   const [swapStatus, setSwapStatus] = useState<SwapStatus | null>(null);
 
+  const useDirect = swapStatus?.mode === "direct";
+  const zeroXSwap = useZeroXSwap(preset, sellAmountInput);
+  const directSwap = useDirectPoolSwap(preset, sellAmountInput);
   const {
     priceLoading,
     priceError,
@@ -109,7 +113,7 @@ export function ZeroXSwapWidget({
     lastTxHash,
     executeSwap,
     sellAmount,
-  } = useZeroXSwap(preset, sellAmountInput);
+  } = useDirect ? directSwap : zeroXSwap;
 
   useEffect(() => {
     setSellAmountInput(defaultSellAmount);
@@ -138,6 +142,12 @@ export function ZeroXSwapWidget({
       role="region"
       aria-label={`Swap for ${BCC_SYMBOL}`}
     >
+      {swapStatus?.mode === "direct" && !compact && (
+        <p className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-[10px] text-muted-foreground">
+          On-chain swap via Aerodrome — your wallet signs directly, no 0x API or agent gateway
+        </p>
+      )}
+
       {swapStatus?.mode === "x402" && !compact && (
         <p className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-[10px] text-muted-foreground">
           Quotes via{" "}
@@ -244,8 +254,9 @@ export function ZeroXSwapWidget({
 
       {!compact && (
         <p className="text-[10px] text-muted-foreground">
-          Powered by 0x on Base · {DEFAULT_SWAP_SLIPPAGE}% slippage · Best route includes Clanker V4
-          pool
+          {useDirect
+            ? `Aerodrome on Base · ${DEFAULT_SWAP_SLIPPAGE}% slippage · USDC routes via WETH`
+            : `Powered by 0x on Base · ${DEFAULT_SWAP_SLIPPAGE}% slippage · Best route includes Clanker V4 pool`}
         </p>
       )}
     </div>

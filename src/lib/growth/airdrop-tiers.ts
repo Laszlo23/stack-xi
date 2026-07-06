@@ -6,8 +6,8 @@ export type AirdropTier = {
   description: string;
 };
 
-export const AIRDROP_POOL_LABEL = "1,000,000,000 BCC";
-export const AIRDROP_POOL_AMOUNT = 1_000_000_000;
+export const AIRDROP_POOL_LABEL = "77,777,777 BCC";
+export const AIRDROP_POOL_AMOUNT = 77_777_777;
 
 export const AIRDROP_TIERS: AirdropTier[] = [
   {

@@ -9,6 +9,8 @@ import {
   ConnectBaseWalletProvider,
   PrivyConnectBridge,
 } from "@/hooks/use-connect-base-wallet";
+import { PrivyWalletSync } from "@/features/wallet/PrivyWalletSync";
+import { PrivyResolvedWalletBridge } from "@/hooks/use-resolved-wallet-address";
 
 const privyAppId = import.meta.env.VITE_PRIVY_APP_ID?.trim();
 
@@ -17,7 +19,14 @@ export function isPrivyEnabled(): boolean {
 }
 
 function PrivyConnectLayer({ children }: { children: ReactNode }) {
-  return <PrivyConnectBridge>{children}</PrivyConnectBridge>;
+  return (
+    <PrivyConnectBridge>
+      <PrivyResolvedWalletBridge>
+        <PrivyWalletSync />
+        {children}
+      </PrivyResolvedWalletBridge>
+    </PrivyConnectBridge>
+  );
 }
 
 export function Web3Providers({

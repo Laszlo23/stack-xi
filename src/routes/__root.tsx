@@ -20,6 +20,7 @@ import { StacksWalletProvider } from "../hooks/use-stacks-wallet";
 import { Web3Providers } from "../lib/base/privy-config";
 import { FarcasterMiniAppReady } from "../features/farcaster/FarcasterMiniAppReady";
 import { TelegramMiniAppReady } from "../features/telegram/TelegramMiniAppReady";
+import { WorldMiniAppReady } from "../features/world/WorldMiniAppReady";
 import { TelegramSessionTasks } from "../features/telegram/TelegramSessionTasks";
 import { TelegramSessionProvider } from "../hooks/use-telegram-session";
 
@@ -61,6 +62,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <p className="mt-2 text-sm text-muted-foreground">
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
+        {error?.message && (
+          <p className="mt-3 rounded-lg border border-border/60 bg-muted/30 px-3 py-2 font-mono text-xs text-muted-foreground break-all">
+            {error.message}
+          </p>
+        )}
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -145,6 +151,7 @@ function RootComponent() {
               <PredictionSessionProvider>
                 <FarcasterMiniAppReady />
                 <TelegramMiniAppReady />
+                <WorldMiniAppReady />
                 <TelegramSessionTasks />
                 <Outlet />
               </PredictionSessionProvider>

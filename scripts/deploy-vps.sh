@@ -33,6 +33,9 @@ fi
 echo "==> Preparing server directories..."
 ssh -i "$SSH_KEY" "$SSH_HOST" "mkdir -p $APP_DIR/dist $APP_DIR/dist/server $APP_DIR/dist/public $APP_DIR/data /var/log/pepe-buildingculture"
 
+echo "==> Stopping service before artifact sync (prevents missing-chunk 500s)..."
+ssh -i "$SSH_KEY" "$SSH_HOST" "systemctl stop ${SERVICE}.service 2>/dev/null || true"
+
 echo "==> Syncing build artifacts..."
 rsync -az --delete -e "ssh -i $SSH_KEY" \
   "$ROOT/.output/server/" "$SSH_HOST:$APP_DIR/dist/server/"
@@ -46,8 +49,11 @@ scp -i "$SSH_KEY" "$ROOT/scripts/deploy/stack-xi-pepe.service" "$SSH_HOST:/etc/s
 scp -i "$SSH_KEY" "$ROOT/scripts/deploy/pepe.buildingcultureid.space.conf" "$SSH_HOST:/etc/nginx/sites-available/${DOMAIN}.conf"
 scp -i "$SSH_KEY" "$ROOT/scripts/deploy/luck-agent.service" "$SSH_HOST:/etc/systemd/system/luck-agent.service"
 scp -i "$SSH_KEY" "$ROOT/scripts/deploy/luck-agent.timer" "$SSH_HOST:/etc/systemd/system/luck-agent.timer"
+scp -i "$SSH_KEY" "$ROOT/scripts/deploy/pepe-agent.service" "$SSH_HOST:/etc/systemd/system/pepe-agent.service"
+scp -i "$SSH_KEY" "$ROOT/scripts/deploy/pepe-agent.timer" "$SSH_HOST:/etc/systemd/system/pepe-agent.timer"
 rsync -az -e "ssh -i $SSH_KEY" \
   "$ROOT/scripts/luck-agent-tick.mjs" "$ROOT/scripts/luck-x-post.mjs" \
+  "$ROOT/scripts/pepe-agent-tick.mjs" \
   "$SSH_HOST:$APP_DIR/scripts/"
 
 if [[ -f "$ROOT/.env" ]]; then
@@ -75,12 +81,13 @@ REMOTE
 echo "==> Starting systemd service..."
 ssh -i "$SSH_KEY" "$SSH_HOST" bash -s <<REMOTE
 set -euo pipefail
-fuser -k ${PORT}/tcp 2>/dev/null || true
 systemctl daemon-reload
 systemctl enable ${SERVICE}.service
 systemctl restart ${SERVICE}.service
 systemctl enable luck-agent.timer
 systemctl restart luck-agent.timer
+systemctl enable pepe-agent.timer
+systemctl restart pepe-agent.timer
 sleep 2
 systemctl is-active ${SERVICE}.service
 curl -sf -o /dev/null -w "local:%{http_code}\n" "http://127.0.0.1:${PORT}/" || true

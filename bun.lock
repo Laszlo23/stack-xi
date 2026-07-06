@@ -46,6 +46,9 @@
         "@wagmi/connectors": "^8.0.20",
         "@wagmi/core": "^3.5.5",
         "@walletconnect/modal": "^2.7.0",
+        "@worldcoin/idkit": "^4.2.0",
+        "@worldcoin/idkit-core": "^4.2.1",
+        "@worldcoin/minikit-js": "^2.0.3",
         "@x402/core": "^2.17.0",
         "@x402/evm": "^2.17.0",
         "@x402/fetch": "^2.17.0",
@@ -1030,6 +1033,14 @@
     "@walletconnect/window-getters": ["@walletconnect/window-getters@1.0.1", "", { "dependencies": { "tslib": "1.14.1" } }, "sha512-vHp+HqzGxORPAN8gY03qnbTMnhqIwjeRJNOMOAzePRg4xVEEE2WvYsI9G2NMjOknA8hnuYbU3/hwLcKbjhc8+Q=="],
 
     "@walletconnect/window-metadata": ["@walletconnect/window-metadata@1.0.1", "", { "dependencies": { "@walletconnect/window-getters": "^1.0.1", "tslib": "1.14.1" } }, "sha512-9koTqyGrM2cqFRW517BPY/iEtUDx2r1+Pwwu5m7sJ7ka79wi3EyqhqcICk/yDmv6jAS1rjKgTKXlEhanYjijcA=="],
+
+    "@worldcoin/idkit": ["@worldcoin/idkit@4.2.0", "", { "dependencies": { "@worldcoin/idkit-core": "4.2.1", "qrcode": "^1.5.4" }, "peerDependencies": { "react": ">=18", "react-dom": ">=18" } }, "sha512-G1pqVkYIDGJur6kZsRrbiatnxBwxYMzsJd4lhQNz3xzzceknVsR9ITJAsXb5vpjhQZVWpgHw3ThXkh3FE+4irw=="],
+
+    "@worldcoin/idkit-core": ["@worldcoin/idkit-core@4.2.1", "", { "dependencies": { "@noble/hashes": "^1.7.2", "@worldcoin/idkit-server": "1.1.1" } }, "sha512-ji/6CMOUex+0auNCdU/XqxtTiFIO/uM32fRtgy6/xU8jCilLdZSiIqn9E44Ux5ftq82RXa/5gexmJVoGgw4LWw=="],
+
+    "@worldcoin/idkit-server": ["@worldcoin/idkit-server@1.1.1", "", { "dependencies": { "@noble/hashes": "^1.7.2", "@noble/secp256k1": "^2.2.3" } }, "sha512-iO4Kd3QBLzJak3BPz5eIzRjW0kT8Px5c3LbNzvCKMnczLvVSKoWqdvGiJlkK8Dp29KstNI62iv4ak0z8nzui/Q=="],
+
+    "@worldcoin/minikit-js": ["@worldcoin/minikit-js@2.0.3", "", { "dependencies": { "abitype": "^1.2.3" }, "peerDependencies": { "react": "^17 || ^18 || ^19", "siwe": "^3.0.0", "viem": "^2.21.0", "wagmi": "^3.0.0" }, "optionalPeers": ["siwe", "viem", "wagmi"] }, "sha512-41rhB59/MOWpAihcCidMijYmzlht5BDPTBQwRRDMhX65rC4Ac2+qEkajDgCR1xW/YWZm122Z8muJzr1pODDq1A=="],
 
     "@x402/core": ["@x402/core@2.17.0", "", { "dependencies": { "zod": "^3.24.2" } }, "sha512-BBooe9Kewl5KLaKadElFwhZzZ+n/X/m2djzGtc7OY51D8fk2vHTVvDZtBFEJYdJxtQoUZMKX73hew0ss81FENQ=="],
 
@@ -2360,6 +2371,12 @@
     "@walletconnect/window-getters/tslib": ["tslib@1.14.1", "", {}, "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="],
 
     "@walletconnect/window-metadata/tslib": ["tslib@1.14.1", "", {}, "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="],
+
+    "@worldcoin/idkit/qrcode": ["qrcode@1.5.4", "", { "dependencies": { "dijkstrajs": "^1.0.1", "pngjs": "^5.0.0", "yargs": "^15.3.1" }, "bin": { "qrcode": "bin/qrcode" } }, "sha512-1ca71Zgiu6ORjHqFBDpnSMTR2ReToX4l1Au1VFLyVeBTFavzQnv5JxMFr3ukHVKpSrSA2MCk0lNJSykjUfz7Zg=="],
+
+    "@worldcoin/idkit-server/@noble/secp256k1": ["@noble/secp256k1@2.3.0", "", {}, "sha512-0TQed2gcBbIrh7Ccyw+y/uZQvbJwm7Ao4scBUxqpBCcsOlZG0O4KGfjtNAy/li4W8n1xt3dxrwJ0beZ2h2G6Kw=="],
+
+    "@worldcoin/minikit-js/abitype": ["abitype@1.2.3", "", { "peerDependencies": { "typescript": ">=5.0.4", "zod": "^3.22.0 || ^4.0.0" }, "optionalPeers": ["typescript", "zod"] }, "sha512-Ofer5QUnuUdTFsBRwARMoWKOH1ND5ehwYhJ3OJ/BQO+StkwQjHw0XyVh4vDttzHB7QOFhPHa/o413PJ82gU/Tg=="],
 
     "anymatch/picomatch": ["picomatch@2.3.2", "", {}, "sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA=="],
 

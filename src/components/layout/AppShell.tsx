@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Glasses, Home, ShieldCheck, Sparkles, Target, User, Users } from "lucide-react";
+import { BookOpen, Glasses, Home, Radio, ShieldCheck, Sparkles, Target, User, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MatchdayTicker } from "@/components/layout/MatchdayTicker";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { hash: "squad", route: undefined, label: "Squad", icon: Users },
   { hash: "predict", route: undefined, label: "Predict", icon: Target },
   { hash: "decentraland", route: undefined, label: "Metaverse", icon: Glasses },
+  { hash: undefined, route: "/feed" as const, label: "Feed", icon: Radio },
   { hash: undefined, route: "/proof" as const, label: "Proof", icon: ShieldCheck },
   { hash: undefined, route: "/profile" as const, label: "Profile", icon: User },
 ] as const;
@@ -36,7 +37,7 @@ function NavItem({
   pathname,
 }: {
   hash?: string;
-  route?: "/" | "/profile" | "/proof";
+  route?: "/" | "/profile" | "/proof" | "/feed";
   label: string;
   icon: typeof Home;
   mobile?: boolean;

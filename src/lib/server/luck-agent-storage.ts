@@ -33,6 +33,8 @@ export type LuckOutcome = {
   actionType: LuckActionType;
   pillar: LuckPillar;
   hook: string;
+  text?: string;
+  url?: string;
   targetTweetId?: string;
   targetHandle?: string;
   publishedAt: string;

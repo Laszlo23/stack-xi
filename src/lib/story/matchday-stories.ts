@@ -153,39 +153,39 @@ const STORY_BY_MATCH: Record<string, Omit<MatchdayStory, "matchId">> = {
     beats: [
       {
         id: "m8-1",
-        line: "Portugal 2-1 Croatia in Toronto — Ramos in the 93rd. Spain 3-0 Austria in LA — first knockout win since South Africa 2010. Now they collide in Dallas.",
+        line: "Four quarterfinalists are already set: Morocco, France, Norway, England. Morocco routed Canada 3-0 in Houston. France edged Paraguay 1-0 — Mbappé's 19th World Cup goal.",
       },
       {
         id: "m8-2",
-        line: "Ronaldo dedicated the win to Diogo Jota. Yamal and Oyarzabal are in form. Pepe brought neutral vibes and a BCC stake — Luck brought popcorn.",
-        sub: "Jul 6 · 2:00 PM CT · AT&T Stadium. Predictions open 90 minutes before kickoff.",
+        line: "Norway stunned Brazil 2-1 in New Jersey — Haaland in the 79th and 90th. England survived Mexico 3-2 at the Azteca with a Bellingham brace and a Kane penalty drama.",
+        sub: "Jul 6 · 2:00 PM CT · AT&T Stadium. Portugal vs Spain decides another quarterfinal berth.",
       },
       {
         id: "m8-3",
-        line: `While Dallas hosts the Iberian storm, ${WORLD_CUP_WINNER_PICK} face Paraguay in Philadelphia tonight — Leonardo's bracket says Les Bleus lift the trophy Jul 19.`,
+        line: `Ronaldo and Yamal renew the Iberian rivalry in Dallas. ${WORLD_CUP_WINNER_PICK} already through — Leonardo's bracket still says Les Bleus lift the trophy Jul 19 in New York.`,
       },
     ],
     sharePost:
-      "🇵🇹 vs 🇪🇸 · Dallas Round of 16 · Jul 6. Portugal vs Spain after dramatic R32 wins. Lock BCC on STACK XI. Pepe picks vibes — Leonardo picks France to win it all 🐸⚽",
+      "🇵🇹 vs 🇪🇸 · Dallas Round of 16 · Jul 6. Four QF spots filled — Morocco, France, Norway, England. Iberian derby locks the next. BCC on STACK XI 🐸⚽",
   },
   m9: {
     title: "Semifinal Dream · France Path",
     beats: [
       {
         id: "m9-1",
-        line: `Semifinal projection at Dallas: ${WORLD_CUP_WINNER_PICK} vs Portugal — if the bracket holds and Leonardo's luck arc pays off.`,
+        line: `Semifinal projection at Dallas: ${WORLD_CUP_WINNER_PICK} vs the Iberian winner — if the bracket holds and Leonardo's luck arc pays off.`,
         sub: "Projected fixture · Jul 14 · subject to knockout results",
       },
       {
         id: "m9-2",
-        line: "Mbappé in form. France beat Sweden 3-0 in the R32. Paraguay stunned Germany on pens — but the crowd on Base is backing blue.",
+        line: "Mbappé through to the quarters. France face Morocco in Boston Jul 9. Norway and England collide in Miami Jul 11 — Haaland vs Bellingham energy.",
       },
       {
         id: "m9-3",
         line: "Early squad minters get the bridge pass to Bitcoin finals on Stacks. For now, Base believers play where the story started — in public, with heart.",
       },
     ],
-    sharePost: `Semifinal horizon in Dallas · Jul 14. Leonardo's pick: ${WORLD_CUP_WINNER_PICK} win the World Cup Jul 19. Mint squad · predict with BCC · prove onchain 🐸`,
+    sharePost: `Quarterfinals set: France vs Morocco Jul 9 · Norway vs England Jul 11. Leonardo's pick: ${WORLD_CUP_WINNER_PICK} win the World Cup Jul 19. Mint squad · predict with BCC 🐸`,
   },
 };
 

@@ -9,6 +9,8 @@ import {
 } from "wagmi";
 import { connect, getAccount, getConnectors } from "wagmi/actions";
 import type { Config, Connector } from "wagmi";
+import { base } from "viem/chains";
+import { useResolvedWalletAddress } from "@/hooks/use-resolved-wallet-address";
 import {
   BCC_TOKEN_ADDRESS,
   BCC_SYMBOL,
@@ -58,9 +60,21 @@ async function connectWithFallback(
   throw new Error("Could not connect wallet — try MetaMask, Coinbase Wallet, or WalletConnect");
 }
 
+function requireWagmiAddress(config: Config): `0x${string}` {
+  const account = getAccount(config);
+  if (!account.isConnected || !account.address) {
+    throw new Error("Wallet not ready — wait for sync to finish or reconnect.");
+  }
+  return account.address;
+}
+
 export function useBaseWallet() {
   const config = useConfig();
-  const { address, isConnected, isConnecting } = useAccount();
+  const { address: wagmiAddress, isConnected: wagmiConnected, isConnecting } = useAccount();
+  const resolvedAddress = useResolvedWalletAddress();
+  const address = wagmiAddress ?? resolvedAddress;
+  const isWalletSyncing = Boolean(resolvedAddress) && !wagmiConnected;
+  const isConnected = wagmiConnected;
   const { disconnect } = useDisconnect();
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
@@ -72,7 +86,8 @@ export function useBaseWallet() {
     abi: ERC20_ABI,
     functionName: "balanceOf",
     args: address ? [address] : undefined,
-    query: { enabled: Boolean(address) },
+    chainId: base.id,
+    query: { enabled: Boolean(address), staleTime: 15_000 },
   });
 
   const { data: bccBalance = 0n, refetch: refetchBccBalance } = useReadContract({
@@ -80,12 +95,17 @@ export function useBaseWallet() {
     abi: ERC20_ABI,
     functionName: "balanceOf",
     args: address ? [address] : undefined,
-    query: { enabled: Boolean(address) },
+    chainId: base.id,
+    query: {
+      enabled: Boolean(address),
+      staleTime: 15_000,
+      refetchOnWindowFocus: true,
+    },
   });
 
   const connectWallet = useCallback(async (): Promise<`0x${string}`> => {
-    const active = getAccount(config);
-    if (active.address) return active.address;
+    const active = getAccount(config).address;
+    if (active) return active;
 
     setConnectError(null);
     setConnectPending(true);
@@ -115,8 +135,7 @@ export function useBaseWallet() {
   }, [config]);
 
   async function approveToken(token: `0x${string}`, spender: `0x${string}`, amount: bigint) {
-    const owner = getAccount(config).address ?? address;
-    if (!owner) throw new Error("Wallet not connected");
+    const owner = requireWagmiAddress(config);
     return writeContractAsync({
       address: token,
       abi: ERC20_ABI,
@@ -126,8 +145,7 @@ export function useBaseWallet() {
   }
 
   async function ensureBccAllowanceFor(spender: `0x${string}`, amount: bigint) {
-    const owner = getAccount(config).address ?? address;
-    if (!owner) throw new Error("Wallet not connected");
+    const owner = requireWagmiAddress(config);
     if (!publicClient) throw new Error("RPC client not ready");
     return ensureBccAllowance(publicClient, writeContractAsync, owner, spender, amount);
   }
@@ -145,6 +163,7 @@ export function useBaseWallet() {
   return {
     address,
     isConnected,
+    isWalletSyncing,
     isConnecting: isConnectBusy,
     connectPending,
     connectError,

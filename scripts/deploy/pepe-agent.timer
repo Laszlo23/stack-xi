@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Pepe Farcaster agent every 30 minutes (offset)
+
+[Timer]
+OnBootSec=12min
+OnUnitActiveSec=30min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

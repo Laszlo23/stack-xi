@@ -33,7 +33,7 @@ export function TelegramGamePanel() {
 
   async function shareInvite() {
     if (!initData) return;
-    const text = `🐸 STACK XI matchday on Base — predict with BCC, mint the squad, 1B BCC airdrop for culture players.\n${referralUrl}`;
+    const text = `🐸 STACK XI matchday on Base — predict with BCC, mint the squad, 77M BCC airdrop for culture players.\n${referralUrl}`;
     try {
       const sent = await shareViaTelegram({
         initData,

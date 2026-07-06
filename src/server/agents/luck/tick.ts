@@ -150,6 +150,8 @@ export async function runLuckTick(
               targetTweetId: candidate.tweetId,
               targetHandle: candidate.handle,
               publishedAt: new Date().toISOString(),
+              text: `Retweet ${candidate.handle}`,
+              url: published.url,
             });
             result.support = { ok: true, action: "retweet", url: published.url };
             result.slack = await postSlack(
@@ -184,6 +186,8 @@ export async function runLuckTick(
               targetTweetId: candidate.tweetId,
               targetHandle: candidate.handle,
               publishedAt: new Date().toISOString(),
+              text: copy.text,
+              url: published.url,
             });
             result.support = { ok: true, action: supportAction, url: published.url };
             result.slack = await postSlack(
@@ -269,6 +273,8 @@ export async function approveLuckDraft(
     pillar: draft.pillar,
     hook: draft.hook,
     publishedAt: new Date().toISOString(),
+    text: draft.text,
+    url: posted.url,
   });
 
   return { ok: true, url: posted.url };

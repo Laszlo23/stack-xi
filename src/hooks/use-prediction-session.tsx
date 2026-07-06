@@ -20,6 +20,7 @@ type PredictionSessionContextValue = {
   setStep: (step: PredictionStep) => void;
   setPick: (matchId: string, pick: PredictionPick) => void;
   setStake: (stakeBcc: bigint, sponsored?: boolean) => void;
+  applyShareUnlock: (advanceToConfirm?: boolean) => void;
   markShareUnlocked: () => void;
   markSubmitted: (txId: string) => void;
   reset: () => void;
@@ -37,14 +38,28 @@ export function PredictionSessionProvider({ children }: { children: ReactNode })
   }, []);
 
   const setStake = useCallback((stakeBcc: bigint, sponsored = false) => {
-    setSession((prev) => (prev ? { ...prev, stakeBcc, sponsored } : prev));
-    setStep(3);
+    setSession((prev) => {
+      if (!prev) return prev;
+      setStep(prev.shareUnlocked ? 4 : 3);
+      return { ...prev, stakeBcc, sponsored };
+    });
+  }, []);
+
+  /** Mark cast gate passed; only advances to confirm when a stake is already chosen. */
+  const applyShareUnlock = useCallback((advanceToConfirm = true) => {
+    setSession((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, shareUnlocked: true };
+      if (advanceToConfirm && prev.stakeBcc > 0n) {
+        setStep(4);
+      }
+      return next;
+    });
   }, []);
 
   const markShareUnlocked = useCallback(() => {
-    setSession((prev) => (prev ? { ...prev, shareUnlocked: true } : prev));
-    setStep(4);
-  }, []);
+    applyShareUnlock(true);
+  }, [applyShareUnlock]);
 
   const markSubmitted = useCallback((txId: string) => {
     setSession((prev) => (prev ? { ...prev, txId, status: "submitted" } : prev));
@@ -63,11 +78,12 @@ export function PredictionSessionProvider({ children }: { children: ReactNode })
       setStep,
       setPick,
       setStake,
+      applyShareUnlock,
       markShareUnlocked,
       markSubmitted,
       reset,
     }),
-    [session, step, setPick, setStake, markShareUnlocked, markSubmitted, reset],
+    [session, step, setPick, setStake, applyShareUnlock, markShareUnlocked, markSubmitted, reset],
   );
 
   return (

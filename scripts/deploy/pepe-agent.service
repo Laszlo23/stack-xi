@@ -1,0 +1,14 @@
+[Unit]
+Description=Pepe Farcaster agent tick — builder feed voice
+After=network.target stack-xi-pepe.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/var/www/pepe-buildingculture
+EnvironmentFile=/var/www/pepe-buildingculture/.env
+ExecStart=/usr/bin/node scripts/pepe-agent-tick.mjs
+StandardOutput=append:/var/log/pepe-buildingculture/pepe-agent.log
+StandardError=append:/var/log/pepe-buildingculture/pepe-agent.log
+
+[Install]
+WantedBy=multi-user.target

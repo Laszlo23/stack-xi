@@ -1,6 +1,5 @@
 import { Check, Copy, Flame, LogOut, Wallet } from "lucide-react";
 import { useState } from "react";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
 import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { useMemberTasks } from "@/hooks/use-member-tasks";
 import { useUserSquadHoldings } from "@/hooks/use-user-squad-holdings";
@@ -12,7 +11,7 @@ function truncateAddress(address: string): string {
 }
 
 export function ProfileHeader() {
-  const { address, bccBalanceLabel, disconnectWallet } = useBaseWallet();
+  const { address, bccBalanceLabel, disconnectWallet } = useConnectBaseWallet();
   const { progress } = useMemberTasks();
   const { holdings, isEarlyBeliever } = useUserSquadHoldings(address);
   const [copied, setCopied] = useState(false);
@@ -67,7 +66,7 @@ export function ProfileHeader() {
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
               Pepe doesn&apos;t chase clout — but he respects members who show up daily.{" "}
-              {bccBalanceLabel} BCC in wallet.
+              {bccBalanceLabel} in wallet.
             </p>
           </div>
 
@@ -111,7 +110,7 @@ export function ProfileHeader() {
 
           <button
             type="button"
-            onClick={() => disconnectWallet()}
+            onClick={() => void disconnectWallet()}
             className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-xs font-semibold text-muted-foreground transition hover:border-destructive/50 hover:text-destructive"
           >
             <LogOut className="h-3.5 w-3.5" />

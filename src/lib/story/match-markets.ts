@@ -45,3 +45,10 @@ export function getNextMarket(after: DallasMatch, now = new Date()): DallasMatch
   if (idx < 0 || idx >= schedule.length - 1) return null;
   return schedule[idx + 1];
 }
+
+export function getMatchById(matchId: string): DallasMatch | undefined {
+  return (
+    DALLAS_SCHEDULE.find((m) => m.id === matchId) ??
+    AUSTRIAN_BUNDESLIGA_SCHEDULE.find((m) => m.id === matchId)
+  );
+}

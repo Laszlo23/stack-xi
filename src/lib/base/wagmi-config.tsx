@@ -1,5 +1,6 @@
 import { WagmiProvider, createConfig, http, type Config } from "wagmi";
 import { base } from "wagmi/chains";
+import { getClientBaseRpcUrl } from "@/lib/base/client-rpc";
 import { coinbaseWallet, injected, walletConnect } from "wagmi/connectors";
 import type { ReactNode } from "react";
 
@@ -78,7 +79,7 @@ export function createWagmiConfig(): Config {
     multiInjectedProviderDiscovery: false,
     ssr: false,
     transports: {
-      [base.id]: http(),
+      [base.id]: http(getClientBaseRpcUrl()),
     },
   });
 }

@@ -258,6 +258,17 @@ export const SQUAD_NFT_ABI = [
 
 export const PREDICTION_POOL_ABI = [
   {
+    type: "event",
+    name: "Prediction",
+    inputs: [
+      { name: "user", type: "address", indexed: true },
+      { name: "matchId", type: "string", indexed: false },
+      { name: "pickHome", type: "bool", indexed: false },
+      { name: "amount", type: "uint256", indexed: false },
+      { name: "timestamp", type: "uint256", indexed: false },
+    ],
+  },
+  {
     type: "function",
     name: "predict",
     stateMutability: "nonpayable",

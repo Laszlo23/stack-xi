@@ -29,7 +29,7 @@ const CAMPAIGN_BODIES: readonly { id: string; title: string; lines: readonly str
     title: "Bracket vs wallet",
     lines: [
       "My bracket said France. My wallet said BCC.",
-      "STACK XI locked Portugal vs Spain onchain. Luck handles the rest 🐸⚽",
+      "Four QF spots set — Iberian derby in Dallas decides the next. STACK XI onchain 🐸⚽",
     ],
   },
   {
@@ -61,7 +61,7 @@ const CAMPAIGN_BODIES: readonly { id: string; title: string; lines: readonly str
     title: "Beer prediction",
     lines: [
       "I told my group chat I'd predict sober. I lied.",
-      "Portugal vs Spain locked with BCC. NO FEELS ONLY VIBES 🐸🍺",
+      "Haaland broke Brazil. Bellingham broke Mexico. Iberian derby locked with BCC 🐸🍺",
     ],
   },
   {
@@ -77,7 +77,7 @@ const CAMPAIGN_BODIES: readonly { id: string; title: string; lines: readonly str
     title: "Luck meter",
     lines: [
       "Luck isn't random. It's showing up for matchday, minting the squad, and casting your pick.",
-      "1B BCC airdrop loading for culture participants 🐸⚽",
+      "77M BCC airdrop loading for culture participants 🐸⚽",
     ],
   },
   {

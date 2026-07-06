@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { AirdropAnnouncementBanner } from "@/features/growth/AirdropAnnouncementBanner";
 import { PointsQuickStart } from "@/features/growth/PointsQuickStart";
-import { useBaseWallet } from "@/hooks/use-base-wallet";
+import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { useMemberTasks } from "@/hooks/use-member-tasks";
 import { useUserSquadHoldings } from "@/hooks/use-user-squad-holdings";
 import { ProfileConnectPrompt, ProfileHeader } from "@/features/profile/ProfileHeader";
@@ -13,12 +13,13 @@ import {
 } from "@/features/profile/SocialConnectionsPanel";
 import { TelegramGamePanel } from "@/features/telegram/TelegramGamePanel";
 import { SquadHoldingsPanel } from "@/features/profile/SquadHoldingsPanel";
+import { MyPredictionsPanel } from "@/features/profile/MyPredictionsPanel";
 import { getCultureLevel, TOTAL_MEMBER_XP } from "@/lib/profile/member-tasks";
 import { processDailyLogin } from "@/lib/profile/task-storage";
 import { getAirdropTier, formatAirdropWeight } from "@/lib/growth/airdrop-tiers";
 
 export function ProfilePageContent() {
-  const { isConnected, address } = useBaseWallet();
+  const { isConnected, address } = useConnectBaseWallet();
   const { holdings, isLoading, isConfigured } = useUserSquadHoldings(address);
   const { refreshProgress } = useMemberTasks();
 
@@ -60,6 +61,7 @@ export function ProfilePageContent() {
             isLoading={isLoading}
             isConfigured={isConfigured}
           />
+          <MyPredictionsPanel />
           <section className="glass rounded-2xl p-6">
             <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
               Culture XP

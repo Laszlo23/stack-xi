@@ -47,6 +47,10 @@ export const TERMS_SECTIONS = [
     body: "Culture tasks use API verification when X or Farcaster accounts are connected, with honor-system fallback when API checks are unavailable. False claims do not create on-chain rights. We may adjust XP or perks at any time during beta.",
   },
   {
+    title: "Automated culture agents",
+    body: "Luck (X) and Pepe (Farcaster) are disclosed automated accounts operated by the project for builder support and matchday culture — not impersonated users. Protocol Pepe treasury activity shown in the culture feed is labeled protocol activity on Base. Automated posts are subject to daily caps and human approval for originals where configured.",
+  },
+  {
     title: "Culture airdrop",
     body: "Promotional messaging about a BCC participant airdrop (including pool size and XP weight tiers) is not a guarantee of allocation, value, or claim timing. Final tokenomics, eligibility, and claim mechanics will be announced separately and may change.",
   },

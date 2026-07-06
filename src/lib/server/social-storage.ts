@@ -21,6 +21,12 @@ export type TelegramSocialLink = {
   linkedAt: string;
 };
 
+export type WorldIdSocialLink = {
+  nullifier: string;
+  protocolVersion: string;
+  verifiedAt: string;
+};
+
 export type TelegramUserRecord = {
   userId: number;
   username?: string;
@@ -32,6 +38,7 @@ export type WalletSocialLinks = {
   x?: XSocialLink;
   farcaster?: FarcasterSocialLink;
   telegram?: TelegramSocialLink;
+  worldId?: WorldIdSocialLink;
 };
 
 export type OAuthPendingSession = {
@@ -197,7 +204,32 @@ export function publicSocialStatus(links: WalletSocialLinks | null) {
     telegram: links?.telegram
       ? { userId: links.telegram.userId, username: links.telegram.username ?? null }
       : null,
+    worldId: links?.worldId
+      ? { verified: true, verifiedAt: links.worldId.verifiedAt }
+      : null,
   };
+}
+
+export async function isWorldNullifierTaken(
+  nullifier: string,
+  exceptWallet?: string,
+): Promise<boolean> {
+  const data = await readStorage();
+  for (const [wallet, links] of Object.entries(data.links)) {
+    if (exceptWallet && wallet.toLowerCase() === exceptWallet.toLowerCase()) continue;
+    if (links.worldId?.nullifier === nullifier) return true;
+  }
+  return false;
+}
+
+export async function linkWorldIdAccount(
+  wallet: string,
+  worldLink: WorldIdSocialLink,
+): Promise<WalletSocialLinks> {
+  const existing = (await getWalletSocialLinks(wallet)) ?? {};
+  const next = { ...existing, worldId: worldLink };
+  await saveWalletSocialLinks(wallet, next);
+  return next;
 }
 
 export function publicTelegramSession(record: TelegramUserRecord | null) {

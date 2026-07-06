@@ -73,9 +73,17 @@ export async function proxyZeroXQuote(params: ZeroXQuoteParams): Promise<ZeroXQu
   return fetchZeroX<ZeroXQuoteResponse>("/swap/allowance-holder/quote", params);
 }
 
-export function isZeroXConfigured(): boolean {
+export function isSwapConfigured(): boolean {
+  const mode = getSwapMode();
+  if (mode === "direct") return true;
+  if (mode === "deeplink_only") return false;
   if (isAlchemyPayerAddressMismatch()) return false;
-  return getSwapMode() !== "deeplink_only";
+  return true;
+}
+
+/** @deprecated Use isSwapConfigured */
+export function isZeroXConfigured(): boolean {
+  return isSwapConfigured();
 }
 
 export { getSwapMode, getX402PayerKind, isX402PayerConfigured };

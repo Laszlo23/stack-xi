@@ -18,11 +18,26 @@ import { isCdpConfigured } from "@/lib/server/cdp-config";
 import { getCdpSwapPayerSigner } from "@/lib/server/cdp-swap-payer";
 import type { ZeroXPriceParams, ZeroXQuoteParams } from "./zerox-types";
 
-const ZEROX_BASE = "https://api.0x.org";
+/** Pay-per-request agent gateway — no 0x API key; x402 USDC micropayments (~$0.01/call). */
+const ZEROX_AGENT_X402_BASE =
+  process.env.ZEROX_AGENT_X402_BASE?.trim() || "https://agent.api.0x.org/v1/x402";
 const BASE_NETWORK = "eip155:8453" as const;
+/** Max x402 spend per 0x call (~$0.02 USDC, 6 decimals). */
+const X402_MAX_PAYMENT_UNITS = 20_000n;
 
 let cachedFetch: typeof fetch | null = null;
 let initPromise: Promise<typeof fetch> | null = null;
+
+function mapX402AgentPath(path: string): string {
+  switch (path) {
+    case "/swap/allowance-holder/price":
+      return "/swap-allowance-holder-price/";
+    case "/swap/allowance-holder/quote":
+      return "/swap-allowance-holder-quote/";
+    default:
+      throw new Error(`Unsupported x402 agent path: ${path}`);
+  }
+}
 
 async function resolveX402Signer(): Promise<LocalAccount> {
   if (isCdpConfigured()) {
@@ -44,6 +59,9 @@ async function resolveX402Signer(): Promise<LocalAccount> {
 async function buildX402Fetch(): Promise<typeof fetch> {
   const signer = await resolveX402Signer();
   const client = new x402Client();
+  client.registerPolicy((_version, requirements) =>
+    requirements.filter((r) => BigInt(r.amount) <= X402_MAX_PAYMENT_UNITS),
+  );
   registerExactEvmScheme(client, {
     signer,
     networks: [BASE_NETWORK],
@@ -91,12 +109,30 @@ export function getX402PayerKind(): X402PayerKind {
   return null;
 }
 
-export type SwapMode = "api_key" | "x402" | "deeplink_only";
+export type SwapMode = "api_key" | "x402" | "direct" | "deeplink_only";
+
+function readForcedSwapMode(): SwapMode | null {
+  const raw = process.env.SWAP_MODE?.trim() || process.env.VITE_SWAP_MODE?.trim();
+  if (!raw) return null;
+  switch (raw) {
+    case "direct":
+    case "api_key":
+    case "x402":
+      return raw;
+    case "deeplink":
+    case "deeplink_only":
+      return "deeplink_only";
+    default:
+      return null;
+  }
+}
 
 export function getSwapMode(): SwapMode {
+  const forced = readForcedSwapMode();
+  if (forced) return forced;
   if (process.env.ZEROX_API_KEY) return "api_key";
-  if (isX402PayerConfigured()) return "x402";
-  return "deeplink_only";
+  if (process.env.SWAP_USE_ZEROX === "1" && isX402PayerConfigured()) return "x402";
+  return "direct";
 }
 
 export async function fetchZeroXWithX402<T>(
@@ -104,11 +140,11 @@ export async function fetchZeroXWithX402<T>(
   params: ZeroXPriceParams | ZeroXQuoteParams,
 ): Promise<T> {
   const paidFetch = await getX402Fetch();
-  const url = `${ZEROX_BASE}${path}?${buildSearchParams(params).toString()}`;
+  const agentPath = mapX402AgentPath(path);
+  const url = `${ZEROX_AGENT_X402_BASE}${agentPath}?${buildSearchParams(params).toString()}`;
 
   const response = await paidFetch(url, {
     headers: {
-      "0x-version": "v2",
       Accept: "application/json",
     },
   });
@@ -121,6 +157,11 @@ export async function fetchZeroXWithX402<T>(
         payer === "cdp"
           ? "x402_payment_required: fund the CDP swap payer wallet with USDC on Base"
           : "x402_payment_required: fund the Alchemy x402 payer wallet with USDC on Base",
+      );
+    }
+    if (response.status === 401) {
+      throw new Error(
+        "0x agent gateway rejected the request — check x402 payer USDC on Base and agent.api.0x.org access",
       );
     }
     throw new Error(`0x x402 ${response.status}: ${body.slice(0, 200)}`);

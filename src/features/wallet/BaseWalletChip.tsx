@@ -9,6 +9,7 @@ function truncateAddress(address: string): string {
 export function BaseWalletChip({ compact }: { compact?: boolean }) {
   const {
     isConnected,
+    isWalletSyncing,
     isConnecting,
     address,
     bccBalanceLabel,
@@ -21,17 +22,23 @@ export function BaseWalletChip({ compact }: { compact?: boolean }) {
     return (
       <Link
         to="/profile"
-        className="inline-flex max-w-[11rem] items-center gap-2 rounded-lg border border-primary/40 bg-primary/10 px-3 py-2 font-mono text-xs text-primary transition hover:bg-primary/20"
-        title="Open profile"
+        className="inline-flex max-w-[14rem] items-center gap-2 rounded-lg border border-primary/40 bg-primary/10 px-3 py-2 font-mono text-xs text-primary transition hover:bg-primary/20"
+        title={`${bccBalanceLabel} · Open profile`}
       >
         <Wallet className="h-4 w-4 shrink-0" />
         <span className="truncate">{truncateAddress(address)}</span>
-        {!compact && (
-          <span className="hidden text-muted-foreground sm:inline">· {bccBalanceLabel}</span>
-        )}
+        <span className="shrink-0 text-[10px] text-muted-foreground">· {bccBalanceLabel}</span>
       </Link>
     );
   }
+
+  const buttonLabel = isConnecting
+    ? isWalletSyncing
+      ? "Syncing…"
+      : "Connecting…"
+    : compact
+      ? "Wallet"
+      : "Connect Base";
 
   return (
     <div className="relative flex flex-col items-end gap-1">
@@ -49,7 +56,7 @@ export function BaseWalletChip({ compact }: { compact?: boolean }) {
         className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-primary-foreground shadow-[0_0_20px_var(--neon)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <Wallet className="h-4 w-4" />
-        {isConnecting ? "Connecting…" : compact ? "Wallet" : "Connect Base"}
+        {buttonLabel}
       </button>
       {connectError && (
         <p className="absolute top-full z-50 mt-1 max-w-[14rem] rounded-md border border-destructive/40 bg-background px-2 py-1 text-right text-[10px] leading-snug text-destructive shadow-lg">
