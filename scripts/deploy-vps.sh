@@ -33,6 +33,14 @@ fi
 echo "==> Preparing server directories..."
 ssh -i "$SSH_KEY" "$SSH_HOST" "mkdir -p $APP_DIR/dist $APP_DIR/dist/server $APP_DIR/dist/public $APP_DIR/data /var/log/pepe-buildingculture"
 
+if [[ -d "$ROOT/data" && "${DEPLOY_SYNC_DATA:-0}" == "1" ]]; then
+  echo "==> Syncing JSON data seeds (DEPLOY_SYNC_DATA=1)..."
+  rsync -az -e "ssh -i $SSH_KEY" \
+    "$ROOT/data/" "$SSH_HOST:$APP_DIR/data/"
+elif [[ -d "$ROOT/data" ]]; then
+  echo "==> Skipping data/ sync (set DEPLOY_SYNC_DATA=1 to overwrite production JSON state)"
+fi
+
 echo "==> Stopping service before artifact sync (prevents missing-chunk 500s)..."
 ssh -i "$SSH_KEY" "$SSH_HOST" "systemctl stop ${SERVICE}.service 2>/dev/null || true"
 
@@ -51,9 +59,12 @@ scp -i "$SSH_KEY" "$ROOT/scripts/deploy/luck-agent.service" "$SSH_HOST:/etc/syst
 scp -i "$SSH_KEY" "$ROOT/scripts/deploy/luck-agent.timer" "$SSH_HOST:/etc/systemd/system/luck-agent.timer"
 scp -i "$SSH_KEY" "$ROOT/scripts/deploy/pepe-agent.service" "$SSH_HOST:/etc/systemd/system/pepe-agent.service"
 scp -i "$SSH_KEY" "$ROOT/scripts/deploy/pepe-agent.timer" "$SSH_HOST:/etc/systemd/system/pepe-agent.timer"
+scp -i "$SSH_KEY" "$ROOT/scripts/deploy/match-ops-agent.service" "$SSH_HOST:/etc/systemd/system/match-ops-agent.service"
+scp -i "$SSH_KEY" "$ROOT/scripts/deploy/match-ops-agent.timer" "$SSH_HOST:/etc/systemd/system/match-ops-agent.timer"
 rsync -az -e "ssh -i $SSH_KEY" \
   "$ROOT/scripts/luck-agent-tick.mjs" "$ROOT/scripts/luck-x-post.mjs" \
   "$ROOT/scripts/pepe-agent-tick.mjs" \
+  "$ROOT/scripts/match-ops-tick.mjs" \
   "$SSH_HOST:$APP_DIR/scripts/"
 
 if [[ -f "$ROOT/.env" ]]; then
@@ -88,12 +99,15 @@ systemctl enable luck-agent.timer
 systemctl restart luck-agent.timer
 systemctl enable pepe-agent.timer
 systemctl restart pepe-agent.timer
+systemctl enable match-ops-agent.timer
+systemctl restart match-ops-agent.timer
 sleep 2
 systemctl is-active ${SERVICE}.service
 curl -sf -o /dev/null -w "local:%{http_code}\n" "http://127.0.0.1:${PORT}/" || true
 REMOTE
 
 echo "==> Smoke checks..."
+sleep 3
 HOME_CODE="$(curl -sf -o /dev/null -w "%{http_code}" "https://${DOMAIN}/" || echo "000")"
 HOME_HTML="$(curl -sf "https://${DOMAIN}/" || true)"
 if [[ "$HOME_CODE" != "200" ]]; then

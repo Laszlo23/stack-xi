@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { WORLD_CUP_SNAPSHOT } from "@/lib/story/world-cup-2026-snapshot";
 
 export function WorldCupSnapshotSection() {
@@ -10,8 +11,7 @@ export function WorldCupSnapshotSection() {
     confirmedQuarterfinals,
     recentResults,
     todayFixtures,
-    upcomingR16,
-    nextDallas,
+    nextHighlight,
     bracketNote,
   } = WORLD_CUP_SNAPSHOT;
 
@@ -23,9 +23,7 @@ export function WorldCupSnapshotSection() {
             <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
               World Cup 2026 · live bracket
             </div>
-            <h2 className="mt-2 font-display text-2xl font-bold sm:text-3xl">
-              {phase}
-            </h2>
+            <h2 className="mt-2 font-display text-2xl font-bold sm:text-3xl">{phase}</h2>
             <p className="mt-2 font-mono text-xs text-muted-foreground">
               Updated {asOf} · Final {finalDate}
             </p>
@@ -69,7 +67,7 @@ export function WorldCupSnapshotSection() {
 
           <div className="glass rounded-2xl p-5 lg:col-span-1">
             <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
-              Today · Jul 6
+              Live window · Jul 6–7
             </div>
             <ul className="mt-4 space-y-2 text-sm">
               {todayFixtures.map((fixture) => (
@@ -78,17 +76,14 @@ export function WorldCupSnapshotSection() {
                 </li>
               ))}
             </ul>
-            <div className="mt-5 border-t border-border/40 pt-4">
-              <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                Tomorrow · Jul 7
-              </div>
-              <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
-                {upcomingR16.map((fixture) => (
-                  <li key={fixture}>{fixture}</li>
-                ))}
-              </ul>
-            </div>
-            <p className="mt-4 font-mono text-xs text-accent">{nextDallas}</p>
+            <p className="mt-4 font-mono text-xs text-accent">{nextHighlight}</p>
+            <Link
+              to="/"
+              hash="predict"
+              className="mt-4 inline-flex text-xs font-bold text-primary hover:underline"
+            >
+              Lock next pick with BCC →
+            </Link>
           </div>
 
           <div className="glass rounded-2xl p-5 lg:col-span-1">

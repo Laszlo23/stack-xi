@@ -1,25 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { getPepeAgentStatus, runPepeTick } from "@/server/agents/pepe/tick";
+import { authorizeWithSecretOrAdmin } from "@/lib/server/agent-auth";
 import { readPepeAgentAdminSecret } from "@/server/agents/pepe/env";
+import { getPepeAgentStatus, runPepeTick } from "@/server/agents/pepe/tick";
 
-function unauthorized() {
-  return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), {
-    status: 401,
-    headers: { "Content-Type": "application/json" },
-  });
-}
+const PEPE_AGENT_HEADERS = ["x-pepe-agent-admin-secret", "x-luck-agent-admin-secret"];
 
 export const Route = createFileRoute("/api/agents/pepe/tick")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const expected = readPepeAgentAdminSecret();
-        if (!expected) return unauthorized();
-        const hdr =
-          request.headers.get("x-pepe-agent-admin-secret") ||
-          request.headers.get("x-luck-agent-admin-secret");
-        if (hdr !== expected) return unauthorized();
+        const denied = authorizeWithSecretOrAdmin(
+          request,
+          readPepeAgentAdminSecret,
+          PEPE_AGENT_HEADERS,
+        );
+        if (denied) return denied;
 
         let body: Record<string, unknown> = {};
         try {

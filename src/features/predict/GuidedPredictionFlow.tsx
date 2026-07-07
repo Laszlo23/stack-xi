@@ -4,6 +4,7 @@ import { FarcasterCastAssistant } from "@/features/farcaster/FarcasterCastAssist
 import { PepeBubble } from "@/features/story/PepeBubble";
 import { BccAcquireGate } from "@/features/swap/BccAcquireGate";
 import { CrowdPressureBar } from "@/features/predict/CrowdPressureBar";
+import { TeamFlag } from "@/features/predict/TeamFlag";
 import { PredictionReceiptPanel } from "@/features/predict/PredictionReceiptPanel";
 import { PredictionShareCard } from "@/features/predict/PredictionShareCard";
 import { ShareUnlockStep } from "@/features/predict/ShareUnlockStep";
@@ -14,6 +15,8 @@ import { usePredictionSession } from "@/hooks/use-prediction-session";
 import { useWorldVerification } from "@/hooks/use-world-verification";
 import { WorldVerifyPanel } from "@/features/world/WorldVerifyPanel";
 import { useSponsoredPrediction } from "@/hooks/use-sponsored-prediction";
+import { useSquadPerks } from "@/hooks/use-squad-perks";
+import { formatBoostPercent } from "@/lib/squad/perk-tiers";
 import {
   BASESCAN_URL,
   BCC_SYMBOL,
@@ -25,6 +28,7 @@ import {
   isSponsorConfigured,
 } from "@/lib/base/config";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { buildPredictCast } from "@/lib/farcaster/cast-templates";
 import {
   formatCountdown,
@@ -34,7 +38,7 @@ import {
 import { hasShareUnlock } from "@/lib/predict/share-unlock";
 import { submitBasePrediction, submitSponsoredPrediction } from "@/lib/base/submit-prediction";
 import { recordPredictionTx } from "@/lib/profile/task-storage";
-import { getActiveMarket } from "@/lib/story/match-markets";
+import { resolvePredictionMarket } from "@/lib/story/match-markets";
 import {
   PEPE_CONFIRM_INTRO,
   PEPE_PREDICT_INTRO,
@@ -44,6 +48,7 @@ import {
 } from "@/lib/story/pepe-script";
 
 export function GuidedPredictionFlow() {
+  const { t } = useTranslation();
   const { session, step, setPick, setStake, applyShareUnlock, markShareUnlocked, markSubmitted, reset } =
     usePredictionSession();
   const {
@@ -60,11 +65,12 @@ export function GuidedPredictionFlow() {
   const { isWorldApp } = useMiniAppContext();
   const { verified: worldVerified, refresh: refreshWorldVerification } = useWorldVerification();
   const sponsor = useSponsoredPrediction();
+  const { perks: squadPerks } = useSquadPerks(address);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [, tick] = useState(0);
 
-  const match = getActiveMarket();
+  const match = resolvePredictionMarket(session?.matchId);
   const window = getPredictionWindow(match);
   const pickedTeam =
     session?.pick === "home" ? match.home : session?.pick === "away" ? match.away : null;
@@ -84,7 +90,7 @@ export function GuidedPredictionFlow() {
   }, [address, session, applyShareUnlock]);
 
   async function handleSubmit() {
-    if (!session || session.stakeBcc <= 0n || !session.shareUnlocked) return;
+    if (!session || session.stakeBcc <= 0n) return;
     if (isWorldApp && !worldVerified) {
       setSubmitError("Verify with World ID before submitting from World App.");
       return;
@@ -155,7 +161,6 @@ export function GuidedPredictionFlow() {
   const windowClosed = window.status === "closed";
   const isSponsoredStake = Boolean(session?.sponsored);
   const canSubmitOnchain =
-    Boolean(session?.shareUnlocked) &&
     Boolean(session && session.stakeBcc > 0n) &&
     isPredictionPoolConfigured() &&
     (!isWorldApp || worldVerified) &&
@@ -168,8 +173,6 @@ export function GuidedPredictionFlow() {
   if (session && session.stakeBcc <= 0n) {
     submitBlockers.push("Select a BCC stake tier before locking");
   }
-  if (session && !session.shareUnlocked)
-    submitBlockers.push("Complete the cast-to-predict unlock (step 3)");
   if (!isPredictionPoolConfigured()) {
     submitBlockers.push("Prediction pool not configured (VITE_PREDICTION_POOL_ADDRESS)");
   }
@@ -201,12 +204,12 @@ export function GuidedPredictionFlow() {
         </div>
         <div className="mb-8 flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
           <span>
-            Step {step} of 5 · {match.stage}
+            Step {step} of 4 · {match.stage}
           </span>
           <LiveWindowBadge window={window} />
         </div>
 
-        {sponsor.isConfigured && sponsor.remainingSlots > 0 && step < 5 && (
+        {sponsor.isConfigured && sponsor.remainingSlots > 0 && step < 4 && (
           <div className="mb-6 rounded-xl border border-accent/40 bg-accent/10 px-4 py-3 text-sm">
             <strong className="text-accent">Founding sponsor:</strong> First {SPONSORED_PREDICTION_MAX}{" "}
             verified members (Farcaster FID or linked X) get {formatBcc(SPONSORED_STAKE_BCC)} staked
@@ -245,30 +248,52 @@ export function GuidedPredictionFlow() {
         {step === 1 && !windowClosed && (
           <div className="space-y-8">
             <PepeBubble beat={PEPE_PREDICT_INTRO} />
-            <div className="glass-neon rounded-2xl p-6 text-center">
+            <div className="rounded-2xl border border-border/60 bg-card/95 p-4 text-center shadow-lg sm:p-6">
               <div className="font-mono text-xs uppercase tracking-widest text-primary">
                 Next up · {match.kickoffLabel}
               </div>
               <p className="mt-2 text-sm text-muted-foreground">
                 Predictions stay open until kickoff · {formatCountdown(window.msUntilClose)} left
               </p>
-              <div className="mt-6 flex items-center justify-between gap-4">
+
+              <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4">
                 <button
                   type="button"
                   onClick={() => setPick(match.id, "home")}
-                  className="glass flex-1 rounded-xl px-4 py-8 transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_32px_var(--neon)]"
+                  className="predict-team-pick group flex min-h-[11rem] flex-col items-center justify-between gap-3 rounded-xl border border-border/80 bg-background px-2 py-4 transition active:scale-[0.98] hover:border-primary/50 hover:shadow-[0_0_24px_oklch(0.88_0.28_145/0.15)] sm:min-h-[12rem] sm:px-4 sm:py-6"
                 >
-                  <div className="font-display text-2xl font-bold">{match.home}</div>
+                  <TeamFlag
+                    team={match.home}
+                    size="xl"
+                    className="transition group-hover:scale-105"
+                  />
+                  <div className="max-w-full px-1 text-center font-display text-base font-bold leading-tight text-foreground sm:text-2xl">
+                    {match.home}
+                  </div>
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-primary opacity-0 transition group-hover:opacity-100">
+                    Pick home →
+                  </span>
                 </button>
-                <div className="font-display text-xl font-bold text-muted-foreground">vs</div>
+
                 <button
                   type="button"
                   onClick={() => setPick(match.id, "away")}
-                  className="glass flex-1 rounded-xl px-4 py-8 transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_0_32px_var(--neon)]"
+                  className="predict-team-pick group flex min-h-[11rem] flex-col items-center justify-between gap-3 rounded-xl border border-border/80 bg-background px-2 py-4 transition active:scale-[0.98] hover:border-primary/50 hover:shadow-[0_0_24px_oklch(0.88_0.28_145/0.15)] sm:min-h-[12rem] sm:px-4 sm:py-6"
                 >
-                  <div className="font-display text-2xl font-bold">{match.away}</div>
+                  <TeamFlag
+                    team={match.away}
+                    size="xl"
+                    className="transition group-hover:scale-105"
+                  />
+                  <div className="max-w-full px-1 text-center font-display text-base font-bold leading-tight text-foreground sm:text-2xl">
+                    {match.away}
+                  </div>
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-primary opacity-0 transition group-hover:opacity-100">
+                    Pick away →
+                  </span>
                 </button>
               </div>
+
               <CrowdPressureBar matchId={match.id} />
             </div>
           </div>
@@ -323,64 +348,7 @@ export function GuidedPredictionFlow() {
           </div>
         )}
 
-        {step === 3 && session && pickedTeam && (
-          <ShareUnlockStep
-            home={match.home}
-            away={match.away}
-            pick={pickedTeam}
-            stakeLabel={stakeLabel}
-            stage={match.stage}
-            address={address}
-            matchId={session.matchId}
-            unlocked={Boolean(session.shareUnlocked)}
-            onUnlocked={markShareUnlocked}
-          />
-        )}
-
-        {step === 4 && session && pickedTeam && session.stakeBcc <= 0n && (
-          <div className="space-y-6">
-            <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-              You skipped stake selection — pick how much {BCC_SYMBOL} to lock for this prediction.
-            </div>
-            <div className="grid gap-3">
-              {sponsor.isEligible && (
-                <button
-                  type="button"
-                  onClick={() => setStake(SPONSORED_STAKE_BCC, true)}
-                  className="flex items-center justify-between rounded-xl border-2 border-accent/50 bg-accent/10 px-5 py-4 text-left transition hover:border-accent hover:bg-accent/15"
-                >
-                  <div>
-                    <div className="font-display text-xl font-bold text-accent">
-                      {formatBcc(SPONSORED_STAKE_BCC)} · Sponsored
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      Founding member stake — free from treasury ({sponsor.remainingSlots} left)
-                    </div>
-                  </div>
-                  <span className="font-mono text-xs uppercase text-accent">Free →</span>
-                </button>
-              )}
-              {STAKE_TIERS_BCC.map((tier) => (
-                <button
-                  key={tier.label}
-                  type="button"
-                  onClick={() => setStake(tier.amount, false)}
-                  className="glass flex items-center justify-between rounded-xl px-5 py-4 text-left transition hover:border-primary/50 hover:bg-primary/5"
-                >
-                  <div>
-                    <div className="font-display text-xl font-bold">
-                      {tier.label} {BCC_SYMBOL}
-                    </div>
-                    <div className="text-sm text-muted-foreground">{tier.tag}</div>
-                  </div>
-                  <span className="text-primary">→</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {step === 4 && session && pickedTeam && session.stakeBcc > 0n && (
+        {step === 3 && session && pickedTeam && session.stakeBcc > 0n && (
           <div className="space-y-8">
             <PepeBubble beat={PEPE_CONFIRM_INTRO} />
             <div className="glass space-y-4 rounded-2xl p-6">
@@ -403,10 +371,14 @@ export function GuidedPredictionFlow() {
                   )}
                 </span>
               </div>
-              <div className="flex justify-between font-mono text-sm">
-                <span className="text-muted-foreground">Social unlock</span>
-                <span className="text-primary">✓ Cast gate passed</span>
-              </div>
+              {squadPerks.predictionBoostBps > 0 && (
+                <div className="flex justify-between font-mono text-sm">
+                  <span className="text-muted-foreground">{t("predict.squadBoost")}</span>
+                  <span className="text-primary">
+                    {formatBoostPercent(squadPerks.predictionBoostBps)} on claims · {squadPerks.tierLabel}
+                  </span>
+                </div>
+              )}
               {isConnected && address && !session.sponsored && (
                 <div className="flex justify-between font-mono text-sm">
                   <span className="text-muted-foreground">Your balance</span>
@@ -488,7 +460,7 @@ export function GuidedPredictionFlow() {
           </div>
         )}
 
-        {step === 5 && session?.txId && pickedTeam && (
+        {step === 4 && session?.txId && pickedTeam && (
           <div className="space-y-8">
             <PepeBubble beat={PEPE_SUCCESS} large luckMeter={95} />
             <PredictionShareCard
@@ -496,6 +468,7 @@ export function GuidedPredictionFlow() {
               away={match.away}
               pick={pickedTeam}
               stakeLabel={stakeLabel.replace("$", "")}
+              matchId={match.id}
             />
             <div className="glass-neon rounded-2xl p-6 text-center">
               <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
@@ -527,6 +500,19 @@ export function GuidedPredictionFlow() {
               })}
               txHash={session.txId}
             />
+            {!hasShareUnlock(address, session.matchId) && (
+              <ShareUnlockStep
+                home={match.home}
+                away={match.away}
+                pick={pickedTeam}
+                stakeLabel={stakeLabel}
+                stage={match.stage}
+                address={address}
+                matchId={session.matchId}
+                unlocked={Boolean(session.shareUnlocked)}
+                onUnlocked={markShareUnlocked}
+              />
+            )}
             <Link
               to="/proof"
               className="block text-center text-sm font-semibold text-primary hover:underline"

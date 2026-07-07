@@ -19,6 +19,15 @@ import {
   buildBaseAppSwapUrl,
   buildUniswapSwapUrl,
 } from "../src/lib/swap/swap-deeplinks.ts";
+import {
+  BASE_CHAIN_ID,
+  isAllowedLifiChain,
+  isAllowedLifiToToken,
+  isLifiConfigured,
+  isLifiSwapEnabled,
+  LIFI_ALLOWED_CHAIN_IDS,
+} from "../src/lib/swap/lifi-config.ts";
+import { BCC_TOKEN_ADDRESS } from "../src/lib/base/config.ts";
 
 let failed = 0;
 
@@ -86,6 +95,30 @@ assert(baseApp.includes("base.app") || baseApp.includes("coin"), "Base App deepl
 
 const aero = buildAerodromePoolUrl();
 assert(aero.includes("aerodrome.finance"), "Aerodrome deeplink builds");
+
+console.log("\nLI.FI config\n");
+
+assert(BASE_CHAIN_ID === 8453, "LI.FI Base chain id is 8453");
+assert(LIFI_ALLOWED_CHAIN_IDS.length === 5, "LI.FI allows 5 chains");
+assert(isAllowedLifiChain(42161), "Arbitrum allowed for LI.FI");
+assert(!isAllowedLifiChain(56), "BSC not allowed for LI.FI");
+assert(
+  isAllowedLifiToToken(BASE_CHAIN_ID, BCC_TOKEN_ADDRESS),
+  "BCC allowed as LI.FI destination on Base",
+);
+
+if (process.env.LIFI_API_KEY) {
+  assert(isLifiConfigured(), "LIFI_API_KEY → isLifiConfigured()");
+} else {
+  assert(!isLifiConfigured(), "no LIFI_API_KEY → not configured");
+}
+
+const lifiEnabled = isLifiSwapEnabled();
+if (process.env.VITE_LIFI_SWAP_ENABLED === "0" || process.env.VITE_LIFI_SWAP_ENABLED === "false") {
+  assert(!lifiEnabled, "VITE_LIFI_SWAP_ENABLED=0 disables LI.FI");
+} else {
+  assert(lifiEnabled, "LI.FI swap enabled by default");
+}
 
 console.log(`\n${failed === 0 ? "All swap config checks passed" : `${failed} failed`}`);
 process.exit(failed > 0 ? 1 : 0);

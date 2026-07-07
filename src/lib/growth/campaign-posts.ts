@@ -29,7 +29,7 @@ const CAMPAIGN_BODIES: readonly { id: string; title: string; lines: readonly str
     title: "Bracket vs wallet",
     lines: [
       "My bracket said France. My wallet said BCC.",
-      "Four QF spots set — Iberian derby in Dallas decides the next. STACK XI onchain 🐸⚽",
+      "Six QF spots set — Belgium rout USA 4-1 in Seattle. Messi vs Salah in Atlanta today. STACK XI onchain 🐸⚽",
     ],
   },
   {
@@ -105,11 +105,27 @@ const CAMPAIGN_BODIES: readonly { id: string; title: string; lines: readonly str
     ],
   },
   {
-    id: "full-culture",
-    title: "Full culture arc",
+    id: "claim-winnings",
+    title: "Claim your pool share",
     lines: [
-      "This isn't a protocol pitch. It's a group chat that became a World Cup watch party with BCC and heart.",
-      "Join the culture layer on STACK XI 🐸⚽",
+      "Spain 1-0 Portugal · Belgium 4-1 USA — if you called either, claim on your STACK XI profile.",
+      "Treasury sends BCC to your wallet. No gas to receive. Culture > solo grind 🐸",
+    ],
+  },
+  {
+    id: "messi-salah",
+    title: "Messi vs Salah",
+    lines: [
+      "Argentina vs Egypt in Atlanta today. Messi vs Salah. The feed is watching.",
+      "Lock BCC on Base. Share the pick. Claim if you win 🐸⚽",
+    ],
+  },
+  {
+    id: "spain-merino",
+    title: "Merino 91'",
+    lines: [
+      "Merino broke Portuguese hearts in Dallas. Belgium ended the American dream 4-1 in Seattle.",
+      "STACK XI receipts on Base — predict Atlanta next, claim Spain & Belgium winners on profile 🐸",
     ],
   },
 ];

@@ -35,6 +35,57 @@ async function checkXRepliedToTweet(
   return (data.data?.length ?? 0) > 0;
 }
 
+async function checkXFollowing(
+  accessToken: string,
+  userId: string,
+  targetUsername: string,
+): Promise<boolean> {
+  const query = encodeURIComponent(`from:${userId}`);
+  const res = await xApiFetch(
+    `/users/${userId}/following?max_results=1000&user.fields=username`,
+    accessToken,
+  );
+  if (res.ok) {
+    const data = (await res.json()) as { data?: { username?: string }[] };
+    const target = targetUsername.toLowerCase();
+    if ((data.data ?? []).some((u) => u.username?.toLowerCase() === target)) {
+      return true;
+    }
+  }
+  const searchRes = await xApiFetch(
+    `/tweets/search/recent?query=${query}&max_results=1`,
+    accessToken,
+  );
+  void searchRes;
+  const lookupRes = await xApiFetch(
+    `/users/by/username/${encodeURIComponent(targetUsername)}`,
+    accessToken,
+  );
+  if (!lookupRes.ok) return false;
+  const lookup = (await lookupRes.json()) as { data?: { id?: string } };
+  const targetId = lookup.data?.id;
+  if (!targetId) return false;
+  const followRes = await xApiFetch(
+    `/users/${userId}/following?max_results=1000`,
+    accessToken,
+  );
+  if (!followRes.ok) return false;
+  const followData = (await followRes.json()) as { data?: { id?: string }[] };
+  return (followData.data ?? []).some((u) => u.id === targetId);
+}
+
+async function checkXEngagedWithPost(
+  accessToken: string,
+  userId: string,
+  tweetId: string,
+): Promise<boolean> {
+  const [replied, retweeted] = await Promise.all([
+    checkXRepliedToTweet(accessToken, userId, tweetId),
+    checkXRetweeted(accessToken, userId, tweetId),
+  ]);
+  return replied || retweeted;
+}
+
 async function checkXPostedSiteUrl(
   accessToken: string,
   userId: string,
@@ -76,20 +127,32 @@ export async function verifyXTask(
       };
     }
 
-    if (taskId === "engage_x_post" || taskId === "like_share_x") {
-      const replied = await checkXRepliedToTweet(x.accessToken, x.userId, tweetId);
-      if (replied) {
+    if (taskId === "follow_x") {
+      const following = await checkXFollowing(x.accessToken, x.userId, SOCIAL_TARGETS.xAccount);
+      if (following) {
+        return { verified: true, method: "api", message: "Following @buildingcultu3 detected." };
+      }
+      return {
+        verified: false,
+        method: "honor_fallback",
+        message: "Could not verify follow via API — complete follow then retry.",
+      };
+    }
+
+    if (taskId === "engage_x" || taskId === "engage_x_post" || taskId === "like_share_x") {
+      const engaged = await checkXEngagedWithPost(x.accessToken, x.userId, tweetId);
+      if (engaged) {
         return {
           verified: true,
           method: "api",
-          message: "Engagement detected (reply on target thread).",
+          message: "Engagement detected (reply or repost on target post).",
         };
       }
       return {
         verified: false,
         method: "honor_fallback",
         message:
-          "Full like/repost verification needs X API Basic tier — reply detected or mark done manually.",
+          "Like/repost/reply not fully verified — engage with the post then retry.",
       };
     }
 
@@ -125,6 +188,18 @@ async function neynarFetch(path: string): Promise<Response | null> {
   return fetch(`https://api.neynar.com${path}`, {
     headers: { accept: "application/json", api_key: apiKey },
   });
+}
+
+async function resolveTargetCastHash(): Promise<string> {
+  const url = SOCIAL_TARGETS.farcasterMatchdayCast;
+  const res = await neynarFetch(
+    `/v2/farcaster/cast?identifier=${encodeURIComponent(url)}&type=url`,
+  );
+  if (res?.ok) {
+    const data = (await res.json()) as { cast?: { hash?: string } };
+    if (data.cast?.hash) return data.cast.hash;
+  }
+  return SOCIAL_TARGETS.farcasterCastHash;
 }
 
 async function checkFarcasterReplied(fid: number, castHash: string): Promise<boolean> {
@@ -167,7 +242,7 @@ export async function verifyFarcasterTask(
     };
   }
 
-  const castHash = SOCIAL_TARGETS.farcasterCastHash;
+  const castHash = await resolveTargetCastHash();
 
   try {
     if (taskId === "comment_farcaster_cast") {
@@ -182,7 +257,7 @@ export async function verifyFarcasterTask(
       };
     }
 
-    if (taskId === "engage_farcaster_cast") {
+    if (taskId === "engage_fc" || taskId === "engage_farcaster_cast") {
       const [replied, recasted] = await Promise.all([
         checkFarcasterReplied(fc.fid, castHash),
         checkFarcasterRecasted(fc.fid, castHash),
@@ -197,7 +272,7 @@ export async function verifyFarcasterTask(
       return {
         verified: false,
         method: "honor_fallback",
-        message: "Like/recast/reply not fully verified — mark done if you engaged.",
+        message: "Like/recast/reply not fully verified — engage then retry.",
       };
     }
 
@@ -227,11 +302,23 @@ export async function verifyFarcasterTask(
   };
 }
 
+export async function verifyQuestStep(
+  step: "follow_x" | "engage_x" | "engage_fc",
+  links: WalletSocialLinks,
+): Promise<SocialVerifyResult> {
+  if (step === "follow_x" || step === "engage_x") {
+    return verifyXTask(step, links);
+  }
+  return verifyFarcasterTask(step, links);
+}
+
 export async function verifySocialTask(
   taskId: string,
   links: WalletSocialLinks,
 ): Promise<SocialVerifyResult> {
   if (
+    taskId === "follow_x" ||
+    taskId === "engage_x" ||
     taskId === "engage_x_post" ||
     taskId === "comment_x_post" ||
     taskId === "like_share_x" ||
@@ -242,6 +329,7 @@ export async function verifySocialTask(
   }
 
   if (
+    taskId === "engage_fc" ||
     taskId === "engage_farcaster_cast" ||
     taskId === "comment_farcaster_cast" ||
     taskId === "follow_farcaster"

@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { FOUNDING_SQUAD } from "@/lib/mock/squad-data";
 import { FOOTER_BASESCAN } from "@/lib/legal/footer-links";
 
-export function SquadSoldOutPanel() {
+export function SquadSoldOutPanel({ totalSupply = 847 }: { totalSupply?: number }) {
   return (
     <div className="space-y-8">
       <div className="glass-neon rounded-2xl border-primary/40 p-5 sm:p-6">
@@ -13,15 +13,16 @@ export function SquadSoldOutPanel() {
               <Trophy className="h-4 w-4" />
               Founding squad · sold out
             </div>
-            <h3 className="mt-2 font-display text-2xl font-bold">All 11 minted on Base</h3>
+            <h3 className="mt-2 font-display text-2xl font-bold">All {totalSupply} packs minted</h3>
             <p className="mt-2 max-w-lg text-sm text-muted-foreground">
-              The bonding curve closed. Every founding player has a minter, a video shout-out in
-              queue, and a spot in STACK XI lore. Trade on secondary markets or predict the next
-              matchday with BCC.
+              The blind-pack curve closed. Every edition has a minter. Trade on secondary markets,
+              stack perks on profile, or predict the next matchday with BCC.
             </p>
           </div>
           <div className="text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-            <div className="text-3xl font-display font-bold text-primary">11/11</div>
+            <div className="text-3xl font-display font-bold text-primary">
+              {totalSupply}/{totalSupply}
+            </div>
             <div className="mt-1">Complete</div>
           </div>
         </div>

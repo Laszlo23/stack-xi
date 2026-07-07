@@ -9,6 +9,7 @@ import {
   getActiveAustrianMatchday,
   getLastCompletedAustrianMatchday,
 } from "./austrian-bundesliga-schedule";
+import { getPredictionWindow } from "@/lib/predict/match-window";
 
 export type MarketKind = "world_cup" | "austrian_bundesliga";
 
@@ -51,4 +52,26 @@ export function getMatchById(matchId: string): DallasMatch | undefined {
     DALLAS_SCHEDULE.find((m) => m.id === matchId) ??
     AUSTRIAN_BUNDESLIGA_SCHEDULE.find((m) => m.id === matchId)
   );
+}
+
+export function getOpenPredictionMarkets(now = new Date()): DallasMatch[] {
+  const schedule = getMarketSchedule(now);
+  return schedule.filter(
+    (m) => !m.result && !m.isProjected && getPredictionWindow(m, now).status === "open",
+  );
+}
+
+export function resolvePredictionMarket(
+  matchId: string | null | undefined,
+  now = new Date(),
+): DallasMatch {
+  if (matchId) {
+    const match = getMatchById(matchId);
+    if (match && getPredictionWindow(match, now).status === "open") {
+      return match;
+    }
+  }
+  const open = getOpenPredictionMarkets(now);
+  if (open[0]) return open[0];
+  return getActiveMarket(now);
 }

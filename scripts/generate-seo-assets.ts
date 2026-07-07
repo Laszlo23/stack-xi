@@ -7,6 +7,9 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { BLOG_POSTS } from "../src/lib/blog/posts.ts";
 import { getAccountAssociation } from "../src/lib/farcaster/account-association.ts";
+import { PEPE_ORIGIN_CHAPTERS } from "../src/lib/story/pepe-origin-chapters.ts";
+import { listMatchSlugs } from "../src/lib/story/match-slugs.ts";
+import { FC_BUILDERS } from "../src/lib/story/farcaster-builders.ts";
 
 const ROOT = join(import.meta.dir, "..");
 const SITE_URL = (process.env.VITE_SITE_URL ?? "https://pepe.buildingcultureid.space").replace(
@@ -42,6 +45,15 @@ type SitemapEntry = {
 /** Indexable public routes only — /labs is noindex and excluded. */
 const STATIC_ROUTES: SitemapEntry[] = [
   { path: "/", changefreq: "daily", priority: "1.0", lastmod: BUILD_DATE },
+  { path: "/play", changefreq: "daily", priority: "0.95", lastmod: BUILD_DATE },
+  { path: "/story", changefreq: "weekly", priority: "0.85", lastmod: BUILD_DATE },
+  { path: "/story/visual", changefreq: "weekly", priority: "0.8", lastmod: BUILD_DATE },
+  { path: "/squad", changefreq: "weekly", priority: "0.85", lastmod: BUILD_DATE },
+  { path: "/leaderboard", changefreq: "daily", priority: "0.9", lastmod: BUILD_DATE },
+  { path: "/feed", changefreq: "daily", priority: "0.85", lastmod: BUILD_DATE },
+  { path: "/quest", changefreq: "daily", priority: "0.85", lastmod: BUILD_DATE },
+  { path: "/faq", changefreq: "weekly", priority: "0.75", lastmod: BUILD_DATE },
+  { path: "/world-cup", changefreq: "daily", priority: "0.8", lastmod: BUILD_DATE },
   { path: "/calendar", changefreq: "daily", priority: "0.9", lastmod: BUILD_DATE },
   { path: "/defi", changefreq: "weekly", priority: "0.9", lastmod: BUILD_DATE },
   { path: "/blog", changefreq: "weekly", priority: "0.9", lastmod: BUILD_DATE },
@@ -79,7 +91,28 @@ function buildSitemap(): string {
     lastmod: toLastmod(post.updatedAt ?? post.publishedAt),
   }));
 
-  const urls = [...STATIC_ROUTES, ...blogEntries]
+  const chapterEntries: SitemapEntry[] = PEPE_ORIGIN_CHAPTERS.map((chapter) => ({
+    path: `/story/${chapter.id}`,
+    changefreq: "monthly" as const,
+    priority: "0.75",
+    lastmod: BUILD_DATE,
+  }));
+
+  const matchEntries: SitemapEntry[] = listMatchSlugs().map(({ slug }) => ({
+    path: `/match/${slug}`,
+    changefreq: "daily" as const,
+    priority: "0.9",
+    lastmod: BUILD_DATE,
+  }));
+
+  const profileEntries: SitemapEntry[] = FC_BUILDERS.map((b) => ({
+    path: `/u/${b.handle.replace("@", "")}`,
+    changefreq: "weekly" as const,
+    priority: "0.6",
+    lastmod: BUILD_DATE,
+  }));
+
+  const urls = [...STATIC_ROUTES, ...blogEntries, ...chapterEntries, ...matchEntries, ...profileEntries]
     .map(
       (entry) => `  <url>
     <loc>${escapeXml(absoluteUrl(entry.path))}</loc>

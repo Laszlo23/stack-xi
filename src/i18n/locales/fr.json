@@ -1,0 +1,165 @@
+{
+  "common": {
+    "language": "Langue",
+    "loading": "Chargement…",
+    "refresh": "Actualiser",
+    "save": "Enregistrer",
+    "login": "Connexion",
+    "logout": "Déconnexion"
+  },
+  "cta": {
+    "predict": "Pronostiquer",
+    "claim": "Réclamer {{count}}",
+    "claim_one": "Réclamer la récompense"
+  },
+  "quickPredict": {
+    "label": "Pronostic rapide",
+    "untilKickoff": "avant le coup d'envoi"
+  },
+  "farcasterAuth": {
+    "signIn": "Se connecter avec Farcaster",
+    "short": "Farcaster",
+    "signingIn": "Ouverture de Farcaster…",
+    "signedIn": "Farcaster connecté",
+    "incomplete": "Connexion Farcaster incomplète — réessaie.",
+    "failed": "Échec de la connexion Farcaster."
+  },
+  "home": {
+    "hero": {
+      "badge": "Matchday Coupe du monde",
+      "badgeLeague": "Matchday Bundesliga",
+      "headline": "La Coupe du monde est un jeu.",
+      "headlineAccent": "Maintenant tu peux jouer.",
+      "headlineLeague": "Le foot ne s'arrête jamais.",
+      "headlineLeagueAccent": "Pronostique le prochain match.",
+      "subheadline": "Pronostique les matchs. Affronte la communauté. Construis ton héritage foot avec Pepe.",
+      "ctaPredict": "Pronostiquer le prochain match",
+      "ctaStory": "L'histoire de Pepe"
+    },
+    "predict": {
+      "eyebrow": "Match en direct",
+      "title": "Qui gagne ?",
+      "pick": "Choisir {{team}}",
+      "locked": "Tu as choisi {{team}}. Dis-le au monde.",
+      "sharePrompt": "Partage ton pick avant le coup d'envoi.",
+      "castFc": "Cast sur Farcaster",
+      "postX": "Poster sur X",
+      "lockOnchain": "Verrouiller onchain →"
+    },
+    "journey": {
+      "eyebrow": "Ton voyage Pepe",
+      "nextUnlock": "{{xp}} XP avant {{tier}}",
+      "maxTier": "Statut Légende débloqué 🐸",
+      "viewProfile": "Voir le profil"
+    },
+    "culture": {
+      "eyebrow": "Culture Score",
+      "title": "Chaque pronostic construit ton héritage.",
+      "body": "Chaque pick, cast et moment matchday alimente ton Culture Score.",
+      "rewards": "Ton score détermine tes récompenses BCC."
+    },
+    "origin": {
+      "eyebrow": "Histoire d'origine",
+      "title": "Comment Pepe est devenu STACK XI",
+      "subtitle": "Quatre chapitres. Une arc culturelle. Partage en un tap.",
+      "fullLore": "Voir le lore visuel complet →"
+    },
+    "builders": {
+      "eyebrow": "Builders",
+      "title": "Demi-finale + Finale sur Stacks",
+      "subtitle": "Les believers Base accèdent en premier à l'arc finales Bitcoin.",
+      "finalsCta": "Teaser finales →"
+    }
+  },
+  "crowdPressure": {
+    "title": "Pression du public",
+    "live": "Marché en mouvement en direct",
+    "homeSide": "{{percent}}% domicile",
+    "awaySide": "{{percent}}% extérieur",
+    "quotes": [
+      "La foule crie. Pepe reste calme. C'est l'avantage. 🐸",
+      "Ils courent après le hype. Toi tu vises le sifflet. Autre sport.",
+      "Luck ne demande pas la permission — ta conviction non plus.",
+      "Les masses paniquent à la 89e. Les builders verrouillent avant le coup d'envoi.",
+      "Pepe ne court pas. Luck si. Rejoins.",
+      "Le consensus est confortable. Les bons picks, rarement.",
+      "Ton pick. Ta mise. Ton histoire sur Base.",
+      "Mauvaise foule, bonne lecture — tout le jeu.",
+      "La fortune sourit à la grenouille qui ship avant le sifflet.",
+      "Tout le monde a un avis. Peu ont un reçu.",
+      "Le feed hurle. Le terrain décide. Reste assis.",
+      "La conviction bat le consensus. Chaque matchday."
+    ]
+  },
+  "ticker": {
+    "lockPick": "Verrouille ton pronostic",
+    "opensIn": "Ouverture dans",
+    "lockCta": "Verrouiller",
+    "tagline": "Base BCC · Building Culture sur Base"
+  },
+  "predict": {
+    "socialSport": "Pronostic social · pas de finance",
+    "stepOf": "Étape {{step}} sur {{total}}",
+    "yourPick": "Ton choix",
+    "stake": "Mise",
+    "connectWallet": "Connecter le wallet Base",
+    "connecting": "Connexion…",
+    "lockPrediction": "Verrouiller le pronostic",
+    "lockSponsored": "Pronostic sponsorisé · {{amount}} gratuit",
+    "youreIn": "C'est parti",
+    "makeAnother": "Faire un autre pronostic",
+    "windowClosed": "Fenêtre fermée — coup d'envoi passé.",
+    "openUntil": "Ouvert jusqu'au coup d'envoi · {{time}} restant",
+    "squadBoost": "Boost squad"
+  },
+  "squad": {
+    "perksTitle": "Avantages squad",
+    "perksLoading": "Chargement des avantages squad…",
+    "perksEmpty": "Mintez et ouvrez un pack squad pour débloquer boosts prédictions, codes merch et multiplicateurs culture.",
+    "perksActive": "Avantages squad actifs",
+    "mint": {
+      "title": "Packs squad aveugles",
+      "subtitle": "847 packs scellés · 77 éditions par joueur · courbe globale",
+      "mintPack": "Minter pack scellé",
+      "myPacks": "Mes packs",
+      "openPack": "Ouvrir le pack",
+      "earlyBeliever": "Places early believer",
+      "genesisTitle": "Genesis XI",
+      "genesisNote": "11 originaux uniques — avantages légende à vie (+25% boost prédictions)."
+    }
+  },
+  "claim": {
+    "title": "Tes pronostics",
+    "subtitle": "Pronostics onchain",
+    "howItWorks": "Ta mise BCC est dans le pool onchain. Après le match, les gagnants réclament ici — le trésor envoie les récompenses.",
+    "autoNote": "Les paiements ne sont pas encore automatiques onchain (v2 à venir). Appuie sur Réclamer.",
+    "claimEta": "En général sous 24 h après la réclamation.",
+    "readyCount": "{{count}} pronostic gagnant à réclamer.",
+    "readyCount_other": "{{count}} pronostics gagnants à réclamer.",
+    "claimButton": "Réclamer les BCC",
+    "claimSubmitted": "Réclamation enregistrée — paiement sous 24 h en général.",
+    "paid": "Récompense envoyée sur ce wallet.",
+    "noPredictions": "Aucun pronostic pour ce wallet.",
+    "firstPick": "Faire ton premier pronostic →",
+    "squadBoostHint": "Boost squad {{boost}} appliqué à la réclamation.",
+    "squadBoostApplied": "Boost squad {{boost}} enregistré pour le paiement trésorerie.",
+    "outcome": {
+      "awaiting": "Résultat en attente",
+      "lost": "Perdu",
+      "claimable": "Gagné · à réclamer",
+      "claimed": "Réclamation envoyée",
+      "paid": "Payé sur le wallet"
+    }
+  },
+  "onboarding": {
+    "connectWallet": "Connecter le wallet",
+    "makePick": "Choisir une équipe",
+    "shareCast": "Partager un cast (optionnel)",
+    "claimReady": "Réclamer quand prêt"
+  },
+  "hero": {
+    "wonClaim": "Gagné ? Réclame les BCC sur le profil après le match.",
+    "claimableBanner": "{{count}} pronostic gagnant prêt — réclame sur le profil.",
+    "claimableBanner_other": "{{count}} pronostics gagnants prêts — réclame sur le profil."
+  }
+}

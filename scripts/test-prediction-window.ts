@@ -26,25 +26,28 @@ function assert(condition: boolean, message: string) {
 console.log("Prediction window tests\n");
 
 const portugalSpain = DALLAS_SCHEDULE.find((m) => m.id === "m8")!;
-const twoDaysBefore = new Date(portugalSpain.kickoffAt.getTime() - 2 * 24 * 60 * 60 * 1000);
-const windowBeforeKickoff = getPredictionWindow(portugalSpain, twoDaysBefore);
+const argentinaEgypt = DALLAS_SCHEDULE.find((m) => m.id === "m10")!;
+const twoDaysBefore = new Date(argentinaEgypt.kickoffAt.getTime() - 2 * 24 * 60 * 60 * 1000);
+const windowBeforeKickoff = getPredictionWindow(argentinaEgypt, twoDaysBefore);
 
 assert(windowBeforeKickoff.status === "open", "window open 2 days before kickoff (default)");
 assert(isPredictionSubmitAllowed(windowBeforeKickoff), "submit allowed before kickoff");
 
 const active = getActiveMarket(twoDaysBefore);
-assert(active.id === "m8", "active market is Portugal vs Spain before WC end");
+assert(active.id === "m10", "active market is Argentina vs Egypt after Belgium result");
 
 const afterKickoff = new Date(portugalSpain.kickoffAt.getTime() + 60_000);
 const windowClosed = getPredictionWindow(portugalSpain, afterKickoff);
 assert(windowClosed.status === "closed", "window closed after kickoff");
 assert(!isPredictionSubmitAllowed(windowClosed), "submit blocked after kickoff");
 
-const afterKickoffActive = getActiveMarket(afterKickoff);
-assert(
-  afterKickoffActive.id === "m8",
-  "active market stays Portugal vs Spain until result is recorded",
-);
+const afterM9Kickoff = new Date("2026-07-07T02:00:00Z");
+const afterM9Closed = getActiveMarket(afterM9Kickoff);
+assert(afterM9Closed.id === "m10", "skips settled m9 to Argentina vs Egypt");
+
+const beforeM10Kickoff = new Date("2026-07-07T10:00:00Z");
+const beforeM10 = getActiveMarket(beforeM10Kickoff);
+assert(beforeM10.id === "m10", "active market is Argentina vs Egypt before m10 kickoff");
 
 const afterWc = new Date(WORLD_CUP_END_AT.getTime() + 60_000);
 assert(

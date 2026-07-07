@@ -187,7 +187,6 @@ export async function runPepeTick(opts?: { dryRun?: boolean }): Promise<PepeTick
             );
           } else {
             result.support = { ok: false, error: published.error ?? "publish_failed" };
-            result.ok = false;
           }
         }
       } else {
@@ -217,7 +216,6 @@ export async function runPepeTick(opts?: { dryRun?: boolean }): Promise<PepeTick
             );
           } else {
             result.support = { ok: false, error: published.error ?? "publish_failed" };
-            result.ok = false;
           }
         }
       }

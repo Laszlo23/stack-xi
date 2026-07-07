@@ -4,7 +4,7 @@ import type { SquadHolding } from "@/domain/types";
 import { BASESCAN_URL, SQUAD_NFT_ADDRESS } from "@/lib/base/config";
 
 function HoldingCard({ holding }: { holding: SquadHolding }) {
-  const { player, mintOrder } = holding;
+  const { player, mintOrder, isGenesis, edition } = holding;
   const accentColor =
     player.accent === "neon"
       ? "var(--neon)"
@@ -41,7 +41,7 @@ function HoldingCard({ holding }: { holding: SquadHolding }) {
           className="absolute left-2 top-2 rounded border px-1.5 py-0.5 font-mono text-[10px]"
           style={{ borderColor: accentColor, color: accentColor }}
         >
-          #{String(player.id).padStart(2, "0")}
+          {isGenesis ? "GENESIS" : edition ? `Ed ${edition}` : `#${String(player.id).padStart(2, "0")}`}
         </span>
       </div>
     </div>
@@ -104,8 +104,14 @@ export function SquadHoldingsPanel({
 
       {holdings.length > 0 && (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {holdings.map((holding) => (
-            <HoldingCard key={holding.player.id} holding={holding} />
+          {holdings.map((holding, index) => (
+            <HoldingCard
+              key={
+                holding.tokenId?.toString() ??
+                (holding.isGenesis ? `genesis-${holding.player.id}` : `v2-${holding.player.id}-${holding.edition}-${index}`)
+              }
+              holding={holding}
+            />
           ))}
         </div>
       )}

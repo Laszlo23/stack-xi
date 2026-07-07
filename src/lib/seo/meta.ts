@@ -4,6 +4,7 @@ import {
   DEFAULT_OG_IMAGE_ALT,
   DEFAULT_OG_IMAGE_HEIGHT,
   DEFAULT_OG_IMAGE_WIDTH,
+  HREFLANG_LOCALES,
   GOOGLE_SITE_VERIFICATION,
   SITE_DESCRIPTION,
   SITE_EMAIL,
@@ -117,7 +118,7 @@ export function buildPageSeo(input: PageSeoInput): SeoHead {
     meta,
     links: [
       { rel: "canonical", href: url },
-      { rel: "alternate", href: url, hrefLang: "en" },
+      ...HREFLANG_LOCALES.map((lang) => ({ rel: "alternate", href: url, hrefLang: lang })),
       { rel: "alternate", href: url, hrefLang: "x-default" },
     ],
   };
@@ -298,5 +299,28 @@ export function buildBreadcrumbJsonLd(items: Array<{ name: string; path: string 
       name: item.name,
       item: absoluteUrl(item.path),
     })),
+  };
+}
+
+export function buildMatchEventJsonLd(match: {
+  home: string;
+  away: string;
+  stage: string;
+  kickoffAt: Date;
+  slug: string;
+}): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SportsEvent",
+    name: `${match.home} vs ${match.away}`,
+    description: `Predict ${match.home} vs ${match.away} on STACK XI — ${match.stage}`,
+    startDate: match.kickoffAt.toISOString(),
+    sport: "Soccer",
+    url: absoluteUrl(`/match/${match.slug}`),
+    organizer: {
+      "@type": "Organization",
+      name: SITE_ORG,
+      url: SITE_URL,
+    },
   };
 }

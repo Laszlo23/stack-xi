@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { useConnectWallet, useLogin, usePrivy, useWallets, type ConnectedWallet } from "@privy-io/react-auth";
+import { useConnectWallet, usePrivy, useWallets, type ConnectedWallet } from "@privy-io/react-auth";
 import { useSetActiveWallet } from "@privy-io/wagmi";
 import { useConfig } from "wagmi";
 import { getAccount, getConnectors, switchChain } from "wagmi/actions";
@@ -19,6 +19,7 @@ async function waitUntil(check: () => boolean, timeoutMs: number, label: string)
   throw new Error(`${label} timed out — try again`);
 }
 
+/** Sync Privy session → wagmi on Base. Login modal must open via useLogin() in the click handler. */
 export function usePrivyBaseConnect() {
   const config = useConfig();
   const { authenticated, ready: privyReady } = usePrivy();
@@ -27,26 +28,10 @@ export function usePrivyBaseConnect() {
   const [connectPending, setConnectPending] = useState(false);
   const [connectError, setConnectError] = useState<string | null>(null);
 
-  const loginWaiterRef = useRef<{
-    resolve: () => void;
-    reject: (error: Error) => void;
-  } | null>(null);
-
   const connectModalWaiterRef = useRef<{
     resolve: (wallet: ConnectedWallet) => void;
     reject: (error: Error) => void;
   } | null>(null);
-
-  const { login } = useLogin({
-    onComplete: () => {
-      loginWaiterRef.current?.resolve();
-      loginWaiterRef.current = null;
-    },
-    onError: (error) => {
-      loginWaiterRef.current?.reject(new Error(String(error)));
-      loginWaiterRef.current = null;
-    },
-  });
 
   const { connectWallet: openConnectWalletModal } = useConnectWallet({
     onSuccess: ({ wallet }) => {
@@ -118,13 +103,6 @@ export function usePrivyBaseConnect() {
     [config, setActiveWallet, waitForWalletConnector],
   );
 
-  const waitForPrivyLogin = useCallback((): Promise<void> => {
-    return new Promise<void>((resolve, reject) => {
-      loginWaiterRef.current = { resolve, reject };
-      login({ loginMethods: ["wallet"] });
-    });
-  }, [login]);
-
   const promptConnectWallet = useCallback((): Promise<ConnectedWallet> => {
     return new Promise<ConnectedWallet>((resolve, reject) => {
       connectModalWaiterRef.current = { resolve, reject };
@@ -132,7 +110,7 @@ export function usePrivyBaseConnect() {
     });
   }, [openConnectWalletModal]);
 
-  const connectWallet = useCallback(async (): Promise<`0x${string}`> => {
+  const syncConnectedWallet = useCallback(async (): Promise<`0x${string}`> => {
     const wagmiAddress = getAccount(config).address;
     if (wagmiAddress) return wagmiAddress;
 
@@ -142,7 +120,11 @@ export function usePrivyBaseConnect() {
     try {
       await waitUntil(() => privyReadyRef.current, 20_000, "Wallet service");
 
-      if (authenticatedRef.current && walletsRef.current.length > 0) {
+      if (!authenticatedRef.current) {
+        throw new Error("Sign-in was cancelled — try Connect Base again.");
+      }
+
+      if (walletsRef.current.length > 0) {
         if (!walletsReadyRef.current) {
           await waitUntil(() => walletsReadyRef.current, 8_000, "Wallet list");
         }
@@ -159,26 +141,20 @@ export function usePrivyBaseConnect() {
         if (isWalletConnectUserRejection(modalError)) {
           throw modalError;
         }
-
-        if (!authenticatedRef.current) {
-          await waitForPrivyLogin();
-        }
-
-        await waitUntil(
-          () => walletsReadyRef.current && walletsRef.current.length > 0,
-          20_000,
-          "Wallet selection",
-        );
-
-        const wallet = pickEthereumWallet(walletsRef.current);
-        if (!wallet) {
-          throw new Error(
-            "No wallet found after login — connect an external wallet or create one.",
-          );
-        }
-
-        return await syncPrivyWalletToWagmi(wallet);
       }
+
+      await waitUntil(
+        () => walletsReadyRef.current && walletsRef.current.length > 0,
+        20_000,
+        "Wallet selection",
+      );
+
+      const wallet = pickEthereumWallet(walletsRef.current);
+      if (!wallet) {
+        throw new Error("No wallet found — connect an external wallet or create one in Privy.");
+      }
+
+      return await syncPrivyWalletToWagmi(wallet);
     } catch (error) {
       if (!isWalletConnectUserRejection(error)) {
         const message = formatWalletConnectError(error);
@@ -188,10 +164,10 @@ export function usePrivyBaseConnect() {
     } finally {
       setConnectPending(false);
     }
-  }, [config, promptConnectWallet, syncPrivyWalletToWagmi, waitForPrivyLogin]);
+  }, [config, promptConnectWallet, syncPrivyWalletToWagmi]);
 
   return {
-    connectWallet,
+    connectWallet: syncConnectedWallet,
     connectPending,
     connectError,
     clearConnectError: () => setConnectError(null),

@@ -1,0 +1,165 @@
+{
+  "common": {
+    "language": "Dil",
+    "loading": "Yükleniyor…",
+    "refresh": "Yenile",
+    "save": "Kaydet",
+    "login": "Giriş",
+    "logout": "Çıkış"
+  },
+  "cta": {
+    "predict": "Tahmin",
+    "claim": "{{count}} talep et",
+    "claim_one": "Ödül talep et"
+  },
+  "quickPredict": {
+    "label": "Hızlı tahmin",
+    "untilKickoff": "başlamaya kadar"
+  },
+  "farcasterAuth": {
+    "signIn": "Farcaster ile giriş",
+    "short": "Farcaster",
+    "signingIn": "Farcaster açılıyor…",
+    "signedIn": "Farcaster bağlandı",
+    "incomplete": "Farcaster girişi tamamlanmadı — tekrar dene.",
+    "failed": "Farcaster girişi başarısız."
+  },
+  "home": {
+    "hero": {
+      "badge": "Dünya Kupası maç günü",
+      "badgeLeague": "Bundesliga maç günü",
+      "headline": "Dünya Kupası bir oyun.",
+      "headlineAccent": "Artık sen de oynayabilirsin.",
+      "headlineLeague": "Futbol hiç bitmez.",
+      "headlineLeagueAccent": "Sıradaki maçı tahmin et.",
+      "subheadline": "Maçları tahmin et. Toplulukla yarış. Pepe ile futbol mirasını inşa et.",
+      "ctaPredict": "Sıradaki maçı tahmin et",
+      "ctaStory": "Pepe'nin hikayesi"
+    },
+    "predict": {
+      "eyebrow": "Canlı maç",
+      "title": "Kim kazanır?",
+      "pick": "{{team}} seç",
+      "locked": "{{team}} seçtin. Şimdi dünyaya söyle.",
+      "sharePrompt": "Başlamadan önce tahminini paylaş.",
+      "castFc": "Farcaster'da cast",
+      "postX": "X'te paylaş",
+      "lockOnchain": "Onchain kilitle →"
+    },
+    "journey": {
+      "eyebrow": "Pepe yolculuğun",
+      "nextUnlock": "{{tier}} için {{xp}} XP kaldı",
+      "maxTier": "Efsane seviyesi açıldı 🐸",
+      "viewProfile": "Profili gör"
+    },
+    "culture": {
+      "eyebrow": "Culture Score",
+      "title": "Her tahmin mirasını inşa eder.",
+      "body": "Her pick, cast ve maç günü anı Culture Score'unu artırır.",
+      "rewards": "Skorun BCC ödüllerini belirler."
+    },
+    "origin": {
+      "eyebrow": "Köken hikayesi",
+      "title": "Pepe STACK XI oldu",
+      "subtitle": "Dört bölüm. Tek kültür yayı. Tek dokunuşla paylaş.",
+      "fullLore": "Tam görsel lore →"
+    },
+    "builders": {
+      "eyebrow": "Builders",
+      "title": "Yarı final + Final Stacks'te",
+      "subtitle": "Base inananları Bitcoin final arc'ına ilk erişenler.",
+      "finalsCta": "Final teaser →"
+    }
+  },
+  "crowdPressure": {
+    "title": "Kalabalık baskısı",
+    "live": "Piyasa canlı hareket ediyor",
+    "homeSide": "{{percent}}% ev sahibi",
+    "awaySide": "{{percent}}% deplasman",
+    "quotes": [
+      "Kalabalık bağırıyor. Pepe sakin. Avantaj bu. 🐸",
+      "Onlar hype kovalar. Sen düdüğü kovala. Başka spor.",
+      "Luck izin istemez — inancın da istememeli.",
+      "Kitleler 89'da panikler. Builder'lar başlamadan kilitler.",
+      "Pepe kovalamaz. Luck kovalar. Katıl.",
+      "Konsens rahat. Doğru tahminler nadiren.",
+      "Senin pick'in. Senin stake'in. Base'deki hikâyen.",
+      "Yanlış kalabalık, doğru okuma — oyun bu.",
+      "Şans, düdükten önce ship eden kurbağayı sever.",
+      "Herkesin fikri var. Az kişinin makbuzu.",
+      "Feed bağırır. Saha karar verir. Otur.",
+      "İnanç konsensi yener. Her maç günü."
+    ]
+  },
+  "ticker": {
+    "lockPick": "Tahminini kilitle",
+    "opensIn": "Tahminler açılıyor",
+    "lockCta": "Kilitle",
+    "tagline": "Base BCC · Base üzerinde Building Culture"
+  },
+  "predict": {
+    "socialSport": "Sosyal tahmin · finans değil",
+    "stepOf": "Adım {{step}} / {{total}}",
+    "yourPick": "Seçimin",
+    "stake": "Bahis",
+    "connectWallet": "Base cüzdanı bağla",
+    "connecting": "Cüzdan bağlanıyor…",
+    "lockPrediction": "Tahmini kilitle",
+    "lockSponsored": "Sponsorlu tahmin · {{amount}} ücretsiz",
+    "youreIn": "Hazırsın",
+    "makeAnother": "Başka tahmin yap",
+    "windowClosed": "Tahmin penceresi kapandı.",
+    "openUntil": "Başlamaya kadar açık · {{time}} kaldı",
+    "squadBoost": "Squad boost"
+  },
+  "squad": {
+    "perksTitle": "Squad avantajları",
+    "perksLoading": "Squad avantajları yükleniyor…",
+    "perksEmpty": "Tahmin boostları, merch kodları ve kültür çarpanları için squad paketi mintleyip açın.",
+    "perksActive": "Aktif squad avantajları",
+    "mint": {
+      "title": "Kör squad paketleri",
+      "subtitle": "847 mühürlü paket · oyuncu başına 77 baskı · global bonding curve",
+      "mintPack": "Mühürlü paket mintle",
+      "myPacks": "Paketlerim",
+      "openPack": "Paketi aç",
+      "earlyBeliever": "Erken inanan slotları",
+      "genesisTitle": "Genesis XI",
+      "genesisNote": "Orijinal 11 tekil — efsane avantajlar sonsuza (+25% tahmin boost)."
+    }
+  },
+  "claim": {
+    "title": "Tahminlerin",
+    "subtitle": "Onchain maç tahminleri",
+    "howItWorks": "BCC bahsin onchain havuzda. Maç bitince kazananlar buradan talep eder — hazine bu cüzdana gönderir.",
+    "autoNote": "Ödemeler henüz otomatik onchain değil (v2 geliyor). Talep Et'e dokun.",
+    "claimEta": "Genelde talepten sonra 24 saat içinde.",
+    "readyCount": "{{count}} kazanan tahmin talep edilmeye hazır.",
+    "readyCount_other": "{{count}} kazanan tahmin talep edilmeye hazır.",
+    "claimButton": "BCC ödülü talep et",
+    "claimSubmitted": "Talep alındı — ödeme genelde 24 saat içinde.",
+    "paid": "Ödül bu cüzdana gönderildi.",
+    "noPredictions": "Bu cüzdan için henüz tahmin yok.",
+    "firstPick": "İlk tahminini yap →",
+    "squadBoostHint": "Talep ederken squad boost {{boost}} uygulanır.",
+    "squadBoostApplied": "Hazine ödemesi için squad boost {{boost}} kaydedildi.",
+    "outcome": {
+      "awaiting": "Sonuç bekleniyor",
+      "lost": "Kaybetti",
+      "claimable": "Kazandı · talep et",
+      "claimed": "Talep gönderildi",
+      "paid": "Cüzdana ödendi"
+    }
+  },
+  "onboarding": {
+    "connectWallet": "Cüzdan bağla",
+    "makePick": "Takım seç",
+    "shareCast": "Cast paylaş (isteğe bağlı)",
+    "claimReady": "Hazır olunca talep et"
+  },
+  "hero": {
+    "wonClaim": "Kazandın mı? Maç bitince profilden talep et.",
+    "claimableBanner": "{{count}} kazanan tahmin hazır — profilden talep et.",
+    "claimableBanner_other": "{{count}} kazanan tahmin hazır — profilden talep et."
+  }
+}

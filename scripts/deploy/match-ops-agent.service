@@ -1,0 +1,15 @@
+[Unit]
+Description=STACK XI match-ops tick (scores + ticker sync)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=www-data
+WorkingDirectory=/var/www/stack-xi
+EnvironmentFile=/var/www/stack-xi/.env
+ExecStart=/usr/bin/node scripts/match-ops-tick.mjs
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

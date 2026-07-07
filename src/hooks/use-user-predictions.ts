@@ -9,6 +9,7 @@ export type UserPredictionRow = {
   id: string;
   matchId: string;
   matchLabel: string;
+  pick: "home" | "away" | null;
   pickLabel: string;
   stakeLabel: string | null;
   timestamp: number | null;
@@ -61,6 +62,7 @@ export function useUserPredictions() {
         id: p.txHash,
         matchId: p.matchId,
         matchLabel: meta.label,
+        pick: p.pick,
         pickLabel,
         stakeLabel: p.stakeLabel,
         timestamp: p.timestamp,
@@ -75,6 +77,7 @@ export function useUserPredictions() {
         id: txHash,
         matchId: "—",
         matchLabel: "Prediction submitted",
+        pick: null,
         pickLabel: "—",
         stakeLabel: null,
         timestamp: null,

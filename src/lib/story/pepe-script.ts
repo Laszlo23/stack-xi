@@ -46,7 +46,8 @@ export const EARLY_BELIEVER_PERKS = [
   "Priority Decentraland lounge access",
   "Finals Bitcoin/Stacks whitelist",
   "Matchday director's cut Pepe stories",
-  "Prediction fee-share multiplier (display; MVP settlement)",
+  "Prediction claim boost (+5% to +25% by tier)",
+  "Merch discount code on profile",
 ];
 
 export const MINT_SUCCESS_MESSAGE: PepeBeat = {

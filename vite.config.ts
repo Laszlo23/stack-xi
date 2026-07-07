@@ -15,7 +15,15 @@ export default defineConfig({
   nitro: {
     preset: process.env.NITRO_PRESET ?? "node_server",
     routeRules: {
-      "/**": { headers: { "cache-control": "public, max-age=0, must-revalidate" } },
+      "/**": {
+        headers: {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-content-type-options": "nosniff",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "x-frame-options": "SAMEORIGIN",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        },
+      },
     },
   },
 });

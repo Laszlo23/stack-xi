@@ -51,11 +51,13 @@ export const Route = createFileRoute("/api/auth/farcaster/verify")({
           return jsonError(400, "address and token are required");
         }
 
-        if (message && signature) {
-          const valid = await verifyWalletSignature({ address, message, signature });
-          if (!valid) {
-            return jsonError(401, "Invalid wallet signature");
-          }
+        if (!message || !signature) {
+          return jsonError(400, "message and signature are required");
+        }
+
+        const valid = await verifyWalletSignature({ address, message, signature });
+        if (!valid) {
+          return jsonError(401, "Invalid wallet signature");
         }
 
         try {

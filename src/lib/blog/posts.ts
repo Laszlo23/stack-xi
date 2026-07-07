@@ -54,34 +54,34 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "bonding-curve-squad-mint",
-    title: "Founding Squad Mint: 770 BCC Bonding Curve Explained",
+    title: "Blind Pack Squad Mint: 770 + 7 BCC Curve Explained",
     excerpt:
-      "Eleven ERC-721 players, one global price curve on Base — starts at 770 BCC and rises 70 BCC every mint. Here's how the game works.",
+      "847 sealed packs on Base — 77 editions per player. Mint blind, open on-chain, joker to pick. Global curve starts at 770 BCC (+7 BCC per pack).",
     publishedAt: "2026-07-02T10:00:00.000Z",
     author: "Leonardo · STACK XI",
     category: "NFT",
-    tags: ["ERC-721", "BCC", "bonding curve", "Base"],
+    tags: ["ERC-721", "BCC", "bonding curve", "Base", "blind pack"],
     readTimeMinutes: 5,
     heroImage: "/pepecard.jpg",
     sections: [
       {
         paragraphs: [
-          "The founding squad isn't a blind box. You pick the player card you want — goalkeeper, striker, mythic winger — and mint directly on Base.",
-          "Pricing is transparent: the contract exposes currentMintPrice and nextMintPrice on-chain. Every successful mint increases the global curve for the next minter.",
+          "The community squad is a blind pack game. Mint sealed, then open on-chain to reveal your player — 77 editions per character across 11 founding players.",
+          "Pricing is transparent: currentMintPrice and nextMintPrice on StackXISquadV2. Every pack mint raises the global curve for everyone.",
         ],
       },
       {
-        heading: "Early believer perks",
+        heading: "Jokers and early believers",
         paragraphs: [
-          "Minters in the first wave unlock promotional perks: personal video shout-outs, Farcaster tags, lounge access for Dallas watch events, and a finals whitelist arc on Stacks/Bitcoin later.",
-          "Perks are culture rewards fulfilled manually during MVP — read the Terms page before minting if you expect guaranteed delivery timelines.",
+          "The first 77 global minters earn early-believer status and a joker credit to pick their player on open instead of random reveal.",
+          "Genesis v1 holders (the original 11) keep permanent legend perks including the top prediction boost tier.",
         ],
       },
       {
-        heading: "Before you sign",
+        heading: "Enforced perks",
         paragraphs: [
-          "Approve BCC for the exact current price at transaction time. Images move to IPFS as the collection matures; on-chain metadata already records mint order and early-believer status.",
-          "Only mint from the official StackXISquad contract linked in-app and on BaseScan.",
+          "Squad holdings unlock prediction claim boosts (+5% to +25%), merch discount codes on your profile, and culture XP multipliers — calculated from on-chain holdings at claim time.",
+          "Approve BCC for the exact current price at transaction time. Only mint from the official StackXISquadV2 contract linked in-app.",
         ],
       },
     ],

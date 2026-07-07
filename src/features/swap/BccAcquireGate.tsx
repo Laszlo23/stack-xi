@@ -1,7 +1,7 @@
 import { RefreshCw, ShoppingCart } from "lucide-react";
 import { useMemo, useState } from "react";
 import { BccBuyAdvisor } from "@/features/swap/BccBuyAdvisor";
-import { ZeroXSwapWidget } from "@/features/swap/ZeroXSwapWidget";
+import { BccExchangePanel } from "@/features/swap/BccExchangePanel";
 import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { useBaseWallet } from "@/hooks/use-base-wallet";
 import { BCC_SYMBOL, CLANKER_BCC_URL, formatBcc } from "@/lib/base/config";
@@ -26,6 +26,7 @@ export function BccAcquireGate({
     useConnectBaseWallet();
   const [refreshing, setRefreshing] = useState(false);
   const [prefillUsdc, setPrefillUsdc] = useState("10");
+  const [swapError, setSwapError] = useState<string | null>(null);
 
   const hasEnough = bccBalance >= requiredAmount;
   const shortfall = requiredAmount > bccBalance ? requiredAmount - bccBalance : 0n;
@@ -112,11 +113,15 @@ export function BccAcquireGate({
         </button>
       ) : (
         <>
-          <ZeroXSwapWidget
+          <BccExchangePanel
             compact
-            defaultSellAmount={prefillUsdc || suggestedUsdc}
+            defaultFromAmount={prefillUsdc || suggestedUsdc}
             onSuccess={() => void refetchBccBalance()}
+            onError={(message) => setSwapError(message)}
           />
+          {swapError ? (
+            <p className="text-xs font-medium text-destructive">{swapError}</p>
+          ) : null}
           <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"

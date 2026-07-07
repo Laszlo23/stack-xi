@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/layout/AppShell";
 import { OnchainProofPage } from "@/features/proof/OnchainProofPage";
 import { buildBreadcrumbJsonLd, buildContractRegistryJsonLd, buildPageSeo } from "@/lib/seo/meta";
-import { BCC_TOKEN_ADDRESS, PREDICTION_POOL_ADDRESS, SQUAD_NFT_ADDRESS } from "@/lib/base/config";
+import { BCC_TOKEN_ADDRESS, PREDICTION_POOL_ADDRESS, SQUAD_NFT_ADDRESS, SQUAD_NFT_V2_ADDRESS } from "@/lib/base/config";
 
 export const Route = createFileRoute("/proof")({
   head: () =>
@@ -28,7 +28,8 @@ export const Route = createFileRoute("/proof")({
         ]),
         buildContractRegistryJsonLd([
           { name: "BCC Token", address: BCC_TOKEN_ADDRESS },
-          { name: "StackXISquad NFT", address: SQUAD_NFT_ADDRESS },
+          { name: "StackXISquad Genesis", address: SQUAD_NFT_ADDRESS },
+          { name: "StackXISquadV2 Packs", address: SQUAD_NFT_V2_ADDRESS },
           { name: "PredictionPool", address: PREDICTION_POOL_ADDRESS },
         ]),
       ],

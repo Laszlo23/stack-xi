@@ -5,11 +5,13 @@ import { buildPageSeo } from "@/lib/seo/meta";
 
 type ProfileSearch = {
   x?: string;
+  fc?: string;
 };
 
 function parseProfileSearch(search: Record<string, unknown>): ProfileSearch {
   const x = typeof search.x === "string" ? search.x : undefined;
-  return { x };
+  const fc = typeof search.fc === "string" ? search.fc : undefined;
+  return { x, fc };
 }
 
 export const Route = createFileRoute("/profile")({

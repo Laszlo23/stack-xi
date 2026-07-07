@@ -137,4 +137,9 @@ export type MemberProgress = {
 export type SquadHolding = {
   player: FoundingPlayer;
   mintOrder: number;
+  /** Genesis v1 one-of-one */
+  isGenesis?: boolean;
+  /** v2 edition within player (1-77) */
+  edition?: number;
+  tokenId?: bigint;
 };

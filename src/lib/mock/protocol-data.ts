@@ -47,32 +47,58 @@ export const TRAINING_CAMPS: TrainingCamp[] = [
 
 export const MATCH_MARKETS: MatchMarket[] = [
   {
+    id: "mkt-ar-eg",
+    home: "Argentina",
+    away: "Egypt",
+    stage: "World Cup · Round of 16 · Atlanta",
+    kickoff: "Tue 16:00 UTC",
+    status: "upcoming",
+    homeProb: 62,
+    awayProb: 22,
+    drawProb: 16,
+    volume: 2_640_000,
+    narrative:
+      "Messi vs Salah — the biggest cultural collision left in the bracket after Belgium routed USA 4-1 in Seattle.",
+  },
+  {
+    id: "mkt-es-be",
+    home: "Spain",
+    away: "Belgium",
+    stage: "World Cup · Quarterfinal · LA",
+    kickoff: "Thu 19:00 UTC",
+    status: "upcoming",
+    homeProb: 52,
+    awayProb: 32,
+    drawProb: 16,
+    volume: 2_120_000,
+    narrative:
+      "Merino's Spain meet De Ketelaere's Belgium — Iberian discipline vs Red Devils firepower Jul 10.",
+  },
+  {
     id: "mkt-pt-es",
     home: "Portugal",
     away: "Spain",
     stage: "World Cup · Round of 16 · Dallas",
     kickoff: "Mon 19:00 UTC",
-    status: "live",
+    status: "settled",
     homeProb: 42,
     awayProb: 44,
     drawProb: 14,
     volume: 2_840_000,
-    narrative:
-      "Iberian derby with a quarterfinal berth on the line — Ronaldo vs Yamal after four QF spots are already set.",
+    narrative: "Spain 1-0 — Merino 91' ended Ronaldo's World Cup in Dallas.",
   },
   {
     id: "mkt-us-be",
     home: "USA",
     away: "Belgium",
     stage: "World Cup · Round of 16 · Seattle",
-    kickoff: "Tue 00:00 UTC",
-    status: "upcoming",
+    kickoff: "Tue 01:00 UTC",
+    status: "settled",
     homeProb: 36,
     awayProb: 48,
     drawProb: 16,
     volume: 1_920_000,
-    narrative:
-      "Balogun suspension overturned — USMNT chase first quarterfinal since 2002 in Seattle.",
+    narrative: "Belgium 4-1 — De Ketelaere brace; all three co-hosts eliminated in the R16.",
   },
   {
     id: "mkt-fr-ma",
@@ -196,9 +222,17 @@ export const ORACLE_FEED: OracleEvent[] = [
   {
     id: "orc-5",
     matchId: "mkt-us-be",
+    type: "goal",
+    minute: 90,
+    description: "Belgium 4-1 USA in Seattle — De Ketelaere brace; all three hosts out in R16.",
+    timestamp: "Jul 7",
+  },
+  {
+    id: "orc-6",
+    matchId: "mkt-ar-eg",
     type: "halftime",
     minute: 0,
-    description: "USA vs Belgium tonight Seattle — Balogun cleared to play after FIFA reversal.",
+    description: "Argentina vs Egypt today Atlanta — Messi vs Salah after Pharaohs' pen heroics.",
     timestamp: "Scheduled",
   },
 ];
@@ -212,8 +246,8 @@ export const CHRONICLE_ENTRIES: ChronicleEntry[] = [
   },
   {
     id: "ch-2",
-    headline: "Iberian derby live",
-    body: "Portugal vs Spain in Dallas — four QF spots already claimed. Ronaldo vs Yamal.",
+    headline: "Belgium rout USA",
+    body: "Belgium 4-1 USA in Seattle — De Ketelaere brace. Spain vs Belgium QF confirmed Jul 10.",
     tag: "empire",
   },
   {

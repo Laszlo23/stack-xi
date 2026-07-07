@@ -1,31 +1,82 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Glasses, Home, Radio, ShieldCheck, Sparkles, Target, User, Users } from "lucide-react";
+import {
+  ChevronDown,
+  Code2,
+  Home,
+  MoreHorizontal,
+  Radio,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  Ticket,
+  Trophy,
+  User,
+  Users,
+} from "lucide-react";
 import { useEffect, useState } from "react";
-import { MatchdayTicker } from "@/components/layout/MatchdayTicker";
+import { FloatingActionCTAs } from "@/components/layout/FloatingActionCTAs";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { LiveMatchTicker } from "@/features/match/LiveMatchTicker";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
 import { PROTOCOL_NAME } from "@/domain/constants";
 import { BaseWalletChip } from "@/features/wallet/BaseWalletChip";
+import { useMatchResults } from "@/hooks/use-match-results";
+import { getActiveMatchSlug } from "@/lib/story/match-slugs";
 
-const NAV_ITEMS = [
-  { hash: undefined, route: "/" as const, label: "Home", icon: Home },
-  { hash: "visual-story", route: undefined, label: "Lore", icon: Sparkles },
-  { hash: "story", route: undefined, label: "Story", icon: BookOpen },
-  { hash: "squad", route: undefined, label: "Squad", icon: Users },
-  { hash: "predict", route: undefined, label: "Predict", icon: Target },
-  { hash: "decentraland", route: undefined, label: "Metaverse", icon: Glasses },
-  { hash: undefined, route: "/feed" as const, label: "Feed", icon: Radio },
-  { hash: undefined, route: "/proof" as const, label: "Proof", icon: ShieldCheck },
-  { hash: undefined, route: "/profile" as const, label: "Profile", icon: User },
+type NavRoute =
+  | "/"
+  | "/profile"
+  | "/proof"
+  | "/feed"
+  | "/quest"
+  | "/defi"
+  | "/finals"
+  | "/story"
+  | "/squad"
+  | "/leaderboard"
+  | "/play";
+
+type NavItemConfig = {
+  hash?: string;
+  route?: NavRoute;
+  label: string;
+  icon: typeof Home;
+};
+
+const NAV_ITEMS: readonly NavItemConfig[] = [
+  { route: "/", label: "Home", icon: Home },
+  { route: "/play", label: "Play", icon: Target },
+  { route: "/story", label: "Story", icon: Sparkles },
+  { route: "/squad", label: "Squad", icon: Users },
+  { route: "/feed", label: "Community", icon: Radio },
 ] as const;
 
-/** Primary destinations on small screens — wallet stays in the header. */
-const MOBILE_NAV_ITEMS = [
-  NAV_ITEMS[0],
-  NAV_ITEMS[6],
-  NAV_ITEMS[4],
-  NAV_ITEMS[3],
-  NAV_ITEMS[7],
+const MORE_NAV: readonly NavItemConfig[] = [
+  { route: "/story/visual", label: "Full Pepe lore", icon: Sparkles },
+  { route: "/world-cup", label: "World Cup", icon: Sparkles },
+  { route: "/leaderboard", label: "Leaderboard", icon: Trophy },
+  { route: "/quest", label: "Quest", icon: Ticket },
+  { route: "/profile", label: "Profile", icon: User },
+  { route: "/proof", label: "Proof", icon: ShieldCheck },
 ] as const;
+
+const BUILDERS_NAV: readonly NavItemConfig[] = [
+  { route: "/defi", label: "DeFi hub", icon: Code2 },
+  { route: "/finals", label: "Finals arc", icon: ShieldCheck },
+  { route: "/proof", label: "Onchain proof", icon: ShieldCheck },
+] as const;
+
+const DESKTOP_PRIMARY_NAV = NAV_ITEMS;
+const MOBILE_NAV_ITEMS = NAV_ITEMS;
 
 function NavItem({
   hash,
@@ -35,20 +86,16 @@ function NavItem({
   mobile,
   activeHash,
   pathname,
-}: {
-  hash?: string;
-  route?: "/" | "/profile" | "/proof" | "/feed";
-  label: string;
-  icon: typeof Home;
+}: NavItemConfig & {
   mobile?: boolean;
   activeHash: string;
   pathname: string;
 }) {
   const isActive = route
-    ? pathname === route
-    : hash === undefined
-      ? pathname === "/" && activeHash === ""
-      : pathname === "/" && activeHash === hash;
+    ? route === "/play"
+      ? pathname.startsWith("/match/") || pathname === "/play" || (pathname === "/" && activeHash === "predict")
+      : pathname === route || (route === "/" && pathname === "/" && !activeHash)
+    : pathname === "/" && activeHash === hash;
 
   const className = mobile
     ? `flex flex-1 flex-col items-center gap-1 py-2 text-[10px] font-medium uppercase tracking-wide ${isActive ? "text-primary" : "text-muted-foreground"}`
@@ -63,17 +110,93 @@ function NavItem({
     );
   }
 
+  const playSlug = getActiveMatchSlug();
+  const to = route === "/play" ? ("/match/$slug" as const) : (route ?? "/");
+  const params = route === "/play" ? { slug: playSlug } : undefined;
+
   return (
-    <Link to={route ?? "/"} className={className}>
+    <Link to={to} params={params} className={className}>
       <Icon className={mobile ? "h-5 w-5" : "h-4 w-4"} />
       {label}
     </Link>
   );
 }
 
+function MoreNavMenu({
+  activeHash,
+  pathname,
+}: {
+  activeHash: string;
+  pathname: string;
+}) {
+  const isMoreActive = [...MORE_NAV, ...BUILDERS_NAV].some((item) =>
+    item.route ? pathname === item.route : pathname === "/" && activeHash === item.hash,
+  );
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className={`gap-1.5 px-3 ${
+            isMoreActive
+              ? "bg-primary/10 font-semibold text-primary hover:bg-primary/15 hover:text-primary"
+              : "text-muted-foreground hover:text-primary"
+          }`}
+        >
+          <MoreHorizontal className="h-4 w-4" />
+          More
+          <ChevronDown className="h-3.5 w-3.5 opacity-70" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-[12rem]">
+        {MORE_NAV.map((item) => {
+          const Icon = item.icon;
+          if (item.hash) {
+            return (
+              <DropdownMenuItem key={item.label} asChild>
+                <Link to="/" hash={item.hash} className="flex cursor-pointer items-center gap-2">
+                  <Icon className="h-4 w-4" />
+                  {item.label}
+                </Link>
+              </DropdownMenuItem>
+            );
+          }
+          return (
+            <DropdownMenuItem key={item.label} asChild>
+              <Link to={item.route ?? "/"} className="flex cursor-pointer items-center gap-2">
+                <Icon className="h-4 w-4" />
+                {item.label}
+              </Link>
+            </DropdownMenuItem>
+          );
+        })}
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          Builders
+        </DropdownMenuLabel>
+        {BUILDERS_NAV.map((item) => {
+          const Icon = item.icon;
+          return (
+            <DropdownMenuItem key={item.label} asChild>
+              <Link to={item.route ?? "/"} className="flex cursor-pointer items-center gap-2">
+                <Icon className="h-4 w-4" />
+                {item.label}
+              </Link>
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 export function AppNav() {
   const [activeHash, setActiveHash] = useState("");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  useMatchResults();
 
   useEffect(() => {
     const sync = () => setActiveHash(window.location.hash.replace("#", ""));
@@ -86,7 +209,7 @@ export function AppNav() {
     <>
       <header className="sticky top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-xl">
         <div className="border-b border-primary/20 bg-primary/5 px-4 py-1.5">
-          <MatchdayTicker />
+          <LiveMatchTicker />
         </div>
 
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
@@ -99,13 +222,17 @@ export function AppNav() {
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex">
-            {NAV_ITEMS.map((item) => (
+          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 lg:flex">
+            {DESKTOP_PRIMARY_NAV.map((item) => (
               <NavItem key={item.label} {...item} activeHash={activeHash} pathname={pathname} />
             ))}
+            <MoreNavMenu activeHash={activeHash} pathname={pathname} />
           </nav>
 
-          <BaseWalletChip />
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+            <BaseWalletChip />
+          </div>
         </div>
       </header>
 
@@ -127,6 +254,7 @@ export function PageShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-background text-foreground">
       <AppNav />
       {children}
+      <FloatingActionCTAs />
       <AppFooter />
     </div>
   );

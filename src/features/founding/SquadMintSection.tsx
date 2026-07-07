@@ -20,22 +20,22 @@ export function SquadMintSection() {
   return (
     <section id="squad" className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
       <SectionHead
-        eyebrow={isSoldOut ? "Founding Squad · Sold out" : "Founding Squad · Member hub"}
+        eyebrow={isSoldOut ? "Blind packs · Sold out" : "Blind pack mint"}
         title={
           isSoldOut ? (
             <>
-              All eleven minted. <span className="text-gradient">Culture locked in.</span>
+              You missed the kickoff. <span className="text-gradient">The squad lives on.</span>
             </>
           ) : (
             <>
-              Eleven players. <span className="text-gradient">Win-win mint game.</span>
+              Rip a sealed pack. <span className="text-gradient">Reveal your legend.</span>
             </>
           )
         }
         sub={
           isSoldOut
-            ? "The bonding curve is closed — view the founding XI on BaseScan, check your holdings, and predict the next Dallas matchday."
-            : "Mint from 770 BCC — manage holdings, earn culture XP, climb the leaderboard, and swap more BCC."
+            ? "847 community packs minted on Base — trade secondary, stack perks, predict with BCC."
+            : "77 editions per player. Mint sealed, open on-chain, joker to pick. Perks hit predictions, merch, and culture XP."
         }
       />
 

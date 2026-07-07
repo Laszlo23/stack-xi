@@ -1,18 +1,15 @@
 import { WagmiProvider, createConfig as createPrivyWagmiConfig, type Config } from "@privy-io/wagmi";
-import { http } from "wagmi";
-import { base } from "wagmi/chains";
 import type { ReactNode } from "react";
 import { buildConnectors } from "@/lib/base/wagmi-config";
-import { getClientBaseRpcUrl } from "@/lib/base/client-rpc";
+import { buildLifiWagmiTransports, LIFI_WAGMI_CHAINS } from "@/lib/swap/lifi-wagmi-chains";
 
-/** Wagmi config for @privy-io/wagmi — disables multi-injected discovery (avoids TON/Telegram wallets). */
+/** Wagmi config for @privy-io/wagmi — Base default + LI.FI source chains for cross-chain swaps. */
 export function createPrivyConfig(): Config {
   return createPrivyWagmiConfig({
-    chains: [base],
+    chains: [...LIFI_WAGMI_CHAINS],
     connectors: buildConnectors(),
-    transports: {
-      [base.id]: http(getClientBaseRpcUrl()),
-    },
+    multiInjectedProviderDiscovery: false,
+    transports: buildLifiWagmiTransports(),
   });
 }
 

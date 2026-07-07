@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { AirdropAnnouncementBanner } from "@/features/growth/AirdropAnnouncementBanner";
 import { PointsQuickStart } from "@/features/growth/PointsQuickStart";
-import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
+import { useWalletSession } from "@/hooks/use-wallet-session";
 import { useMemberTasks } from "@/hooks/use-member-tasks";
 import { useUserSquadHoldings } from "@/hooks/use-user-squad-holdings";
 import { ProfileConnectPrompt, ProfileHeader } from "@/features/profile/ProfileHeader";
@@ -13,13 +13,14 @@ import {
 } from "@/features/profile/SocialConnectionsPanel";
 import { TelegramGamePanel } from "@/features/telegram/TelegramGamePanel";
 import { SquadHoldingsPanel } from "@/features/profile/SquadHoldingsPanel";
+import { SquadPerksPanel } from "@/features/profile/SquadPerksPanel";
 import { MyPredictionsPanel } from "@/features/profile/MyPredictionsPanel";
 import { getCultureLevel, TOTAL_MEMBER_XP } from "@/lib/profile/member-tasks";
 import { processDailyLogin } from "@/lib/profile/task-storage";
 import { getAirdropTier, formatAirdropWeight } from "@/lib/growth/airdrop-tiers";
 
 export function ProfilePageContent() {
-  const { isConnected, address } = useConnectBaseWallet();
+  const { hasWalletSession, isWalletSyncing, address } = useWalletSession();
   const { holdings, isLoading, isConfigured } = useUserSquadHoldings(address);
   const { refreshProgress } = useMemberTasks();
 
@@ -41,7 +42,9 @@ export function ProfilePageContent() {
         </p>
       </div>
 
-      {!isConnected ? (
+      <SocialConnectToast />
+
+      {!hasWalletSession ? (
         <>
           <AirdropAnnouncementBanner />
           <PointsQuickStart compact />
@@ -50,10 +53,15 @@ export function ProfilePageContent() {
         </>
       ) : (
         <>
-          <SocialConnectToast />
+          {isWalletSyncing && (
+            <div className="rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-primary">
+              Restoring wallet session… on-chain actions unlock in a moment.
+            </div>
+          )}
           <AirdropAnnouncementBanner />
           <PointsQuickStart />
           <ProfileHeader />
+          <SquadPerksPanel />
           <SocialConnectionsPanel />
           <TelegramGamePanel />
           <SquadHoldingsPanel

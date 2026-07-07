@@ -6,6 +6,12 @@ import {
   resolveAlchemyX402PayerKey,
 } from "@/lib/server/alchemy-config";
 import { getSwapMode, getX402PayerKind, isSwapConfigured } from "@/lib/swap/zerox-proxy";
+import {
+  getLifiIntegrator,
+  getLifiIntegratorFee,
+  isLifiConfigured,
+  isLifiSwapEnabled,
+} from "@/lib/swap/lifi-config";
 
 function getPayerAddress(): `0x${string}` | null {
   const key = resolveAlchemyX402PayerKey();
@@ -42,6 +48,9 @@ export const Route = createFileRoute("/api/swap/status")({
                       : "Quotes paid via project x402 wallet; user wallet executes swap"
                   : "Classic 0x API key proxy";
 
+        const lifiConfigured = isLifiConfigured();
+        const lifiEnabled = isLifiSwapEnabled();
+
         return new Response(
           JSON.stringify({
             configured: isSwapConfigured() && !payerMismatch,
@@ -51,6 +60,13 @@ export const Route = createFileRoute("/api/swap/status")({
             expectedAddress,
             payerMismatch,
             hint,
+            lifi: {
+              configured: lifiConfigured,
+              enabled: lifiEnabled,
+              integrator: getLifiIntegrator(),
+              fee: getLifiIntegratorFee() ?? null,
+              ready: lifiConfigured && lifiEnabled,
+            },
           }),
           { headers: { "content-type": "application/json" } },
         );

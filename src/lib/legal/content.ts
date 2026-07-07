@@ -40,7 +40,7 @@ export const TERMS_SECTIONS = [
   },
   {
     title: "NFT mints",
-    body: "Founding squad NFTs are ERC-721 on Base with bonding-curve pricing. Metadata may move to IPFS. Perks (video shout-outs, lounge access) are promotional and fulfilled manually unless stated on-chain.",
+    body: "Founding squad packs are ERC-721 on Base: mint sealed, open on-chain to reveal your player (77 editions per character, 847 total). Genesis v1 cards remain legend tier. Prediction claim boosts and merch codes apply automatically in-app based on holdings; video shout-outs and lounge access may still be fulfilled manually.",
   },
   {
     title: "Social missions",

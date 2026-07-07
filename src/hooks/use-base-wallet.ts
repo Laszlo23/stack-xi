@@ -74,6 +74,7 @@ export function useBaseWallet() {
   const resolvedAddress = useResolvedWalletAddress();
   const address = wagmiAddress ?? resolvedAddress;
   const isWalletSyncing = Boolean(resolvedAddress) && !wagmiConnected;
+  const hasWalletSession = wagmiConnected || Boolean(resolvedAddress);
   const isConnected = wagmiConnected;
   const { disconnect } = useDisconnect();
   const { writeContractAsync } = useWriteContract();
@@ -163,6 +164,7 @@ export function useBaseWallet() {
   return {
     address,
     isConnected,
+    hasWalletSession,
     isWalletSyncing,
     isConnecting: isConnectBusy,
     connectPending,
@@ -174,6 +176,7 @@ export function useBaseWallet() {
     bccBalanceLabel: formatBcc(bccBalance),
     bccSymbol: BCC_SYMBOL,
     connectWallet,
+    loginWithFarcaster: undefined as (() => Promise<void>) | undefined,
     disconnectWallet: disconnect,
     writeContractAsync,
     approveUsdc,

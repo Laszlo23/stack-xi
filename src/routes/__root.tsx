@@ -9,8 +9,11 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import "@/i18n";
+
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { initClientErrorReporting } from "../lib/error-capture";
 import { farcasterMiniAppMetaContent, farcasterFrameMetaContent } from "../lib/farcaster/manifest-config";
 import { THEME_COLOR } from "../lib/seo/site-config";
 import { ProtocolProvider } from "../hooks/use-protocol-state";
@@ -18,7 +21,10 @@ import { PredictionSessionProvider } from "../hooks/use-prediction-session";
 import { MemberTasksProvider } from "../hooks/use-member-tasks";
 import { StacksWalletProvider } from "../hooks/use-stacks-wallet";
 import { Web3Providers } from "../lib/base/privy-config";
-import { FarcasterMiniAppReady } from "../features/farcaster/FarcasterMiniAppReady";
+import { ClientErrorBoundary } from "@/components/layout/ClientErrorBoundary";
+import { FarcasterMiniAppReady } from "@/features/farcaster/FarcasterMiniAppReady";
+import { FarcasterAuthProvider } from "@/features/farcaster/FarcasterAuthProvider";
+import { FarcasterSessionSync } from "@/features/farcaster/FarcasterSessionSync";
 import { TelegramMiniAppReady } from "../features/telegram/TelegramMiniAppReady";
 import { WorldMiniAppReady } from "../features/world/WorldMiniAppReady";
 import { TelegramSessionTasks } from "../features/telegram/TelegramSessionTasks";
@@ -142,6 +148,10 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  useEffect(() => {
+    initClientErrorReporting();
+  }, []);
+
   return (
     <Web3Providers queryClient={queryClient}>
       <ProtocolProvider>
@@ -149,11 +159,16 @@ function RootComponent() {
           <TelegramSessionProvider>
             <MemberTasksProvider>
               <PredictionSessionProvider>
-                <FarcasterMiniAppReady />
-                <TelegramMiniAppReady />
+                <FarcasterAuthProvider>
+                  <FarcasterMiniAppReady />
+                  <FarcasterSessionSync />
+                  <TelegramMiniAppReady />
                 <WorldMiniAppReady />
                 <TelegramSessionTasks />
-                <Outlet />
+                <ClientErrorBoundary>
+                  <Outlet />
+                </ClientErrorBoundary>
+                </FarcasterAuthProvider>
               </PredictionSessionProvider>
             </MemberTasksProvider>
           </TelegramSessionProvider>

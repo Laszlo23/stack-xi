@@ -2,11 +2,14 @@ import { Link } from "@tanstack/react-router";
 import { ExternalLink } from "lucide-react";
 import { PROTOCOL_NAME, PROTOCOL_TAGLINE } from "@/domain/constants";
 import {
+  FOOTER_BUILDER_LINKS,
   FOOTER_COMMUNITY_LINKS,
-  FOOTER_ONCHAIN_LINKS,
   FOOTER_PRODUCT_LINKS,
+  FOOTER_RESOURCE_LINKS,
   LEGAL_ROUTES,
 } from "@/lib/legal/footer-links";
+
+type FooterRoute = "/" | "/profile" | "/defi" | "/calendar" | "/partners" | "/blog" | "/finals" | "/faq" | "/story" | "/squad" | "/leaderboard" | "/feed" | "/quest" | "/play" | "/proof" | "/world-cup";
 
 function FooterColumn({
   title,
@@ -46,7 +49,7 @@ function FooterRouteItem({
   hash,
   label,
 }: {
-  to: (typeof FOOTER_PRODUCT_LINKS)[number]["to"];
+  to: FooterRoute;
   hash?: string;
   label: string;
 }) {
@@ -89,16 +92,16 @@ export function SiteFooter() {
               <div>
                 <div className="font-display text-lg font-bold tracking-wide">{PROTOCOL_NAME}</div>
                 <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Base BCC · matchday culture
+                  The internet&apos;s football playground
                 </div>
               </div>
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              {PROTOCOL_TAGLINE} Predict with BCC, mint the founding squad, and prove it on Base.
+              {PROTOCOL_TAGLINE} Predict. Compete. Share. Return tomorrow.
             </p>
           </div>
 
-          <FooterColumn title="Product">
+          <FooterColumn title="Play">
             {FOOTER_PRODUCT_LINKS.map((link) => (
               <FooterRouteItem
                 key={`${link.to}${"hash" in link ? link.hash : ""}-${link.label}`}
@@ -109,19 +112,26 @@ export function SiteFooter() {
             ))}
           </FooterColumn>
 
+          <FooterColumn title="Builders">
+            {FOOTER_BUILDER_LINKS.map((link) =>
+              "external" in link && link.external ? (
+                <FooterExternalItem key={link.href} href={link.href} label={link.label} />
+              ) : (
+                <FooterRouteItem key={link.label} to={link.to} label={link.label} />
+              ),
+            )}
+          </FooterColumn>
+
+          <FooterColumn title="Learn">
+            {FOOTER_RESOURCE_LINKS.map((link) => (
+              <FooterRouteItem key={link.to} to={link.to} label={link.label} />
+            ))}
+          </FooterColumn>
+
           <FooterColumn title="Community">
             {FOOTER_COMMUNITY_LINKS.map((link) => (
               <FooterExternalItem key={link.href} href={link.href} label={link.label} />
             ))}
-          </FooterColumn>
-
-          <FooterColumn title="Onchain">
-            {FOOTER_ONCHAIN_LINKS.map((link) => (
-              <FooterExternalItem key={link.href} href={link.href} label={link.label} />
-            ))}
-          </FooterColumn>
-
-          <FooterColumn title="Legal">
             {LEGAL_ROUTES.map((link) => (
               <FooterRouteItem key={link.to} to={link.to} label={link.label} />
             ))}
@@ -130,8 +140,7 @@ export function SiteFooter() {
 
         <div className="mt-10 flex flex-col gap-4 border-t border-border/60 pt-6 sm:flex-row sm:items-end sm:justify-between">
           <p className="max-w-2xl text-xs leading-relaxed text-muted-foreground">
-            Predictions and NFT mints involve financial risk. Not investment advice. BCC stakes and
-            squad mints are on Base mainnet — verify contract addresses before signing.
+            Predictions involve financial risk. Not investment advice. Blockchain should feel invisible. Fun should be obvious.
           </p>
           <p className="shrink-0 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             © {year} {PROTOCOL_NAME}

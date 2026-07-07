@@ -120,6 +120,18 @@ export function PointsQuickStart({
         </div>
       )}
 
+      <Link
+        to="/quest"
+        className="mb-5 flex items-center gap-3 rounded-xl border border-accent/40 bg-accent/10 px-4 py-3 transition hover:border-accent/60"
+      >
+        <Trophy className="h-5 w-5 text-accent" />
+        <div className="flex-1 text-left">
+          <div className="text-sm font-bold text-accent">7,777,777 BCC raffle</div>
+          <div className="text-xs text-muted-foreground">Follow, engage, mint a free ticket</div>
+        </div>
+        <ArrowRight className="h-4 w-4 text-accent" />
+      </Link>
+
       <ol className="mt-5 space-y-3">
         {QUICK_STEPS.map((item) => {
           const Icon = item.icon;

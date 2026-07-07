@@ -99,6 +99,27 @@ export async function connectFarcasterAccount(input: {
   }
 }
 
+export async function linkFarcasterToWallet(input: {
+  address: `0x${string}`;
+  message: string;
+  signature: `0x${string}`;
+  fid: number;
+  username?: string | null;
+  siwfMessage?: string;
+  siwfSignature?: `0x${string}`;
+  siwfNonce?: string;
+}): Promise<void> {
+  const res = await fetch("/api/auth/farcaster/link-account", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (!res.ok) {
+    const data = (await res.json()) as { error?: string };
+    throw new Error(data.error ?? "Failed to link Farcaster");
+  }
+}
+
 export async function verifySocialTaskApi(
   address: string,
   taskId: string,

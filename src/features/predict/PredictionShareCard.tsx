@@ -1,11 +1,14 @@
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Download, Loader2, Send } from "lucide-react";
 import { MemeShareCard } from "@/features/share/MemeShareCard";
 import { useShareCardDownload } from "@/features/share/useShareCardDownload";
 import { ShareActions } from "@/features/story/ShareActions";
+import { useMatchStats } from "@/hooks/use-match-stats";
 import { useMemberTasksOptional } from "@/hooks/use-member-tasks";
 import { useTelegramSessionOptional } from "@/hooks/use-telegram-session";
-import { buildWinnerMemeText } from "@/lib/predict/share-unlock";
+import { buildHeroPickShare } from "@/lib/growth/viral-share-copy";
+import { matchPath } from "@/lib/story/match-slugs";
 import { shareViaTelegram } from "@/lib/telegram/share";
 
 export function PredictionShareCard({
@@ -13,6 +16,7 @@ export function PredictionShareCard({
   away,
   pick,
   stakeLabel,
+  matchId,
   pepeSrc = "/pepeheadball.jpg",
   onPngDownloaded,
 }: {
@@ -20,10 +24,17 @@ export function PredictionShareCard({
   away: string;
   pick: string;
   stakeLabel: string;
+  matchId?: string;
   pepeSrc?: string;
   onPngDownloaded?: () => void;
 }) {
-  const shareText = buildWinnerMemeText({ home, away, pick, stakeLabel });
+  const { data: stats } = useMatchStats(matchId);
+  const shareText = buildHeroPickShare({
+    pick,
+    home,
+    away,
+    matchPath: matchPath({ home, away }),
+  });
   const { cardRef, download, exporting, error } = useShareCardDownload();
   const telegram = useTelegramSessionOptional();
   const memberTasks = useMemberTasksOptional();
@@ -58,17 +69,26 @@ export function PredictionShareCard({
             away={away}
             pick={pick}
             stakeLabel={stakeLabel}
+            homePct={stats?.homePct}
+            awayPct={stats?.awayPct}
             pepeSrc={pepeSrc}
+            subtitle="My prediction is locked. 🐸"
           />
 
           <div className="mt-4 border-t border-border/40 pt-4">
             <ShareActions text={shareText} />
+            <Link
+              to={matchPath({ home, away })}
+              className="mt-2 inline-flex rounded-lg border border-primary/30 px-3 py-2 text-xs font-semibold text-primary hover:bg-primary/10"
+            >
+              Challenge a friend →
+            </Link>
             {telegram?.isTelegram && (
               <button
                 type="button"
                 disabled={sharing}
                 onClick={() => void shareToTelegram()}
-                className="mt-2 inline-flex items-center gap-2 rounded-lg border border-sky-500/40 bg-sky-500/10 px-3 py-2 text-xs font-semibold text-sky-300 disabled:opacity-60"
+                className="mt-2 ml-2 inline-flex items-center gap-2 rounded-lg border border-sky-500/40 bg-sky-500/10 px-3 py-2 text-xs font-semibold text-sky-300 disabled:opacity-60"
               >
                 {sharing ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -94,11 +114,8 @@ export function PredictionShareCard({
           ) : (
             <Download className="h-4 w-4" />
           )}
-          {exporting ? "Rendering PNG…" : "Download PNG for X"}
+          {exporting ? "Rendering PNG…" : "Share"}
         </button>
-        <span className="text-xs text-muted-foreground">
-          Screenshot-free meme card · attach when posting on X
-        </span>
         {error && <span className="text-xs text-destructive">{error}</span>}
       </div>
     </div>

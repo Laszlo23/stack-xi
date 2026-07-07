@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/layout/AppShell";
-import { PepeScrollExperience } from "@/features/story/PepeScrollExperience";
+import { PredictionHomePage } from "@/features/home/PredictionHomePage";
 import { SQUAD_TABS, type SquadTab } from "@/hooks/use-squad-tab";
 import { buildHomeJsonLd, buildPageSeo } from "@/lib/seo/meta";
 import { SITE_DESCRIPTION } from "@/lib/seo/site-config";
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <PageShell>
-      <PepeScrollExperience />
+      <PredictionHomePage />
     </PageShell>
   );
 }

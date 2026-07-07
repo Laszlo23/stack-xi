@@ -1,3 +1,5 @@
+import { getPredictionWindow } from "@/lib/predict/match-window";
+
 export type DallasMatch = {
   id: string;
   home: string;
@@ -82,14 +84,40 @@ export const DALLAS_SCHEDULE: DallasMatch[] = [
     id: "m8",
     home: "Portugal",
     away: "Spain",
-    stage: "Round of 16",
+    stage: "Round of 16 · Dallas",
     kickoffLabel: "Jul 6 · 2:00 PM CT",
     kickoffAt: new Date("2026-07-06T19:00:00Z"),
+    result: "Spain 1-0 (Merino 91')",
   },
   {
     id: "m9",
+    home: "USA",
+    away: "Belgium",
+    stage: "Round of 16 · Seattle",
+    kickoffLabel: "Jul 6 · 8:00 PM ET",
+    kickoffAt: new Date("2026-07-07T01:00:00Z"),
+    result: "Belgium 4-1 USA — De Ketelaere brace; Tillman FK",
+  },
+  {
+    id: "m10",
+    home: "Argentina",
+    away: "Egypt",
+    stage: "Round of 16 · Atlanta",
+    kickoffLabel: "Jul 7 · 12:00 PM ET",
+    kickoffAt: new Date("2026-07-07T16:00:00Z"),
+  },
+  {
+    id: "m11",
+    home: "Switzerland",
+    away: "Colombia",
+    stage: "Round of 16 · Vancouver",
+    kickoffLabel: "Jul 7 · 4:00 PM ET",
+    kickoffAt: new Date("2026-07-07T20:00:00Z"),
+  },
+  {
+    id: "m12",
     home: "France",
-    away: "Portugal",
+    away: "Spain",
     stage: "Semifinal · bracket projection",
     kickoffLabel: "Jul 14 · 2:00 PM CT",
     kickoffAt: new Date("2026-07-14T19:00:00Z"),
@@ -98,13 +126,13 @@ export const DALLAS_SCHEDULE: DallasMatch[] = [
 ];
 
 export function getActiveMatchday(now = new Date()): DallasMatch {
-  // Keep the open Dallas fixture active until a result is recorded — kickoff alone
-  // must not advance to bracket projections (e.g. France vs Portugal semifinal).
-  const openFixture = DALLAS_SCHEDULE.find((m) => !m.result && !m.isProjected);
+  const openFixture = DALLAS_SCHEDULE.find(
+    (m) => !m.result && !m.isProjected && getPredictionWindow(m, now).status === "open",
+  );
   if (openFixture) return openFixture;
 
   const upcoming = DALLAS_SCHEDULE.find(
-    (m) => !m.isProjected && m.kickoffAt.getTime() > now.getTime(),
+    (m) => !m.result && !m.isProjected && m.kickoffAt.getTime() > now.getTime(),
   );
   if (upcoming) return upcoming;
 

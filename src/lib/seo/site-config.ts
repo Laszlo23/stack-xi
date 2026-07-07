@@ -12,6 +12,9 @@ export const SITE_URL = (
 export const SITE_LOCALE = "en_US";
 export const SITE_LANGUAGE = "en";
 
+/** Client-side i18n locales — hreflang alternates share canonical URL. */
+export const HREFLANG_LOCALES = ["en", "de", "tr", "fr", "es"] as const;
+
 export const TWITTER_HANDLE = import.meta.env.VITE_TWITTER_SITE ?? "@buildingcultu3";
 export const TWITTER_CREATOR = "@0xleonardo";
 

@@ -1,6 +1,5 @@
-import { WagmiProvider, createConfig, http, type Config } from "wagmi";
-import { base } from "wagmi/chains";
-import { getClientBaseRpcUrl } from "@/lib/base/client-rpc";
+import { WagmiProvider, createConfig, type Config } from "wagmi";
+import { buildLifiWagmiTransports, LIFI_WAGMI_CHAINS } from "@/lib/swap/lifi-wagmi-chains";
 import { coinbaseWallet, injected, walletConnect } from "wagmi/connectors";
 import type { ReactNode } from "react";
 
@@ -71,16 +70,14 @@ export function buildConnectors() {
   ];
 }
 
-/** Client-only wagmi config — avoids SSR/client duplicate instances with empty connectors. */
+/** STACK XI onchain actions default to Base; LI.FI swaps can switch source chains via wagmi. */
 export function createWagmiConfig(): Config {
   return createConfig({
-    chains: [base],
+    chains: [...LIFI_WAGMI_CHAINS],
     connectors: buildConnectors(),
     multiInjectedProviderDiscovery: false,
     ssr: false,
-    transports: {
-      [base.id]: http(getClientBaseRpcUrl()),
-    },
+    transports: buildLifiWagmiTransports(),
   });
 }
 

@@ -1,4 +1,5 @@
 import type { DallasMatch } from "./dallas-schedule";
+import { getPredictionWindow } from "@/lib/predict/match-window";
 
 /** SK Rapid Wien — Austrian vibe, Building Culture shoutout. */
 export const AUSTRIAN_LEAGUE_TAGLINE = "World Cup → Austrian Bundesliga · SK Rapid Wien first";
@@ -33,8 +34,18 @@ export const AUSTRIAN_BUNDESLIGA_SCHEDULE: AustrianMatch[] = [
 ];
 
 export function getActiveAustrianMatchday(now = new Date()): AustrianMatch {
-  const upcoming = AUSTRIAN_BUNDESLIGA_SCHEDULE.find((m) => m.kickoffAt.getTime() > now.getTime());
-  return upcoming ?? AUSTRIAN_BUNDESLIGA_SCHEDULE[AUSTRIAN_BUNDESLIGA_SCHEDULE.length - 1];
+  const openFixture = AUSTRIAN_BUNDESLIGA_SCHEDULE.find(
+    (m) => !m.result && !m.isProjected && getPredictionWindow(m, now).status === "open",
+  );
+  if (openFixture) return openFixture;
+
+  const upcoming = AUSTRIAN_BUNDESLIGA_SCHEDULE.find(
+    (m) => !m.result && !m.isProjected && m.kickoffAt.getTime() > now.getTime(),
+  );
+  if (upcoming) return upcoming;
+
+  const realFixtures = AUSTRIAN_BUNDESLIGA_SCHEDULE.filter((m) => !m.isProjected);
+  return realFixtures.at(-1) ?? AUSTRIAN_BUNDESLIGA_SCHEDULE[AUSTRIAN_BUNDESLIGA_SCHEDULE.length - 1]!;
 }
 
 export function getLastCompletedAustrianMatchday(now = new Date()): AustrianMatch | null {

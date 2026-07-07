@@ -149,43 +149,83 @@ const STORY_BY_MATCH: Record<string, Omit<MatchdayStory, "matchId">> = {
       "🇪🇬 Egypt beat Australia 4-2 on pens in Dallas — first WC knockout win ever. Next: Argentina in Atlanta. Dallas R16: Portugal vs Spain Jul 6. Predict on Base 🐸⚽",
   },
   m8: {
-    title: "Iberian Derby · Dallas Round of 16",
+    title: "Merino Ends Ronaldo's Dream · Spain Through",
     beats: [
       {
         id: "m8-1",
-        line: "Four quarterfinalists are already set: Morocco, France, Norway, England. Morocco routed Canada 3-0 in Houston. France edged Paraguay 1-0 — Mbappé's 19th World Cup goal.",
+        line: "Spain 1-0 Portugal in Dallas — Mikel Merino struck in the 91st minute. Ronaldo's World Cup farewell ended in tears. La Roja's first QF since 2010.",
       },
       {
         id: "m8-2",
-        line: "Norway stunned Brazil 2-1 in New Jersey — Haaland in the 79th and 90th. England survived Mexico 3-2 at the Azteca with a Bellingham brace and a Kane penalty drama.",
-        sub: "Jul 6 · 2:00 PM CT · AT&T Stadium. Portugal vs Spain decides another quarterfinal berth.",
+        line: "Unai Simón extended Spain's clean-sheet run to six straight knockout games. Pepe had BCC on the line — Luck had popcorn for the stoppage-time chaos.",
+        sub: "Final: Spain 1-0 · Merino 91' · AT&T Stadium Dallas",
       },
       {
         id: "m8-3",
-        line: `Ronaldo and Yamal renew the Iberian rivalry in Dallas. ${WORLD_CUP_WINNER_PICK} already through — Leonardo's bracket still says Les Bleus lift the trophy Jul 19 in New York.`,
+        line: "Picked Spain? Head to your profile and claim pool rewards — treasury sends BCC to your wallet after you tap Claim. Argentina vs Egypt in Atlanta is the next live market.",
       },
     ],
     sharePost:
-      "🇵🇹 vs 🇪🇸 · Dallas Round of 16 · Jul 6. Four QF spots filled — Morocco, France, Norway, England. Iberian derby locks the next. BCC on STACK XI 🐸⚽",
+      "🇪🇸 Spain 1-0 Portugal · Merino 91' in Dallas. Ronaldo out. Claim your STACK XI winnings on profile if you called it 🐸⚽",
   },
   m9: {
-    title: "Semifinal Dream · France Path",
+    title: "Belgium Ends American Dream · Seattle",
     beats: [
       {
         id: "m9-1",
-        line: `Semifinal projection at Dallas: ${WORLD_CUP_WINNER_PICK} vs the Iberian winner — if the bracket holds and Leonardo's luck arc pays off.`,
-        sub: "Projected fixture · Jul 14 · subject to knockout results",
+        line: "Belgium 4-1 USA in Seattle — Charles De Ketelaere scored twice, Hans Vanaken and Romelu Lukaku finished it. All three co-hosts eliminated in the Round of 16.",
       },
       {
         id: "m9-2",
-        line: "Mbappé through to the quarters. France face Morocco in Boston Jul 9. Norway and England collide in Miami Jul 11 — Haaland vs Bellingham energy.",
+        line: "Malik Tillman's free-kick briefly levelled it at 1-1. Belgium answered 52 seconds later. Lumen Field went silent — fourth R16 exit in five World Cups for the USMNT.",
+        sub: "Final: Belgium 4-1 · Lumen Field Seattle",
       },
       {
         id: "m9-3",
+        line: "Picked Belgium? Claim pool rewards on profile. Argentina vs Egypt is the live window in Atlanta — Messi vs Salah after the Pharaohs' pen heroics in Dallas.",
+      },
+    ],
+    sharePost:
+      "🇧🇪 Belgium 4-1 USA · Seattle. Co-hosts out. Spain await in LA Jul 10. Claim STACK XI winnings on profile if you called it 🐸⚽",
+  },
+  m10: {
+    title: "Messi vs Salah · Atlanta",
+    beats: [
+      {
+        id: "m10-1",
+        line: "Argentina vs Egypt at Mercedes-Benz Stadium — Messi goal #20 energy meets Salah after the Pharaohs' first-ever knockout win on pens in Dallas.",
+      },
+      {
+        id: "m10-2",
+        line: "The biggest cultural collision left in the bracket. Pepe brought neutral vibes. Luck brought receipts.",
+        sub: "Jul 7 · 12:00 PM ET · Atlanta",
+      },
+      {
+        id: "m10-3",
+        line: "Predict with BCC. Cast it. Winners claim on profile — treasury routes pool share to your Base wallet.",
+      },
+    ],
+    sharePost:
+      "Messi vs Salah · Atlanta Jul 7. STACK XI prediction window open. Claim Spain winners on profile 🐸⚽",
+  },
+  m12: {
+    title: "Semifinal Dream · France Path",
+    beats: [
+      {
+        id: "m12-1",
+        line: `Semifinal projection at Dallas: ${WORLD_CUP_WINNER_PICK} vs Spain — if the bracket holds and Leonardo's luck arc pays off.`,
+        sub: "Projected fixture · Jul 14 · subject to knockout results",
+      },
+      {
+        id: "m12-2",
+        line: "France vs Morocco in Boston Jul 9. Norway vs England in Miami Jul 11. Spain vs Belgium in LA Jul 10.",
+      },
+      {
+        id: "m12-3",
         line: "Early squad minters get the bridge pass to Bitcoin finals on Stacks. For now, Base believers play where the story started — in public, with heart.",
       },
     ],
-    sharePost: `Quarterfinals set: France vs Morocco Jul 9 · Norway vs England Jul 11. Leonardo's pick: ${WORLD_CUP_WINNER_PICK} win the World Cup Jul 19. Mint squad · predict with BCC 🐸`,
+    sharePost: `QF week: France vs Morocco Jul 9 · Norway vs England Jul 11. Leonardo's pick: ${WORLD_CUP_WINNER_PICK} win the World Cup Jul 19. Claim · predict · mint 🐸`,
   },
 };
 

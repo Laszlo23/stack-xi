@@ -43,8 +43,8 @@ export function PredictionReceiptPanel({
           {settlementStatus === "settled" ? "BCC rewards distributed" : "Awaiting final whistle"}
         </div>
         <p className="mt-2 text-xs text-muted-foreground">
-          MVP: winners receive BCC from the prediction pool via treasury multisig after match
-          settlement. On-chain claim contracts coming in v2.
+          MVP: winners tap Claim on profile — treasury sends BCC pool share to your wallet.
+          On-chain auto-claim contracts coming in v2.
         </p>
 
         <ol className="mt-6 space-y-2">

@@ -13,6 +13,7 @@ import { PrivyWalletSync } from "@/features/wallet/PrivyWalletSync";
 import { PrivyResolvedWalletBridge } from "@/hooks/use-resolved-wallet-address";
 
 const privyAppId = import.meta.env.VITE_PRIVY_APP_ID?.trim();
+const privyClientId = import.meta.env.VITE_PRIVY_CLIENT_ID?.trim();
 
 export function isPrivyEnabled(): boolean {
   return Boolean(privyAppId);
@@ -53,8 +54,9 @@ export function Web3Providers({
   return (
     <PrivyProvider
       appId={privyAppId}
+      clientId={privyClientId || undefined}
       config={{
-        loginMethods: ["wallet", "email"],
+        loginMethods: ["wallet", "email", "farcaster"],
         appearance: {
           theme: "dark",
           accentColor: "#22c55e",

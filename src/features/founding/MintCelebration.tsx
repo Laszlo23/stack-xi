@@ -4,7 +4,7 @@ import { FarcasterCastAssistant } from "@/features/farcaster/FarcasterCastAssist
 import { PepeBubble } from "@/features/story/PepeBubble";
 import { buildMintCast } from "@/lib/farcaster/cast-templates";
 import { MINT_SUCCESS_MESSAGE } from "@/lib/story/pepe-script";
-import { mintTierLabel } from "@/lib/squad/mint-game";
+import { mintTierLabel, SQUAD_V2_EDITIONS_PER_PLAYER } from "@/lib/squad/mint-game";
 import { BASESCAN_URL, BCC_SYMBOL, formatBcc } from "@/lib/base/config";
 import { FOUNDING_SQUAD } from "@/lib/mock/squad-data";
 
@@ -14,6 +14,8 @@ export type MintCelebrationData = {
   pricePaid: bigint;
   nextPrice: bigint;
   txHash: string;
+  edition?: number;
+  usedJoker?: boolean;
 };
 
 export function MintCelebration({
@@ -38,13 +40,23 @@ export function MintCelebration({
       <div className="glass-neon max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl p-6 sm:p-8">
         <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-primary">
           <PartyPopper className="h-4 w-4" />
-          You minted · {tier}
+          Pack opened · {tier}
         </div>
         <h3 className="mt-3 font-display text-2xl font-bold">{player?.name ?? "Squad player"}</h3>
         <p className="mt-1 font-mono text-sm text-muted-foreground">
-          Mint #{data.mintOrder} · {formatBcc(data.pricePaid)} · Next mint{" "}
-          {formatBcc(data.nextPrice)}
+          Global #{data.mintOrder}
+          {data.edition ? ` · Edition ${data.edition}/${SQUAD_V2_EDITIONS_PER_PLAYER}` : ""}
+          {data.usedJoker ? " · Joker pick" : ""}
+          {data.pricePaid > 0n ? ` · ${formatBcc(data.pricePaid)}` : ""}
         </p>
+
+        {player?.img && (
+          <img
+            src={player.img}
+            alt={player.name}
+            className="mt-4 aspect-[3/4] w-full max-w-[200px] rounded-xl object-cover"
+          />
+        )}
 
         <div className="mt-6 space-y-4">
           <PepeBubble beat={MINT_SUCCESS_MESSAGE} large luckMeter={98} />
@@ -52,11 +64,11 @@ export function MintCelebration({
           <div className="rounded-xl border border-primary/40 bg-primary/10 p-4">
             <div className="flex items-center gap-2 font-display font-bold text-primary">
               <Video className="h-5 w-5" />
-              Video shout-out queued
+              Perks unlocked
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
-              Leonardo will record a personal thank-you, tag your Farcaster/X handle, and post it.
-              You made the squad real — respect back.
+              Prediction boost, merch code, and culture XP multiplier are live on your profile.
+              {data.pricePaid > 0n ? ` Paid ${formatBcc(data.pricePaid)} ${BCC_SYMBOL}.` : ""}
             </p>
           </div>
 
@@ -68,10 +80,10 @@ export function MintCelebration({
           </div>
 
           <Link
-            to="/proof"
+            to="/profile"
             className="block text-center text-sm font-semibold text-primary hover:underline"
           >
-            View all onchain proofs →
+            View perks on profile →
           </Link>
 
           <a
@@ -101,14 +113,20 @@ export function MintArenaHeader({
   currentPrice,
   nextPrice,
   remaining,
+  maxSupply = 847,
+  priceIncrementLabel = "7 BCC",
+  earlySlotsLeft,
 }: {
   mintCount: bigint;
   currentPrice: bigint;
   nextPrice: bigint;
   remaining: bigint;
+  maxSupply?: number;
+  priceIncrementLabel?: string;
+  earlySlotsLeft?: number;
 }) {
   const filled = Number(mintCount);
-  const total = 11;
+  const total = maxSupply;
   const pct = Math.round((filled / total) * 100);
 
   return (
@@ -117,12 +135,18 @@ export function MintArenaHeader({
         <div>
           <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-primary">
             <Trophy className="h-4 w-4" />
-            Squad mint game
+            Blind pack mint
           </div>
           <p className="mt-2 max-w-md text-sm text-muted-foreground">
-            Starts at <strong className="text-foreground">770 BCC</strong>. Every mint raises the
-            price by <strong className="text-foreground">70 BCC</strong>. Early minters win on price
-            + perks. Everyone gets a personal video shout-out.
+            Mint a <strong className="text-foreground">sealed pack</strong>, then open on-chain to
+            reveal your player. Starts at <strong className="text-foreground">770 BCC</strong>, +{" "}
+            <strong className="text-foreground">{priceIncrementLabel}</strong> per pack.{" "}
+            {earlySlotsLeft != null && earlySlotsLeft > 0 && (
+              <>
+                <strong className="text-primary">{earlySlotsLeft}</strong> early-believer slots left
+                (joker included).
+              </>
+            )}
           </p>
         </div>
         <div className="text-right">
@@ -130,14 +154,16 @@ export function MintArenaHeader({
           <div className="font-display text-3xl font-bold text-primary">
             {formatBcc(currentPrice)}
           </div>
-          <div className="font-mono text-xs text-muted-foreground">then {formatBcc(nextPrice)}</div>
+          {nextPrice > 0n && (
+            <div className="font-mono text-xs text-muted-foreground">then {formatBcc(nextPrice)}</div>
+          )}
         </div>
       </div>
 
       <div className="mt-5">
         <div className="mb-1 flex justify-between font-mono text-[10px] uppercase text-muted-foreground">
           <span>
-            {filled}/{total} minted
+            {filled}/{total} packs minted
           </span>
           <span>{Number(remaining)} left</span>
         </div>
@@ -147,11 +173,6 @@ export function MintArenaHeader({
             style={{ width: `${pct}%` }}
           />
         </div>
-        {filled >= 10 && (
-          <p className="mt-2 font-mono text-xs text-primary animate-pulse">
-            Final mints — last dance pricing activated
-          </p>
-        )}
       </div>
     </div>
   );

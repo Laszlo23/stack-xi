@@ -1,0 +1,221 @@
+{
+  "common": {
+    "language": "Sprache",
+    "loading": "Lädt…",
+    "refresh": "Aktualisieren",
+    "save": "Speichern",
+    "login": "Anmelden",
+    "logout": "Abmelden"
+  },
+  "cta": {
+    "predict": "Tippen",
+    "claim": "{{count}} einlösen",
+    "claim_one": "Belohnung einlösen"
+  },
+  "quickPredict": {
+    "label": "Schnelltipp",
+    "untilKickoff": "bis Anpfiff"
+  },
+  "farcasterAuth": {
+    "signIn": "Mit Farcaster anmelden",
+    "short": "Farcaster",
+    "signingIn": "Farcaster öffnet…",
+    "signedIn": "Farcaster verbunden",
+    "incomplete": "Farcaster-Anmeldung unvollständig — erneut versuchen.",
+    "failed": "Farcaster-Anmeldung fehlgeschlagen."
+  },
+  "home": {
+    "hero": {
+      "badge": "WM-Matchday",
+      "badgeLeague": "Bundesliga-Matchday",
+      "headline": "Die WM ist ein Spiel.",
+      "headlineAccent": "Jetzt kannst du mitspielen.",
+      "headlineLeague": "Fußball hört nie auf.",
+      "headlineLeagueAccent": "Tippe das nächste Spiel.",
+      "subheadline": "Tippe Matches. Messe dich mit der Community. Baue dein Fußball-Erbe mit Pepe.",
+      "ctaPredict": "Nächsten Match tippen",
+      "ctaStory": "Pepe's Story"
+    },
+    "predict": {
+      "eyebrow": "Live-Spiel",
+      "title": "Wer gewinnt?",
+      "pick": "{{team}} tippen",
+      "locked": "Du hast {{team}} gelockt. Jetzt der Welt erzählen.",
+      "sharePrompt": "Teile deinen Tipp vor Anpfiff.",
+      "castFc": "Cast auf Farcaster",
+      "postX": "Post auf X",
+      "lockOnchain": "Onchain sperren →"
+    },
+    "journey": {
+      "eyebrow": "Deine Pepe-Reise",
+      "nextUnlock": "Noch {{xp}} XP bis {{tier}}",
+      "maxTier": "Legend-Status freigeschaltet 🐸",
+      "viewProfile": "Profil ansehen"
+    },
+    "culture": {
+      "eyebrow": "Culture Score",
+      "title": "Jeder Tipp baut dein Erbe.",
+      "body": "Jeder Pick, Cast und Matchday-Moment erhöht deinen Culture Score — so zeigt die Community, dass du dabei warst.",
+      "rewards": "Dein Score bestimmt deine BCC-Belohnungen. Tokenomics für Builder im More-Menü."
+    },
+    "origin": {
+      "eyebrow": "Ursprungsgeschichte",
+      "title": "Wie Pepe zu STACK XI wurde",
+      "subtitle": "Vier Kapitel. Eine Kultur-Arc. Jedes Kapitel mit einem Farcaster-Tap teilbar.",
+      "fullLore": "Volle visuelle Lore →"
+    },
+    "builders": {
+      "eyebrow": "Builder",
+      "title": "Halbfinale + Finale auf Stacks",
+      "subtitle": "Base-Believer erhalten ersten Zugang zur Bitcoin-Finals-Arc.",
+      "finalsCta": "Finals-Teaser →"
+    }
+  },
+  "crowdPressure": {
+    "title": "Publikumsdruck",
+    "live": "Markt bewegt sich live",
+    "homeSide": "{{percent}}% Heimseite",
+    "awaySide": "{{percent}}% Auswärtsseite",
+    "quotes": [
+      "Die Masse ist laut. Pepe bleibt ruhig. Das ist der Vorteil. 🐸",
+      "Sie jagen Hype. Du jagst den Pfiff. Anderer Sport.",
+      "Luck fragt nicht um Erlaubnis — und deine Überzeugung auch nicht.",
+      "Die Masse panikt in der 89'. Builder sperren vor Anpfiff.",
+      "Pepe jagt nicht. Luck schon. Steig ein.",
+      "Konsens ist bequem. Richtige Tipps selten.",
+      "Dein Tipp. Dein Einsatz. Deine Story on Base.",
+      "Falsche Masse, richtige Lesart — das ganze Spiel.",
+      "Das Glück liebt den Frosch, der vor dem Pfiff liefert.",
+      "Jeder hat eine Meinung. Wenige haben einen Beleg.",
+      "Der Feed schreit. Der Rasen entscheidet. Bleib sitzen.",
+      "Überzeugung schlägt Konsens. Jeden Spieltag."
+    ]
+  },
+  "ticker": {
+    "lockPick": "Tipp sperren",
+    "opensIn": "Tipps öffnen in",
+    "lockCta": "Tipp sperren",
+    "tagline": "Base BCC · Building Culture auf Base"
+  },
+  "predict": {
+    "socialSport": "Social Prediction · kein Finanzprodukt",
+    "stepOf": "Schritt {{step}} von {{total}}",
+    "yourPick": "Dein Tipp",
+    "stake": "Einsatz",
+    "connectWallet": "Base-Wallet verbinden",
+    "connecting": "Wallet verbindet…",
+    "lockPrediction": "Tipp sperren",
+    "lockSponsored": "Gesponserter Tipp · {{amount}} gratis",
+    "youreIn": "Du bist dabei",
+    "makeAnother": "Weiteren Tipp abgeben",
+    "windowClosed": "Tippfenster geschlossen — Anpfiff war.",
+    "openUntil": "Offen bis Anpfiff · noch {{time}}",
+    "squadBoost": "Squad-Boost"
+  },
+  "squad": {
+    "perksTitle": "Squad-Vorteile",
+    "perksLoading": "Squad-Vorteile werden geladen…",
+    "perksEmpty": "Minte und öffne ein Squad-Pack für Prediction-Boosts, Merch-Codes und Kultur-Multiplikatoren.",
+    "perksActive": "Aktive Squad-Vorteile",
+    "mint": {
+      "title": "Blinde Squad-Packs",
+      "subtitle": "847 versiegelte Packs · 77 Editionen pro Spieler · globale Bonding Curve",
+      "mintPack": "Versiegeltes Pack minten",
+      "myPacks": "Meine Packs",
+      "openPack": "Pack öffnen",
+      "earlyBeliever": "Early-Believer-Slots",
+      "genesisTitle": "Genesis XI",
+      "genesisNote": "Original 11 Einzelstücke — Legenden-Vorteile für immer (+25% Prediction-Boost)."
+    }
+  },
+  "claim": {
+    "title": "Deine Tipps",
+    "subtitle": "Onchain Match-Tipps",
+    "howItWorks": "Dein BCC-Einsatz liegt im Onchain-Pool. Nach dem Abpfiff lösen Gewinner hier ein — die Treasury sendet Belohnungen an diese Wallet. Kein Gas zum Empfangen.",
+    "autoNote": "Auszahlungen sind noch nicht automatisch onchain (v2 Claim-Contract kommt). Tippe auf Einlösen, damit die Treasury deinen Pool-Anteil sendet.",
+    "claimEta": "In der Regel innerhalb von 24 Stunden nach dem Einlösen.",
+    "readyCount": "{{count}} Gewinntipp bereit zum Einlösen.",
+    "readyCount_other": "{{count}} Gewinntipps bereit zum Einlösen.",
+    "claimButton": "BCC-Belohnung einlösen",
+    "claimSubmitted": "Einlösung eingereicht — Auszahlung meist innerhalb von 24 Stunden.",
+    "paid": "Belohnung an diese Wallet gesendet.",
+    "noPredictions": "Noch keine Tipps für diese Wallet.",
+    "firstPick": "Ersten Tipp abgeben →",
+    "squadBoostHint": "Squad-Boost {{boost}} wird beim Einlösen angewendet.",
+    "squadBoostApplied": "Squad-Boost {{boost}} für Treasury-Auszahlung gespeichert.",
+    "outcome": {
+      "awaiting": "Ergebnis ausstehend",
+      "lost": "Verloren",
+      "claimable": "Gewonnen · einlösbar",
+      "claimed": "Einlösung eingereicht",
+      "paid": "An Wallet ausgezahlt"
+    }
+  },
+  "onboarding": {
+    "connectWallet": "Wallet verbinden",
+    "makePick": "Team wählen",
+    "shareCast": "Cast teilen (optional)",
+    "claimReady": "Einlösen wenn bereit"
+  },
+  "hero": {
+    "wonClaim": "Gewonnen? BCC im Profil nach dem Abpfiff einlösen.",
+    "claimableBanner": "{{count}} Gewinntipp bereit — im Profil einlösen.",
+    "claimableBanner_other": "{{count}} Gewinntipps bereit — im Profil einlösen.",
+    "questCta": "7.777.777 BCC gewinnen — Kultur-Quest →"
+  },
+  "quest": {
+    "eyebrow": "Kultur-Quest",
+    "title": "7,7 Mio. BCC Verlosung",
+    "subtitle": "Folgen, engagieren, gratis Ticket minten. Ein Gewinner erhält {{prize}} BCC — transparent onchain.",
+    "verify": "Verifizieren",
+    "openPost": "Post öffnen",
+    "repost": "Reposten",
+    "comment": "Kommentieren",
+    "openCast": "Cast öffnen",
+    "mintTicket": "Los-Ticket minten",
+    "ticketMinted": "Ticket gemintet",
+    "mintSuccess": "Ticket gemintet — tx {{tx}}…",
+    "viewTicketTx": "Mint-Transaktion ansehen",
+    "profileLink": "Profil & Missionen →",
+    "steps": {
+      "connect": {
+        "title": "Wallet + Social verbinden",
+        "description": "Base-Wallet, X und Farcaster verknüpfen.",
+        "cta": "Wallet verbinden"
+      },
+      "followX": {
+        "title": "@buildingcultu3 folgen",
+        "description": "Dem offiziellen STACK XI Account auf X folgen."
+      },
+      "engageX": {
+        "title": "Auf X engagieren",
+        "description": "Liken, reposten oder den Kampagnenpost kommentieren."
+      },
+      "engageFc": {
+        "title": "Auf Farcaster engagieren",
+        "description": "Liken, recasten oder auf Leonardos Cast antworten."
+      },
+      "mint": {
+        "title": "Los-Ticket minten",
+        "description": "Gratis ERC721 — nur Base-Gas. Eins pro Wallet."
+      }
+    },
+    "raffle": {
+      "eyebrow": "Transparente Ziehung",
+      "title": "Öffentlicher Nachweis",
+      "howItWorks": "Commit-Reveal auf Base. Jedes Los ist ein onchain ERC721.",
+      "prize": "Hauptpreis",
+      "poolFunded": "Pool finanziert",
+      "tickets": "Tickets gemintet",
+      "deadline": "Einsendefrist",
+      "phase": "Status",
+      "winner": "Gewinner",
+      "ticketId": "Ticket",
+      "commit": "Draw-Commit",
+      "closeBlock": "Close-Block",
+      "formula": "winnerTokenId = 1 + keccak256(secret, blockhash(closeBlock)) % totalMinted",
+      "contract": "Contract ansehen",
+      "entryList": "Alle Teilnehmer"
+    }
+  }
+}

@@ -9,11 +9,25 @@ export const USDC_ADDRESS =
 export const SQUAD_NFT_ADDRESS = import.meta.env.VITE_SQUAD_NFT_ADDRESS as
   `0x${string}` | undefined;
 
+/** Blind-pack squad mint (77 editions per player, 847 total) */
+export const SQUAD_NFT_V2_ADDRESS = import.meta.env.VITE_SQUAD_NFT_V2_ADDRESS as
+  `0x${string}` | undefined;
+
+export const SQUAD_V2_MAX_PER_PLAYER = Number(import.meta.env.VITE_SQUAD_V2_MAX_PER_PLAYER ?? 77);
+export const SQUAD_V2_MAX_SUPPLY = SQUAD_V2_MAX_PER_PLAYER * 11;
+
 export const PREDICTION_POOL_ADDRESS = import.meta.env.VITE_PREDICTION_POOL_ADDRESS as
   `0x${string}` | undefined;
 
 export const PREDICTION_SPONSOR_ADDRESS = import.meta.env.VITE_PREDICTION_SPONSOR_ADDRESS as
   `0x${string}` | undefined;
+
+export const RAFFLE_TICKET_ADDRESS = import.meta.env.VITE_RAFFLE_TICKET_ADDRESS as
+  `0x${string}` | undefined;
+
+export function isRaffleTicketConfigured(): boolean {
+  return Boolean(RAFFLE_TICKET_ADDRESS?.startsWith("0x"));
+}
 
 export const USDC_DECIMALS = 6;
 
@@ -28,6 +42,13 @@ export const SPONSORED_PREDICTION_MAX = Number(
 
 export const MINT_BASE_PRICE_BCC = 770n * BCC_UNIT;
 export const MINT_PRICE_INCREMENT_BCC = 70n * BCC_UNIT;
+
+export const SQUAD_V2_BASE_PRICE_BCC = BigInt(
+  import.meta.env.VITE_SQUAD_V2_BASE_PRICE_BCC ?? String(770n * BCC_UNIT),
+);
+export const SQUAD_V2_PRICE_INCREMENT_BCC = BigInt(
+  import.meta.env.VITE_SQUAD_V2_PRICE_INCREMENT_BCC ?? String(7n * BCC_UNIT),
+);
 
 /** Legacy USDC curve constants — display/history only */
 export const MINT_BASE_PRICE_USDC = 770_000n;
@@ -80,6 +101,15 @@ export function formatBcc(amount: bigint, decimals = BCC_DECIMALS): string {
 
 export function isSquadContractConfigured(): boolean {
   return Boolean(SQUAD_NFT_ADDRESS?.startsWith("0x"));
+}
+
+export function isSquadV2Configured(): boolean {
+  return Boolean(SQUAD_NFT_V2_ADDRESS?.startsWith("0x"));
+}
+
+/** Active mint target — v2 blind packs when deployed, else legacy v1 */
+export function isActiveSquadMintConfigured(): boolean {
+  return isSquadV2Configured() || isSquadContractConfigured();
 }
 
 export function isPredictionPoolConfigured(): boolean {
@@ -256,6 +286,195 @@ export const SQUAD_NFT_ABI = [
   },
 ] as const;
 
+export const SQUAD_NFT_V2_ABI = [
+  {
+    type: "function",
+    name: "mintPack",
+    stateMutability: "nonpayable",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "openPack",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "openPackWithJoker",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "tokenId", type: "uint256" },
+      { name: "playerId", type: "uint256" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "grantJoker",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "account", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "currentMintPrice",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "nextMintPrice",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "mintCount",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "remainingPacks",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "playerMintCount",
+    stateMutability: "view",
+    inputs: [{ name: "playerId", type: "uint256" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "playerRemaining",
+    stateMutability: "view",
+    inputs: [{ name: "playerId", type: "uint256" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "earlyBeliever",
+    stateMutability: "view",
+    inputs: [{ name: "account", type: "address" }],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "jokerBalance",
+    stateMutability: "view",
+    inputs: [{ name: "account", type: "address" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "revealed",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "tokenPlayerId",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "editionOf",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "mintOrderOf",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "balanceOf",
+    stateMutability: "view",
+    inputs: [{ name: "owner", type: "address" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "tokenOfOwnerByIndex",
+    stateMutability: "view",
+    inputs: [
+      { name: "owner", type: "address" },
+      { name: "index", type: "uint256" },
+    ],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "ownerOf",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ type: "address" }],
+  },
+  {
+    type: "function",
+    name: "tokenURI",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ type: "string" }],
+  },
+  {
+    type: "function",
+    name: "BASE_PRICE",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "PRICE_INCREMENT",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "event",
+    name: "PackMinted",
+    inputs: [
+      { name: "minter", type: "address", indexed: true },
+      { name: "tokenId", type: "uint256", indexed: true },
+      { name: "mintOrder", type: "uint256", indexed: false },
+      { name: "pricePaid", type: "uint256", indexed: false },
+      { name: "nextPrice", type: "uint256", indexed: false },
+    ],
+  },
+  {
+    type: "event",
+    name: "PackOpened",
+    inputs: [
+      { name: "opener", type: "address", indexed: true },
+      { name: "tokenId", type: "uint256", indexed: true },
+      { name: "playerId", type: "uint256", indexed: false },
+      { name: "edition", type: "uint256", indexed: false },
+      { name: "mintOrder", type: "uint256", indexed: false },
+      { name: "usedJoker", type: "bool", indexed: false },
+    ],
+  },
+] as const;
+
 export const PREDICTION_POOL_ABI = [
   {
     type: "event",
@@ -338,5 +557,113 @@ export const PREDICTION_SPONSOR_ABI = [
     stateMutability: "view",
     inputs: [],
     outputs: [{ type: "uint256" }],
+  },
+] as const;
+
+export const CULTURE_RAFFLE_ABI = [
+  {
+    type: "function",
+    name: "mint",
+    stateMutability: "nonpayable",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "allowed",
+    stateMutability: "view",
+    inputs: [{ name: "user", type: "address" }],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "hasMinted",
+    stateMutability: "view",
+    inputs: [{ name: "user", type: "address" }],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "totalMinted",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "entriesClosed",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "closeBlock",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "drawCommit",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "bytes32" }],
+  },
+  {
+    type: "function",
+    name: "drawComplete",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "winnerTokenId",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "winner",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "address" }],
+  },
+  {
+    type: "function",
+    name: "prizeClaimed",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "prizePoolBalance",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "claimPrize",
+    stateMutability: "nonpayable",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "balanceOf",
+    stateMutability: "view",
+    inputs: [{ name: "owner", type: "address" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "ownerOf",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ type: "address" }],
   },
 ] as const;

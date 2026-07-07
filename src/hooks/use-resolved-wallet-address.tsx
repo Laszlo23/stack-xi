@@ -31,7 +31,7 @@ export function useResolvedWalletAddress(): `0x${string}` | undefined {
   return address ?? privyFallback;
 }
 
-/** True only when wagmi can sign — not merely when Privy has a cached address. */
+/** True when wagmi can sign — not merely when Privy has a cached address. */
 export function useResolvedWalletConnected(): boolean {
   const { isConnected } = useAccount();
   return isConnected;

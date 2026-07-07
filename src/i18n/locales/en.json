@@ -1,0 +1,251 @@
+{
+  "common": {
+    "language": "Language",
+    "loading": "Loading…",
+    "refresh": "Refresh",
+    "save": "Save",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "cta": {
+    "predict": "Predict",
+    "claim": "Claim {{count}}",
+    "claim_one": "Claim reward"
+  },
+  "quickPredict": {
+    "label": "Quick pick",
+    "untilKickoff": "until kickoff"
+  },
+  "farcasterAuth": {
+    "signIn": "Sign in with Farcaster",
+    "short": "Farcaster",
+    "signingIn": "Opening Farcaster…",
+    "signedIn": "Farcaster connected",
+    "incomplete": "Farcaster sign-in incomplete — try again.",
+    "failed": "Farcaster sign-in failed."
+  },
+  "home": {
+    "hero": {
+      "badge": "World Cup matchday",
+      "badgeLeague": "Bundesliga matchday",
+      "headline": "The World Cup is a game.",
+      "headlineAccent": "Now you can play it.",
+      "headlineLeague": "Football never stops.",
+      "headlineLeagueAccent": "Predict the next match.",
+      "subheadline": "Predict today's match. Compete with thousands of fans. Build your football legacy.",
+      "ctaPredict": "Predict Now",
+      "ctaStory": "Watch Story"
+    },
+    "live": {
+      "countdown": "Until kickoff",
+      "predictions": "Predictions",
+      "prizePool": "Prize pool",
+      "xpReward": "XP reward",
+      "streak": "Streak",
+      "fansPlaying": "Join {{count}}+ fans playing today",
+      "challengeFriend": "Challenge friend"
+    },
+    "social": {
+      "eyebrow": "Live community",
+      "predictions": "Predictions",
+      "latestPicks": "Latest picks"
+    },
+    "leaderboard": {
+      "title": "Matchday Leaders",
+      "beatThem": "Beat Them",
+      "you": "You?",
+      "join": "Join →"
+    },
+    "storyTeaser": {
+      "line1": "Pepe wasn't always lucky.",
+      "line2": "He used to watch.",
+      "line3": "Then luck started chasing him.",
+      "cta": "Read the Story →"
+    },
+    "activity": {
+      "title": "Community pulse",
+      "viewAll": "View feed →"
+    },
+    "predict": {
+      "eyebrow": "Live match",
+      "title": "Who wins?",
+      "pick": "Pick {{team}}",
+      "locked": "You locked {{team}}. Now tell the world.",
+      "sharePrompt": "Share your call before kickoff.",
+      "castFc": "Cast on Farcaster",
+      "postX": "Post on X",
+      "lockOnchain": "Lock it onchain →"
+    },
+    "journey": {
+      "eyebrow": "Your Pepe journey",
+      "nextUnlock": "{{xp}} XP until {{tier}}",
+      "maxTier": "Legend status unlocked 🐸",
+      "viewProfile": "View profile"
+    },
+    "culture": {
+      "eyebrow": "Culture score",
+      "title": "Every prediction builds your legacy.",
+      "body": "Every pick, cast, and matchday moment adds to your Culture Score — how the community knows you showed up.",
+      "rewards": "Your score shapes your BCC rewards. Tokenomics are for builders who want to go deeper."
+    },
+    "origin": {
+      "eyebrow": "Origin story",
+      "title": "How Pepe became STACK XI",
+      "subtitle": "Four chapters. One culture arc. Every card is one tap away from Farcaster.",
+      "fullLore": "Scroll the full visual lore →"
+    },
+    "builders": {
+      "eyebrow": "Builders",
+      "title": "Semifinal + Final on Stacks",
+      "subtitle": "Base believers get first access when the tournament hits the Bitcoin finals arc.",
+      "finalsCta": "Finals teaser →"
+    }
+  },
+  "crowdPressure": {
+    "title": "Crowd pressure",
+    "live": "Market moving in real time",
+    "homeSide": "{{percent}}% home side",
+    "awaySide": "{{percent}}% away side",
+    "quotes": [
+      "Crowd is loud. Pepe is calm. That's the edge. 🐸",
+      "They chase hype. You chase the whistle. Different sport.",
+      "Luck doesn't ask permission — and neither should your conviction.",
+      "The masses panic at 89'. Builders lock in before kickoff.",
+      "Pepe doesn't chase. Luck does. Tag in.",
+      "Consensus is comfortable. Correct picks rarely are.",
+      "Your pick. Your stake. Your story on Base.",
+      "Wrong crowd, right read — that's the whole game.",
+      "Fortune favors the frog who ships before the whistle.",
+      "Everyone has an opinion. Few have a receipt.",
+      "The feed screams. The pitch decides. Stay seated.",
+      "Conviction beats consensus. Every matchday."
+    ]
+  },
+  "ticker": {
+    "lockPick": "Lock your pick",
+    "opensIn": "Predictions open in",
+    "lockCta": "Lock pick",
+    "tagline": "Base BCC · Building Culture layer on Base"
+  },
+  "predict": {
+    "socialSport": "Social prediction sport · not finance",
+    "stepOf": "Step {{step}} of {{total}}",
+    "yourPick": "Your pick",
+    "stake": "Stake",
+    "connectWallet": "Connect Base wallet",
+    "connecting": "Connecting wallet…",
+    "lockPrediction": "Lock in prediction",
+    "lockSponsored": "Lock sponsored prediction · {{amount}} free",
+    "youreIn": "You're in",
+    "makeAnother": "Make another prediction",
+    "windowClosed": "Live match window closed. Predictions lock at kickoff — receipts are in.",
+    "openUntil": "Open until kickoff · {{time}} left",
+    "squadBoost": "Squad boost"
+  },
+  "squad": {
+    "perksTitle": "Squad perks",
+    "perksLoading": "Loading squad perks…",
+    "perksEmpty": "Mint and open a squad pack to unlock prediction boosts, merch codes, and culture multipliers.",
+    "perksActive": "Active squad perks",
+    "mint": {
+      "title": "Blind squad packs",
+      "subtitle": "847 sealed packs · 77 editions per player · global bonding curve",
+      "mintPack": "Mint sealed pack",
+      "myPacks": "My packs",
+      "openPack": "Open pack",
+      "earlyBeliever": "Early believer slots",
+      "genesisTitle": "Genesis XI",
+      "genesisNote": "Original 11 one-of-ones — legend perks forever (+25% prediction boost)."
+    }
+  },
+  "claim": {
+    "title": "Your predictions",
+    "subtitle": "Onchain match picks",
+    "howItWorks": "Your BCC stake sits in the onchain prediction pool. After the final whistle, winners claim here — treasury sends rewards to this wallet. No gas to receive.",
+    "autoNote": "Payouts are not automatic on-chain yet (v2 claim contract coming). Tap Claim so treasury can route your pool share to this address.",
+    "claimEta": "Usually within 24 hours after you claim.",
+    "readyCount": "{{count}} winning pick ready to claim.",
+    "readyCount_other": "{{count}} winning picks ready to claim.",
+    "claimButton": "Claim BCC rewards",
+    "claimSubmitted": "Claim logged — treasury payout usually within 24 hours after you claim.",
+    "paid": "Reward sent to this wallet.",
+    "noPredictions": "No predictions yet for this wallet.",
+    "firstPick": "Make your first pick →",
+    "squadBoostHint": "Squad boost {{boost}} applied when you claim.",
+    "squadBoostApplied": "Squad boost {{boost}} locked in for treasury payout.",
+    "outcome": {
+      "awaiting": "Awaiting result",
+      "lost": "Lost",
+      "claimable": "Won · claim ready",
+      "claimed": "Claim submitted",
+      "paid": "Paid to wallet"
+    }
+  },
+  "onboarding": {
+    "connectWallet": "Connect wallet",
+    "makePick": "Pick a team",
+    "shareCast": "Share cast (optional)",
+    "claimReady": "Claim when ready"
+  },
+  "hero": {
+    "wonClaim": "Won a pick? Claim BCC on profile after the whistle.",
+    "claimableBanner": "{{count}} winning pick ready — claim on profile.",
+    "claimableBanner_other": "{{count}} winning picks ready — claim on profile.",
+    "questCta": "Win 7,777,777 BCC — culture quest →"
+  },
+  "quest": {
+    "eyebrow": "Culture quest",
+    "title": "7.7M BCC raffle",
+    "subtitle": "Follow, engage, mint a free ticket. One winner takes {{prize}} BCC — transparent on-chain draw.",
+    "verify": "Verify",
+    "openPost": "Open post",
+    "repost": "Repost",
+    "comment": "Comment",
+    "openCast": "Open cast",
+    "mintTicket": "Mint raffle ticket",
+    "ticketMinted": "Ticket minted",
+    "mintSuccess": "Ticket minted — tx {{tx}}…",
+    "viewTicketTx": "View mint transaction",
+    "profileLink": "Profile & missions →",
+    "steps": {
+      "connect": {
+        "title": "Connect wallet + social",
+        "description": "Link Base wallet, X, and Farcaster to verify quests.",
+        "cta": "Connect wallet"
+      },
+      "followX": {
+        "title": "Follow @buildingcultu3",
+        "description": "Follow the official STACK XI account on X."
+      },
+      "engageX": {
+        "title": "Engage on X",
+        "description": "Like, repost, or comment on the campaign post."
+      },
+      "engageFc": {
+        "title": "Engage on Farcaster",
+        "description": "Like, recast, or reply on Leonardo's campaign cast."
+      },
+      "mint": {
+        "title": "Mint raffle ticket",
+        "description": "Free ERC721 ticket — you pay Base gas only. One per wallet."
+      }
+    },
+    "raffle": {
+      "eyebrow": "Transparent draw",
+      "title": "Public raffle proof",
+      "howItWorks": "Commit–reveal draw on Base. Every ticket is an on-chain ERC721. Winner index = hash(secret, close block) mod total tickets.",
+      "prize": "Grand prize",
+      "poolFunded": "Pool funded",
+      "tickets": "Tickets minted",
+      "deadline": "Entry deadline",
+      "phase": "Status",
+      "winner": "Winner",
+      "ticketId": "Ticket",
+      "commit": "Draw commit",
+      "closeBlock": "Close block",
+      "formula": "winnerTokenId = 1 + keccak256(secret, blockhash(closeBlock)) % totalMinted",
+      "contract": "View contract",
+      "entryList": "All entries"
+    }
+  }
+}

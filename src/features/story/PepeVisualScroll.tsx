@@ -84,9 +84,9 @@ function VisualChapter({ chapter, index }: { chapter: PepeVisualChapter; index: 
   );
 }
 
-export function PepeVisualScroll() {
+export function PepeVisualScroll({ id = "visual-story" }: { id?: string }) {
   return (
-    <section id="visual-story" className="relative overflow-hidden border-y border-border/60">
+    <section id={id} className="relative overflow-hidden border-y border-border/60">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,oklch(0.88_0.28_145/0.08),transparent_50%)]" />
 
       <div className="relative mx-auto max-w-6xl px-4 pb-6 pt-16 sm:px-6 sm:pt-20">

@@ -9,21 +9,36 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorldCupRouteImport } from './routes/world-cup'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SquadRouteImport } from './routes/squad'
+import { Route as QuestRouteImport } from './routes/quest'
 import { Route as ProofRouteImport } from './routes/proof'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PlayRouteImport } from './routes/play'
 import { Route as PartnersRouteImport } from './routes/partners'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as LabsRouteImport } from './routes/labs'
 import { Route as ImprintRouteImport } from './routes/imprint'
 import { Route as FinalsRouteImport } from './routes/finals'
 import { Route as FeedRouteImport } from './routes/feed'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DefiRouteImport } from './routes/defi'
 import { Route as CalendarRouteImport } from './routes/calendar'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StoryIndexRouteImport } from './routes/story/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as UHandleRouteImport } from './routes/u/$handle'
+import { Route as StoryVisualRouteImport } from './routes/story/visual'
+import { Route as StoryChapterIdRouteImport } from './routes/story/$chapterId'
+import { Route as MatchSlugRouteImport } from './routes/match/$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as ApiLeaderboardRouteImport } from './routes/api/leaderboard'
 import { Route as ApiFeedIndexRouteImport } from './routes/api/feed/index'
+import { Route as ApiClaimsIndexRouteImport } from './routes/api/claims/index'
+import { Route as PredictResultMatchIdRouteImport } from './routes/predict/result/$matchId'
 import { Route as ApiTelegramWebhookRouteImport } from './routes/api/telegram/webhook'
 import { Route as ApiTelegramPrepareShareRouteImport } from './routes/api/telegram/prepare-share'
 import { Route as ApiSwapStatusRouteImport } from './routes/api/swap/status'
@@ -32,24 +47,62 @@ import { Route as ApiSwapPriceRouteImport } from './routes/api/swap/price'
 import { Route as ApiSponsorEligibilityRouteImport } from './routes/api/sponsor/eligibility'
 import { Route as ApiSocialVerifyRouteImport } from './routes/api/social/verify'
 import { Route as ApiSocialStatusRouteImport } from './routes/api/social/status'
+import { Route as ApiRaffleStatusRouteImport } from './routes/api/raffle/status'
+import { Route as ApiRaffleEntriesRouteImport } from './routes/api/raffle/entries'
+import { Route as ApiQuestVerifyRouteImport } from './routes/api/quest/verify'
+import { Route as ApiQuestStatusRouteImport } from './routes/api/quest/status'
+import { Route as ApiQuestApproveMintRouteImport } from './routes/api/quest/approve-mint'
 import { Route as ApiPredictionsHistoryRouteImport } from './routes/api/predictions/history'
+import { Route as ApiOgMatchRouteImport } from './routes/api/og/match'
+import { Route as ApiMatchesScheduleRouteImport } from './routes/api/matches/schedule'
+import { Route as ApiMatchesResultsRouteImport } from './routes/api/matches/results'
+import { Route as ApiMatchesLiveRouteImport } from './routes/api/matches/live'
+import { Route as ApiMatchesActiveRouteImport } from './routes/api/matches/active'
 import { Route as ApiMarketingXPostRouteImport } from './routes/api/marketing/x-post'
+import { Route as ApiLifiStepTransactionRouteImport } from './routes/api/lifi/step-transaction'
+import { Route as ApiLifiStatusRouteImport } from './routes/api/lifi/status'
+import { Route as ApiLifiQuoteRouteImport } from './routes/api/lifi/quote'
 import { Route as ApiFarcasterCastRouteImport } from './routes/api/farcaster/cast'
+import { Route as ApiClaimsRequestRouteImport } from './routes/api/claims/request'
+import { Route as ApiAdminLoginRouteImport } from './routes/api/admin/login'
+import { Route as ApiAdminDashboardRouteImport } from './routes/api/admin/dashboard'
+import { Route as ApiActivityRecentRouteImport } from './routes/api/activity/recent'
+import { Route as ApiAdminRaffleIndexRouteImport } from './routes/api/admin/raffle/index'
+import { Route as ApiMatchesMatchIdStatsRouteImport } from './routes/api/matches/$matchId/stats'
+import { Route as ApiLifiV1SplatRouteImport } from './routes/api/lifi/v1/$'
 import { Route as ApiAuthXStartRouteImport } from './routes/api/auth/x/start'
 import { Route as ApiAuthXCallbackRouteImport } from './routes/api/auth/x/callback'
 import { Route as ApiAuthWorldVerifyRouteImport } from './routes/api/auth/world/verify'
 import { Route as ApiAuthWorldStartRouteImport } from './routes/api/auth/world/start'
 import { Route as ApiAuthTelegramVerifyRouteImport } from './routes/api/auth/telegram/verify'
 import { Route as ApiAuthFarcasterVerifyRouteImport } from './routes/api/auth/farcaster/verify'
+import { Route as ApiAuthFarcasterLinkAccountRouteImport } from './routes/api/auth/farcaster/link-account'
 import { Route as ApiAgentsPepeTickRouteImport } from './routes/api/agents/pepe/tick'
 import { Route as ApiAgentsPepeApproveRouteImport } from './routes/api/agents/pepe/approve'
+import { Route as ApiAgentsMatchOpsTickRouteImport } from './routes/api/agents/match-ops/tick'
 import { Route as ApiAgentsLuckTickRouteImport } from './routes/api/agents/luck/tick'
 import { Route as ApiAgentsLuckApproveRouteImport } from './routes/api/agents/luck/approve'
 import { Route as ApiAgentsCultureOpsTickRouteImport } from './routes/api/agents/culture-ops/tick'
+import { Route as ApiAdminClaimsMarkPaidRouteImport } from './routes/api/admin/claims/mark-paid'
 
+const WorldCupRoute = WorldCupRouteImport.update({
+  id: '/world-cup',
+  path: '/world-cup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SquadRoute = SquadRouteImport.update({
+  id: '/squad',
+  path: '/squad',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestRoute = QuestRouteImport.update({
+  id: '/quest',
+  path: '/quest',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProofRoute = ProofRouteImport.update({
@@ -67,9 +120,19 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlayRoute = PlayRouteImport.update({
+  id: '/play',
+  path: '/play',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PartnersRoute = PartnersRouteImport.update({
   id: '/partners',
   path: '/partners',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LabsRoute = LabsRouteImport.update({
@@ -92,6 +155,11 @@ const FeedRoute = FeedRouteImport.update({
   path: '/feed',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DefiRoute = DefiRouteImport.update({
   id: '/defi',
   path: '/defi',
@@ -102,9 +170,19 @@ const CalendarRoute = CalendarRouteImport.update({
   path: '/calendar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoryIndexRoute = StoryIndexRouteImport.update({
+  id: '/story/',
+  path: '/story/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -112,14 +190,49 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
   path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UHandleRoute = UHandleRouteImport.update({
+  id: '/u/$handle',
+  path: '/u/$handle',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoryVisualRoute = StoryVisualRouteImport.update({
+  id: '/story/visual',
+  path: '/story/visual',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoryChapterIdRoute = StoryChapterIdRouteImport.update({
+  id: '/story/$chapterId',
+  path: '/story/$chapterId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MatchSlugRoute = MatchSlugRouteImport.update({
+  id: '/match/$slug',
+  path: '/match/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiLeaderboardRoute = ApiLeaderboardRouteImport.update({
+  id: '/api/leaderboard',
+  path: '/api/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiFeedIndexRoute = ApiFeedIndexRouteImport.update({
   id: '/api/feed/',
   path: '/api/feed/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiClaimsIndexRoute = ApiClaimsIndexRouteImport.update({
+  id: '/api/claims/',
+  path: '/api/claims/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PredictResultMatchIdRoute = PredictResultMatchIdRouteImport.update({
+  id: '/predict/result/$matchId',
+  path: '/predict/result/$matchId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiTelegramWebhookRoute = ApiTelegramWebhookRouteImport.update({
@@ -162,9 +275,59 @@ const ApiSocialStatusRoute = ApiSocialStatusRouteImport.update({
   path: '/api/social/status',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiRaffleStatusRoute = ApiRaffleStatusRouteImport.update({
+  id: '/api/raffle/status',
+  path: '/api/raffle/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRaffleEntriesRoute = ApiRaffleEntriesRouteImport.update({
+  id: '/api/raffle/entries',
+  path: '/api/raffle/entries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiQuestVerifyRoute = ApiQuestVerifyRouteImport.update({
+  id: '/api/quest/verify',
+  path: '/api/quest/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiQuestStatusRoute = ApiQuestStatusRouteImport.update({
+  id: '/api/quest/status',
+  path: '/api/quest/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiQuestApproveMintRoute = ApiQuestApproveMintRouteImport.update({
+  id: '/api/quest/approve-mint',
+  path: '/api/quest/approve-mint',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPredictionsHistoryRoute = ApiPredictionsHistoryRouteImport.update({
   id: '/api/predictions/history',
   path: '/api/predictions/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOgMatchRoute = ApiOgMatchRouteImport.update({
+  id: '/api/og/match',
+  path: '/api/og/match',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMatchesScheduleRoute = ApiMatchesScheduleRouteImport.update({
+  id: '/api/matches/schedule',
+  path: '/api/matches/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMatchesResultsRoute = ApiMatchesResultsRouteImport.update({
+  id: '/api/matches/results',
+  path: '/api/matches/results',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMatchesLiveRoute = ApiMatchesLiveRouteImport.update({
+  id: '/api/matches/live',
+  path: '/api/matches/live',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMatchesActiveRoute = ApiMatchesActiveRouteImport.update({
+  id: '/api/matches/active',
+  path: '/api/matches/active',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiMarketingXPostRoute = ApiMarketingXPostRouteImport.update({
@@ -172,9 +335,59 @@ const ApiMarketingXPostRoute = ApiMarketingXPostRouteImport.update({
   path: '/api/marketing/x-post',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiLifiStepTransactionRoute = ApiLifiStepTransactionRouteImport.update({
+  id: '/api/lifi/step-transaction',
+  path: '/api/lifi/step-transaction',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLifiStatusRoute = ApiLifiStatusRouteImport.update({
+  id: '/api/lifi/status',
+  path: '/api/lifi/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLifiQuoteRoute = ApiLifiQuoteRouteImport.update({
+  id: '/api/lifi/quote',
+  path: '/api/lifi/quote',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiFarcasterCastRoute = ApiFarcasterCastRouteImport.update({
   id: '/api/farcaster/cast',
   path: '/api/farcaster/cast',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiClaimsRequestRoute = ApiClaimsRequestRouteImport.update({
+  id: '/api/claims/request',
+  path: '/api/claims/request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminLoginRoute = ApiAdminLoginRouteImport.update({
+  id: '/api/admin/login',
+  path: '/api/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminDashboardRoute = ApiAdminDashboardRouteImport.update({
+  id: '/api/admin/dashboard',
+  path: '/api/admin/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiActivityRecentRoute = ApiActivityRecentRouteImport.update({
+  id: '/api/activity/recent',
+  path: '/api/activity/recent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminRaffleIndexRoute = ApiAdminRaffleIndexRouteImport.update({
+  id: '/api/admin/raffle/',
+  path: '/api/admin/raffle/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMatchesMatchIdStatsRoute = ApiMatchesMatchIdStatsRouteImport.update({
+  id: '/api/matches/$matchId/stats',
+  path: '/api/matches/$matchId/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLifiV1SplatRoute = ApiLifiV1SplatRouteImport.update({
+  id: '/api/lifi/v1/$',
+  path: '/api/lifi/v1/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthXStartRoute = ApiAuthXStartRouteImport.update({
@@ -207,6 +420,12 @@ const ApiAuthFarcasterVerifyRoute = ApiAuthFarcasterVerifyRouteImport.update({
   path: '/api/auth/farcaster/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthFarcasterLinkAccountRoute =
+  ApiAuthFarcasterLinkAccountRouteImport.update({
+    id: '/api/auth/farcaster/link-account',
+    path: '/api/auth/farcaster/link-account',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiAgentsPepeTickRoute = ApiAgentsPepeTickRouteImport.update({
   id: '/api/agents/pepe/tick',
   path: '/api/agents/pepe/tick',
@@ -215,6 +434,11 @@ const ApiAgentsPepeTickRoute = ApiAgentsPepeTickRouteImport.update({
 const ApiAgentsPepeApproveRoute = ApiAgentsPepeApproveRouteImport.update({
   id: '/api/agents/pepe/approve',
   path: '/api/agents/pepe/approve',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAgentsMatchOpsTickRoute = ApiAgentsMatchOpsTickRouteImport.update({
+  id: '/api/agents/match-ops/tick',
+  path: '/api/agents/match-ops/tick',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAgentsLuckTickRoute = ApiAgentsLuckTickRouteImport.update({
@@ -232,25 +456,60 @@ const ApiAgentsCultureOpsTickRoute = ApiAgentsCultureOpsTickRouteImport.update({
   path: '/api/agents/culture-ops/tick',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminClaimsMarkPaidRoute = ApiAdminClaimsMarkPaidRouteImport.update({
+  id: '/api/admin/claims/mark-paid',
+  path: '/api/admin/claims/mark-paid',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/calendar': typeof CalendarRoute
   '/defi': typeof DefiRoute
+  '/faq': typeof FaqRoute
   '/feed': typeof FeedRoute
   '/finals': typeof FinalsRoute
   '/imprint': typeof ImprintRoute
   '/labs': typeof LabsRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/partners': typeof PartnersRoute
+  '/play': typeof PlayRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/proof': typeof ProofRoute
+  '/quest': typeof QuestRoute
+  '/squad': typeof SquadRoute
   '/terms': typeof TermsRoute
+  '/world-cup': typeof WorldCupRoute
+  '/api/leaderboard': typeof ApiLeaderboardRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/match/$slug': typeof MatchSlugRoute
+  '/story/$chapterId': typeof StoryChapterIdRoute
+  '/story/visual': typeof StoryVisualRoute
+  '/u/$handle': typeof UHandleRoute
   '/blog/': typeof BlogIndexRoute
+  '/story/': typeof StoryIndexRoute
+  '/api/activity/recent': typeof ApiActivityRecentRoute
+  '/api/admin/dashboard': typeof ApiAdminDashboardRoute
+  '/api/admin/login': typeof ApiAdminLoginRoute
+  '/api/claims/request': typeof ApiClaimsRequestRoute
   '/api/farcaster/cast': typeof ApiFarcasterCastRoute
+  '/api/lifi/quote': typeof ApiLifiQuoteRoute
+  '/api/lifi/status': typeof ApiLifiStatusRoute
+  '/api/lifi/step-transaction': typeof ApiLifiStepTransactionRoute
   '/api/marketing/x-post': typeof ApiMarketingXPostRoute
+  '/api/matches/active': typeof ApiMatchesActiveRoute
+  '/api/matches/live': typeof ApiMatchesLiveRoute
+  '/api/matches/results': typeof ApiMatchesResultsRoute
+  '/api/matches/schedule': typeof ApiMatchesScheduleRoute
+  '/api/og/match': typeof ApiOgMatchRoute
   '/api/predictions/history': typeof ApiPredictionsHistoryRoute
+  '/api/quest/approve-mint': typeof ApiQuestApproveMintRoute
+  '/api/quest/status': typeof ApiQuestStatusRoute
+  '/api/quest/verify': typeof ApiQuestVerifyRoute
+  '/api/raffle/entries': typeof ApiRaffleEntriesRoute
+  '/api/raffle/status': typeof ApiRaffleStatusRoute
   '/api/social/status': typeof ApiSocialStatusRoute
   '/api/social/verify': typeof ApiSocialVerifyRoute
   '/api/sponsor/eligibility': typeof ApiSponsorEligibilityRoute
@@ -259,37 +518,75 @@ export interface FileRoutesByFullPath {
   '/api/swap/status': typeof ApiSwapStatusRoute
   '/api/telegram/prepare-share': typeof ApiTelegramPrepareShareRoute
   '/api/telegram/webhook': typeof ApiTelegramWebhookRoute
+  '/predict/result/$matchId': typeof PredictResultMatchIdRoute
+  '/api/claims/': typeof ApiClaimsIndexRoute
   '/api/feed/': typeof ApiFeedIndexRoute
+  '/api/admin/claims/mark-paid': typeof ApiAdminClaimsMarkPaidRoute
   '/api/agents/culture-ops/tick': typeof ApiAgentsCultureOpsTickRoute
   '/api/agents/luck/approve': typeof ApiAgentsLuckApproveRoute
   '/api/agents/luck/tick': typeof ApiAgentsLuckTickRoute
+  '/api/agents/match-ops/tick': typeof ApiAgentsMatchOpsTickRoute
   '/api/agents/pepe/approve': typeof ApiAgentsPepeApproveRoute
   '/api/agents/pepe/tick': typeof ApiAgentsPepeTickRoute
+  '/api/auth/farcaster/link-account': typeof ApiAuthFarcasterLinkAccountRoute
   '/api/auth/farcaster/verify': typeof ApiAuthFarcasterVerifyRoute
   '/api/auth/telegram/verify': typeof ApiAuthTelegramVerifyRoute
   '/api/auth/world/start': typeof ApiAuthWorldStartRoute
   '/api/auth/world/verify': typeof ApiAuthWorldVerifyRoute
   '/api/auth/x/callback': typeof ApiAuthXCallbackRoute
   '/api/auth/x/start': typeof ApiAuthXStartRoute
+  '/api/lifi/v1/$': typeof ApiLifiV1SplatRoute
+  '/api/matches/$matchId/stats': typeof ApiMatchesMatchIdStatsRoute
+  '/api/admin/raffle/': typeof ApiAdminRaffleIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/calendar': typeof CalendarRoute
   '/defi': typeof DefiRoute
+  '/faq': typeof FaqRoute
   '/feed': typeof FeedRoute
   '/finals': typeof FinalsRoute
   '/imprint': typeof ImprintRoute
   '/labs': typeof LabsRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/partners': typeof PartnersRoute
+  '/play': typeof PlayRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/proof': typeof ProofRoute
+  '/quest': typeof QuestRoute
+  '/squad': typeof SquadRoute
   '/terms': typeof TermsRoute
+  '/world-cup': typeof WorldCupRoute
+  '/api/leaderboard': typeof ApiLeaderboardRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/match/$slug': typeof MatchSlugRoute
+  '/story/$chapterId': typeof StoryChapterIdRoute
+  '/story/visual': typeof StoryVisualRoute
+  '/u/$handle': typeof UHandleRoute
   '/blog': typeof BlogIndexRoute
+  '/story': typeof StoryIndexRoute
+  '/api/activity/recent': typeof ApiActivityRecentRoute
+  '/api/admin/dashboard': typeof ApiAdminDashboardRoute
+  '/api/admin/login': typeof ApiAdminLoginRoute
+  '/api/claims/request': typeof ApiClaimsRequestRoute
   '/api/farcaster/cast': typeof ApiFarcasterCastRoute
+  '/api/lifi/quote': typeof ApiLifiQuoteRoute
+  '/api/lifi/status': typeof ApiLifiStatusRoute
+  '/api/lifi/step-transaction': typeof ApiLifiStepTransactionRoute
   '/api/marketing/x-post': typeof ApiMarketingXPostRoute
+  '/api/matches/active': typeof ApiMatchesActiveRoute
+  '/api/matches/live': typeof ApiMatchesLiveRoute
+  '/api/matches/results': typeof ApiMatchesResultsRoute
+  '/api/matches/schedule': typeof ApiMatchesScheduleRoute
+  '/api/og/match': typeof ApiOgMatchRoute
   '/api/predictions/history': typeof ApiPredictionsHistoryRoute
+  '/api/quest/approve-mint': typeof ApiQuestApproveMintRoute
+  '/api/quest/status': typeof ApiQuestStatusRoute
+  '/api/quest/verify': typeof ApiQuestVerifyRoute
+  '/api/raffle/entries': typeof ApiRaffleEntriesRoute
+  '/api/raffle/status': typeof ApiRaffleStatusRoute
   '/api/social/status': typeof ApiSocialStatusRoute
   '/api/social/verify': typeof ApiSocialVerifyRoute
   '/api/sponsor/eligibility': typeof ApiSponsorEligibilityRoute
@@ -298,38 +595,76 @@ export interface FileRoutesByTo {
   '/api/swap/status': typeof ApiSwapStatusRoute
   '/api/telegram/prepare-share': typeof ApiTelegramPrepareShareRoute
   '/api/telegram/webhook': typeof ApiTelegramWebhookRoute
+  '/predict/result/$matchId': typeof PredictResultMatchIdRoute
+  '/api/claims': typeof ApiClaimsIndexRoute
   '/api/feed': typeof ApiFeedIndexRoute
+  '/api/admin/claims/mark-paid': typeof ApiAdminClaimsMarkPaidRoute
   '/api/agents/culture-ops/tick': typeof ApiAgentsCultureOpsTickRoute
   '/api/agents/luck/approve': typeof ApiAgentsLuckApproveRoute
   '/api/agents/luck/tick': typeof ApiAgentsLuckTickRoute
+  '/api/agents/match-ops/tick': typeof ApiAgentsMatchOpsTickRoute
   '/api/agents/pepe/approve': typeof ApiAgentsPepeApproveRoute
   '/api/agents/pepe/tick': typeof ApiAgentsPepeTickRoute
+  '/api/auth/farcaster/link-account': typeof ApiAuthFarcasterLinkAccountRoute
   '/api/auth/farcaster/verify': typeof ApiAuthFarcasterVerifyRoute
   '/api/auth/telegram/verify': typeof ApiAuthTelegramVerifyRoute
   '/api/auth/world/start': typeof ApiAuthWorldStartRoute
   '/api/auth/world/verify': typeof ApiAuthWorldVerifyRoute
   '/api/auth/x/callback': typeof ApiAuthXCallbackRoute
   '/api/auth/x/start': typeof ApiAuthXStartRoute
+  '/api/lifi/v1/$': typeof ApiLifiV1SplatRoute
+  '/api/matches/$matchId/stats': typeof ApiMatchesMatchIdStatsRoute
+  '/api/admin/raffle': typeof ApiAdminRaffleIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/calendar': typeof CalendarRoute
   '/defi': typeof DefiRoute
+  '/faq': typeof FaqRoute
   '/feed': typeof FeedRoute
   '/finals': typeof FinalsRoute
   '/imprint': typeof ImprintRoute
   '/labs': typeof LabsRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/partners': typeof PartnersRoute
+  '/play': typeof PlayRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/proof': typeof ProofRoute
+  '/quest': typeof QuestRoute
+  '/squad': typeof SquadRoute
   '/terms': typeof TermsRoute
+  '/world-cup': typeof WorldCupRoute
+  '/api/leaderboard': typeof ApiLeaderboardRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/match/$slug': typeof MatchSlugRoute
+  '/story/$chapterId': typeof StoryChapterIdRoute
+  '/story/visual': typeof StoryVisualRoute
+  '/u/$handle': typeof UHandleRoute
   '/blog/': typeof BlogIndexRoute
+  '/story/': typeof StoryIndexRoute
+  '/api/activity/recent': typeof ApiActivityRecentRoute
+  '/api/admin/dashboard': typeof ApiAdminDashboardRoute
+  '/api/admin/login': typeof ApiAdminLoginRoute
+  '/api/claims/request': typeof ApiClaimsRequestRoute
   '/api/farcaster/cast': typeof ApiFarcasterCastRoute
+  '/api/lifi/quote': typeof ApiLifiQuoteRoute
+  '/api/lifi/status': typeof ApiLifiStatusRoute
+  '/api/lifi/step-transaction': typeof ApiLifiStepTransactionRoute
   '/api/marketing/x-post': typeof ApiMarketingXPostRoute
+  '/api/matches/active': typeof ApiMatchesActiveRoute
+  '/api/matches/live': typeof ApiMatchesLiveRoute
+  '/api/matches/results': typeof ApiMatchesResultsRoute
+  '/api/matches/schedule': typeof ApiMatchesScheduleRoute
+  '/api/og/match': typeof ApiOgMatchRoute
   '/api/predictions/history': typeof ApiPredictionsHistoryRoute
+  '/api/quest/approve-mint': typeof ApiQuestApproveMintRoute
+  '/api/quest/status': typeof ApiQuestStatusRoute
+  '/api/quest/verify': typeof ApiQuestVerifyRoute
+  '/api/raffle/entries': typeof ApiRaffleEntriesRoute
+  '/api/raffle/status': typeof ApiRaffleStatusRoute
   '/api/social/status': typeof ApiSocialStatusRoute
   '/api/social/verify': typeof ApiSocialVerifyRoute
   '/api/sponsor/eligibility': typeof ApiSponsorEligibilityRoute
@@ -338,39 +673,77 @@ export interface FileRoutesById {
   '/api/swap/status': typeof ApiSwapStatusRoute
   '/api/telegram/prepare-share': typeof ApiTelegramPrepareShareRoute
   '/api/telegram/webhook': typeof ApiTelegramWebhookRoute
+  '/predict/result/$matchId': typeof PredictResultMatchIdRoute
+  '/api/claims/': typeof ApiClaimsIndexRoute
   '/api/feed/': typeof ApiFeedIndexRoute
+  '/api/admin/claims/mark-paid': typeof ApiAdminClaimsMarkPaidRoute
   '/api/agents/culture-ops/tick': typeof ApiAgentsCultureOpsTickRoute
   '/api/agents/luck/approve': typeof ApiAgentsLuckApproveRoute
   '/api/agents/luck/tick': typeof ApiAgentsLuckTickRoute
+  '/api/agents/match-ops/tick': typeof ApiAgentsMatchOpsTickRoute
   '/api/agents/pepe/approve': typeof ApiAgentsPepeApproveRoute
   '/api/agents/pepe/tick': typeof ApiAgentsPepeTickRoute
+  '/api/auth/farcaster/link-account': typeof ApiAuthFarcasterLinkAccountRoute
   '/api/auth/farcaster/verify': typeof ApiAuthFarcasterVerifyRoute
   '/api/auth/telegram/verify': typeof ApiAuthTelegramVerifyRoute
   '/api/auth/world/start': typeof ApiAuthWorldStartRoute
   '/api/auth/world/verify': typeof ApiAuthWorldVerifyRoute
   '/api/auth/x/callback': typeof ApiAuthXCallbackRoute
   '/api/auth/x/start': typeof ApiAuthXStartRoute
+  '/api/lifi/v1/$': typeof ApiLifiV1SplatRoute
+  '/api/matches/$matchId/stats': typeof ApiMatchesMatchIdStatsRoute
+  '/api/admin/raffle/': typeof ApiAdminRaffleIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/calendar'
     | '/defi'
+    | '/faq'
     | '/feed'
     | '/finals'
     | '/imprint'
     | '/labs'
+    | '/leaderboard'
     | '/partners'
+    | '/play'
     | '/privacy'
     | '/profile'
     | '/proof'
+    | '/quest'
+    | '/squad'
     | '/terms'
+    | '/world-cup'
+    | '/api/leaderboard'
     | '/blog/$slug'
+    | '/match/$slug'
+    | '/story/$chapterId'
+    | '/story/visual'
+    | '/u/$handle'
     | '/blog/'
+    | '/story/'
+    | '/api/activity/recent'
+    | '/api/admin/dashboard'
+    | '/api/admin/login'
+    | '/api/claims/request'
     | '/api/farcaster/cast'
+    | '/api/lifi/quote'
+    | '/api/lifi/status'
+    | '/api/lifi/step-transaction'
     | '/api/marketing/x-post'
+    | '/api/matches/active'
+    | '/api/matches/live'
+    | '/api/matches/results'
+    | '/api/matches/schedule'
+    | '/api/og/match'
     | '/api/predictions/history'
+    | '/api/quest/approve-mint'
+    | '/api/quest/status'
+    | '/api/quest/verify'
+    | '/api/raffle/entries'
+    | '/api/raffle/status'
     | '/api/social/status'
     | '/api/social/verify'
     | '/api/sponsor/eligibility'
@@ -379,37 +752,75 @@ export interface FileRouteTypes {
     | '/api/swap/status'
     | '/api/telegram/prepare-share'
     | '/api/telegram/webhook'
+    | '/predict/result/$matchId'
+    | '/api/claims/'
     | '/api/feed/'
+    | '/api/admin/claims/mark-paid'
     | '/api/agents/culture-ops/tick'
     | '/api/agents/luck/approve'
     | '/api/agents/luck/tick'
+    | '/api/agents/match-ops/tick'
     | '/api/agents/pepe/approve'
     | '/api/agents/pepe/tick'
+    | '/api/auth/farcaster/link-account'
     | '/api/auth/farcaster/verify'
     | '/api/auth/telegram/verify'
     | '/api/auth/world/start'
     | '/api/auth/world/verify'
     | '/api/auth/x/callback'
     | '/api/auth/x/start'
+    | '/api/lifi/v1/$'
+    | '/api/matches/$matchId/stats'
+    | '/api/admin/raffle/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/calendar'
     | '/defi'
+    | '/faq'
     | '/feed'
     | '/finals'
     | '/imprint'
     | '/labs'
+    | '/leaderboard'
     | '/partners'
+    | '/play'
     | '/privacy'
     | '/profile'
     | '/proof'
+    | '/quest'
+    | '/squad'
     | '/terms'
+    | '/world-cup'
+    | '/api/leaderboard'
     | '/blog/$slug'
+    | '/match/$slug'
+    | '/story/$chapterId'
+    | '/story/visual'
+    | '/u/$handle'
     | '/blog'
+    | '/story'
+    | '/api/activity/recent'
+    | '/api/admin/dashboard'
+    | '/api/admin/login'
+    | '/api/claims/request'
     | '/api/farcaster/cast'
+    | '/api/lifi/quote'
+    | '/api/lifi/status'
+    | '/api/lifi/step-transaction'
     | '/api/marketing/x-post'
+    | '/api/matches/active'
+    | '/api/matches/live'
+    | '/api/matches/results'
+    | '/api/matches/schedule'
+    | '/api/og/match'
     | '/api/predictions/history'
+    | '/api/quest/approve-mint'
+    | '/api/quest/status'
+    | '/api/quest/verify'
+    | '/api/raffle/entries'
+    | '/api/raffle/status'
     | '/api/social/status'
     | '/api/social/verify'
     | '/api/sponsor/eligibility'
@@ -418,37 +829,75 @@ export interface FileRouteTypes {
     | '/api/swap/status'
     | '/api/telegram/prepare-share'
     | '/api/telegram/webhook'
+    | '/predict/result/$matchId'
+    | '/api/claims'
     | '/api/feed'
+    | '/api/admin/claims/mark-paid'
     | '/api/agents/culture-ops/tick'
     | '/api/agents/luck/approve'
     | '/api/agents/luck/tick'
+    | '/api/agents/match-ops/tick'
     | '/api/agents/pepe/approve'
     | '/api/agents/pepe/tick'
+    | '/api/auth/farcaster/link-account'
     | '/api/auth/farcaster/verify'
     | '/api/auth/telegram/verify'
     | '/api/auth/world/start'
     | '/api/auth/world/verify'
     | '/api/auth/x/callback'
     | '/api/auth/x/start'
+    | '/api/lifi/v1/$'
+    | '/api/matches/$matchId/stats'
+    | '/api/admin/raffle'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/calendar'
     | '/defi'
+    | '/faq'
     | '/feed'
     | '/finals'
     | '/imprint'
     | '/labs'
+    | '/leaderboard'
     | '/partners'
+    | '/play'
     | '/privacy'
     | '/profile'
     | '/proof'
+    | '/quest'
+    | '/squad'
     | '/terms'
+    | '/world-cup'
+    | '/api/leaderboard'
     | '/blog/$slug'
+    | '/match/$slug'
+    | '/story/$chapterId'
+    | '/story/visual'
+    | '/u/$handle'
     | '/blog/'
+    | '/story/'
+    | '/api/activity/recent'
+    | '/api/admin/dashboard'
+    | '/api/admin/login'
+    | '/api/claims/request'
     | '/api/farcaster/cast'
+    | '/api/lifi/quote'
+    | '/api/lifi/status'
+    | '/api/lifi/step-transaction'
     | '/api/marketing/x-post'
+    | '/api/matches/active'
+    | '/api/matches/live'
+    | '/api/matches/results'
+    | '/api/matches/schedule'
+    | '/api/og/match'
     | '/api/predictions/history'
+    | '/api/quest/approve-mint'
+    | '/api/quest/status'
+    | '/api/quest/verify'
+    | '/api/raffle/entries'
+    | '/api/raffle/status'
     | '/api/social/status'
     | '/api/social/verify'
     | '/api/sponsor/eligibility'
@@ -457,38 +906,76 @@ export interface FileRouteTypes {
     | '/api/swap/status'
     | '/api/telegram/prepare-share'
     | '/api/telegram/webhook'
+    | '/predict/result/$matchId'
+    | '/api/claims/'
     | '/api/feed/'
+    | '/api/admin/claims/mark-paid'
     | '/api/agents/culture-ops/tick'
     | '/api/agents/luck/approve'
     | '/api/agents/luck/tick'
+    | '/api/agents/match-ops/tick'
     | '/api/agents/pepe/approve'
     | '/api/agents/pepe/tick'
+    | '/api/auth/farcaster/link-account'
     | '/api/auth/farcaster/verify'
     | '/api/auth/telegram/verify'
     | '/api/auth/world/start'
     | '/api/auth/world/verify'
     | '/api/auth/x/callback'
     | '/api/auth/x/start'
+    | '/api/lifi/v1/$'
+    | '/api/matches/$matchId/stats'
+    | '/api/admin/raffle/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   CalendarRoute: typeof CalendarRoute
   DefiRoute: typeof DefiRoute
+  FaqRoute: typeof FaqRoute
   FeedRoute: typeof FeedRoute
   FinalsRoute: typeof FinalsRoute
   ImprintRoute: typeof ImprintRoute
   LabsRoute: typeof LabsRoute
+  LeaderboardRoute: typeof LeaderboardRoute
   PartnersRoute: typeof PartnersRoute
+  PlayRoute: typeof PlayRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   ProofRoute: typeof ProofRoute
+  QuestRoute: typeof QuestRoute
+  SquadRoute: typeof SquadRoute
   TermsRoute: typeof TermsRoute
+  WorldCupRoute: typeof WorldCupRoute
+  ApiLeaderboardRoute: typeof ApiLeaderboardRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  MatchSlugRoute: typeof MatchSlugRoute
+  StoryChapterIdRoute: typeof StoryChapterIdRoute
+  StoryVisualRoute: typeof StoryVisualRoute
+  UHandleRoute: typeof UHandleRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  StoryIndexRoute: typeof StoryIndexRoute
+  ApiActivityRecentRoute: typeof ApiActivityRecentRoute
+  ApiAdminDashboardRoute: typeof ApiAdminDashboardRoute
+  ApiAdminLoginRoute: typeof ApiAdminLoginRoute
+  ApiClaimsRequestRoute: typeof ApiClaimsRequestRoute
   ApiFarcasterCastRoute: typeof ApiFarcasterCastRoute
+  ApiLifiQuoteRoute: typeof ApiLifiQuoteRoute
+  ApiLifiStatusRoute: typeof ApiLifiStatusRoute
+  ApiLifiStepTransactionRoute: typeof ApiLifiStepTransactionRoute
   ApiMarketingXPostRoute: typeof ApiMarketingXPostRoute
+  ApiMatchesActiveRoute: typeof ApiMatchesActiveRoute
+  ApiMatchesLiveRoute: typeof ApiMatchesLiveRoute
+  ApiMatchesResultsRoute: typeof ApiMatchesResultsRoute
+  ApiMatchesScheduleRoute: typeof ApiMatchesScheduleRoute
+  ApiOgMatchRoute: typeof ApiOgMatchRoute
   ApiPredictionsHistoryRoute: typeof ApiPredictionsHistoryRoute
+  ApiQuestApproveMintRoute: typeof ApiQuestApproveMintRoute
+  ApiQuestStatusRoute: typeof ApiQuestStatusRoute
+  ApiQuestVerifyRoute: typeof ApiQuestVerifyRoute
+  ApiRaffleEntriesRoute: typeof ApiRaffleEntriesRoute
+  ApiRaffleStatusRoute: typeof ApiRaffleStatusRoute
   ApiSocialStatusRoute: typeof ApiSocialStatusRoute
   ApiSocialVerifyRoute: typeof ApiSocialVerifyRoute
   ApiSponsorEligibilityRoute: typeof ApiSponsorEligibilityRoute
@@ -497,27 +984,56 @@ export interface RootRouteChildren {
   ApiSwapStatusRoute: typeof ApiSwapStatusRoute
   ApiTelegramPrepareShareRoute: typeof ApiTelegramPrepareShareRoute
   ApiTelegramWebhookRoute: typeof ApiTelegramWebhookRoute
+  PredictResultMatchIdRoute: typeof PredictResultMatchIdRoute
+  ApiClaimsIndexRoute: typeof ApiClaimsIndexRoute
   ApiFeedIndexRoute: typeof ApiFeedIndexRoute
+  ApiAdminClaimsMarkPaidRoute: typeof ApiAdminClaimsMarkPaidRoute
   ApiAgentsCultureOpsTickRoute: typeof ApiAgentsCultureOpsTickRoute
   ApiAgentsLuckApproveRoute: typeof ApiAgentsLuckApproveRoute
   ApiAgentsLuckTickRoute: typeof ApiAgentsLuckTickRoute
+  ApiAgentsMatchOpsTickRoute: typeof ApiAgentsMatchOpsTickRoute
   ApiAgentsPepeApproveRoute: typeof ApiAgentsPepeApproveRoute
   ApiAgentsPepeTickRoute: typeof ApiAgentsPepeTickRoute
+  ApiAuthFarcasterLinkAccountRoute: typeof ApiAuthFarcasterLinkAccountRoute
   ApiAuthFarcasterVerifyRoute: typeof ApiAuthFarcasterVerifyRoute
   ApiAuthTelegramVerifyRoute: typeof ApiAuthTelegramVerifyRoute
   ApiAuthWorldStartRoute: typeof ApiAuthWorldStartRoute
   ApiAuthWorldVerifyRoute: typeof ApiAuthWorldVerifyRoute
   ApiAuthXCallbackRoute: typeof ApiAuthXCallbackRoute
   ApiAuthXStartRoute: typeof ApiAuthXStartRoute
+  ApiLifiV1SplatRoute: typeof ApiLifiV1SplatRoute
+  ApiMatchesMatchIdStatsRoute: typeof ApiMatchesMatchIdStatsRoute
+  ApiAdminRaffleIndexRoute: typeof ApiAdminRaffleIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/world-cup': {
+      id: '/world-cup'
+      path: '/world-cup'
+      fullPath: '/world-cup'
+      preLoaderRoute: typeof WorldCupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/squad': {
+      id: '/squad'
+      path: '/squad'
+      fullPath: '/squad'
+      preLoaderRoute: typeof SquadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quest': {
+      id: '/quest'
+      path: '/quest'
+      fullPath: '/quest'
+      preLoaderRoute: typeof QuestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/proof': {
@@ -541,11 +1057,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/play': {
+      id: '/play'
+      path: '/play'
+      fullPath: '/play'
+      preLoaderRoute: typeof PlayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/partners': {
       id: '/partners'
       path: '/partners'
       fullPath: '/partners'
       preLoaderRoute: typeof PartnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/labs': {
@@ -576,6 +1106,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/defi': {
       id: '/defi'
       path: '/defi'
@@ -590,11 +1127,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalendarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/story/': {
+      id: '/story/'
+      path: '/story'
+      fullPath: '/story/'
+      preLoaderRoute: typeof StoryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -604,6 +1155,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/u/$handle': {
+      id: '/u/$handle'
+      path: '/u/$handle'
+      fullPath: '/u/$handle'
+      preLoaderRoute: typeof UHandleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/story/visual': {
+      id: '/story/visual'
+      path: '/story/visual'
+      fullPath: '/story/visual'
+      preLoaderRoute: typeof StoryVisualRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/story/$chapterId': {
+      id: '/story/$chapterId'
+      path: '/story/$chapterId'
+      fullPath: '/story/$chapterId'
+      preLoaderRoute: typeof StoryChapterIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/match/$slug': {
+      id: '/match/$slug'
+      path: '/match/$slug'
+      fullPath: '/match/$slug'
+      preLoaderRoute: typeof MatchSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/blog/$slug'
@@ -611,11 +1190,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/leaderboard': {
+      id: '/api/leaderboard'
+      path: '/api/leaderboard'
+      fullPath: '/api/leaderboard'
+      preLoaderRoute: typeof ApiLeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/feed/': {
       id: '/api/feed/'
       path: '/api/feed'
       fullPath: '/api/feed/'
       preLoaderRoute: typeof ApiFeedIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/claims/': {
+      id: '/api/claims/'
+      path: '/api/claims'
+      fullPath: '/api/claims/'
+      preLoaderRoute: typeof ApiClaimsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/predict/result/$matchId': {
+      id: '/predict/result/$matchId'
+      path: '/predict/result/$matchId'
+      fullPath: '/predict/result/$matchId'
+      preLoaderRoute: typeof PredictResultMatchIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/telegram/webhook': {
@@ -674,11 +1274,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSocialStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/raffle/status': {
+      id: '/api/raffle/status'
+      path: '/api/raffle/status'
+      fullPath: '/api/raffle/status'
+      preLoaderRoute: typeof ApiRaffleStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/raffle/entries': {
+      id: '/api/raffle/entries'
+      path: '/api/raffle/entries'
+      fullPath: '/api/raffle/entries'
+      preLoaderRoute: typeof ApiRaffleEntriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/quest/verify': {
+      id: '/api/quest/verify'
+      path: '/api/quest/verify'
+      fullPath: '/api/quest/verify'
+      preLoaderRoute: typeof ApiQuestVerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/quest/status': {
+      id: '/api/quest/status'
+      path: '/api/quest/status'
+      fullPath: '/api/quest/status'
+      preLoaderRoute: typeof ApiQuestStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/quest/approve-mint': {
+      id: '/api/quest/approve-mint'
+      path: '/api/quest/approve-mint'
+      fullPath: '/api/quest/approve-mint'
+      preLoaderRoute: typeof ApiQuestApproveMintRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/predictions/history': {
       id: '/api/predictions/history'
       path: '/api/predictions/history'
       fullPath: '/api/predictions/history'
       preLoaderRoute: typeof ApiPredictionsHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/og/match': {
+      id: '/api/og/match'
+      path: '/api/og/match'
+      fullPath: '/api/og/match'
+      preLoaderRoute: typeof ApiOgMatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/matches/schedule': {
+      id: '/api/matches/schedule'
+      path: '/api/matches/schedule'
+      fullPath: '/api/matches/schedule'
+      preLoaderRoute: typeof ApiMatchesScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/matches/results': {
+      id: '/api/matches/results'
+      path: '/api/matches/results'
+      fullPath: '/api/matches/results'
+      preLoaderRoute: typeof ApiMatchesResultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/matches/live': {
+      id: '/api/matches/live'
+      path: '/api/matches/live'
+      fullPath: '/api/matches/live'
+      preLoaderRoute: typeof ApiMatchesLiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/matches/active': {
+      id: '/api/matches/active'
+      path: '/api/matches/active'
+      fullPath: '/api/matches/active'
+      preLoaderRoute: typeof ApiMatchesActiveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/marketing/x-post': {
@@ -688,11 +1358,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiMarketingXPostRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/lifi/step-transaction': {
+      id: '/api/lifi/step-transaction'
+      path: '/api/lifi/step-transaction'
+      fullPath: '/api/lifi/step-transaction'
+      preLoaderRoute: typeof ApiLifiStepTransactionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/lifi/status': {
+      id: '/api/lifi/status'
+      path: '/api/lifi/status'
+      fullPath: '/api/lifi/status'
+      preLoaderRoute: typeof ApiLifiStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/lifi/quote': {
+      id: '/api/lifi/quote'
+      path: '/api/lifi/quote'
+      fullPath: '/api/lifi/quote'
+      preLoaderRoute: typeof ApiLifiQuoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/farcaster/cast': {
       id: '/api/farcaster/cast'
       path: '/api/farcaster/cast'
       fullPath: '/api/farcaster/cast'
       preLoaderRoute: typeof ApiFarcasterCastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/claims/request': {
+      id: '/api/claims/request'
+      path: '/api/claims/request'
+      fullPath: '/api/claims/request'
+      preLoaderRoute: typeof ApiClaimsRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/login': {
+      id: '/api/admin/login'
+      path: '/api/admin/login'
+      fullPath: '/api/admin/login'
+      preLoaderRoute: typeof ApiAdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/dashboard': {
+      id: '/api/admin/dashboard'
+      path: '/api/admin/dashboard'
+      fullPath: '/api/admin/dashboard'
+      preLoaderRoute: typeof ApiAdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/activity/recent': {
+      id: '/api/activity/recent'
+      path: '/api/activity/recent'
+      fullPath: '/api/activity/recent'
+      preLoaderRoute: typeof ApiActivityRecentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/raffle/': {
+      id: '/api/admin/raffle/'
+      path: '/api/admin/raffle'
+      fullPath: '/api/admin/raffle/'
+      preLoaderRoute: typeof ApiAdminRaffleIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/matches/$matchId/stats': {
+      id: '/api/matches/$matchId/stats'
+      path: '/api/matches/$matchId/stats'
+      fullPath: '/api/matches/$matchId/stats'
+      preLoaderRoute: typeof ApiMatchesMatchIdStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/lifi/v1/$': {
+      id: '/api/lifi/v1/$'
+      path: '/api/lifi/v1/$'
+      fullPath: '/api/lifi/v1/$'
+      preLoaderRoute: typeof ApiLifiV1SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/x/start': {
@@ -737,6 +1477,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthFarcasterVerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/farcaster/link-account': {
+      id: '/api/auth/farcaster/link-account'
+      path: '/api/auth/farcaster/link-account'
+      fullPath: '/api/auth/farcaster/link-account'
+      preLoaderRoute: typeof ApiAuthFarcasterLinkAccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/agents/pepe/tick': {
       id: '/api/agents/pepe/tick'
       path: '/api/agents/pepe/tick'
@@ -749,6 +1496,13 @@ declare module '@tanstack/react-router' {
       path: '/api/agents/pepe/approve'
       fullPath: '/api/agents/pepe/approve'
       preLoaderRoute: typeof ApiAgentsPepeApproveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/agents/match-ops/tick': {
+      id: '/api/agents/match-ops/tick'
+      path: '/api/agents/match-ops/tick'
+      fullPath: '/api/agents/match-ops/tick'
+      preLoaderRoute: typeof ApiAgentsMatchOpsTickRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/agents/luck/tick': {
@@ -772,27 +1526,64 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAgentsCultureOpsTickRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/claims/mark-paid': {
+      id: '/api/admin/claims/mark-paid'
+      path: '/api/admin/claims/mark-paid'
+      fullPath: '/api/admin/claims/mark-paid'
+      preLoaderRoute: typeof ApiAdminClaimsMarkPaidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   CalendarRoute: CalendarRoute,
   DefiRoute: DefiRoute,
+  FaqRoute: FaqRoute,
   FeedRoute: FeedRoute,
   FinalsRoute: FinalsRoute,
   ImprintRoute: ImprintRoute,
   LabsRoute: LabsRoute,
+  LeaderboardRoute: LeaderboardRoute,
   PartnersRoute: PartnersRoute,
+  PlayRoute: PlayRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   ProofRoute: ProofRoute,
+  QuestRoute: QuestRoute,
+  SquadRoute: SquadRoute,
   TermsRoute: TermsRoute,
+  WorldCupRoute: WorldCupRoute,
+  ApiLeaderboardRoute: ApiLeaderboardRoute,
   BlogSlugRoute: BlogSlugRoute,
+  MatchSlugRoute: MatchSlugRoute,
+  StoryChapterIdRoute: StoryChapterIdRoute,
+  StoryVisualRoute: StoryVisualRoute,
+  UHandleRoute: UHandleRoute,
   BlogIndexRoute: BlogIndexRoute,
+  StoryIndexRoute: StoryIndexRoute,
+  ApiActivityRecentRoute: ApiActivityRecentRoute,
+  ApiAdminDashboardRoute: ApiAdminDashboardRoute,
+  ApiAdminLoginRoute: ApiAdminLoginRoute,
+  ApiClaimsRequestRoute: ApiClaimsRequestRoute,
   ApiFarcasterCastRoute: ApiFarcasterCastRoute,
+  ApiLifiQuoteRoute: ApiLifiQuoteRoute,
+  ApiLifiStatusRoute: ApiLifiStatusRoute,
+  ApiLifiStepTransactionRoute: ApiLifiStepTransactionRoute,
   ApiMarketingXPostRoute: ApiMarketingXPostRoute,
+  ApiMatchesActiveRoute: ApiMatchesActiveRoute,
+  ApiMatchesLiveRoute: ApiMatchesLiveRoute,
+  ApiMatchesResultsRoute: ApiMatchesResultsRoute,
+  ApiMatchesScheduleRoute: ApiMatchesScheduleRoute,
+  ApiOgMatchRoute: ApiOgMatchRoute,
   ApiPredictionsHistoryRoute: ApiPredictionsHistoryRoute,
+  ApiQuestApproveMintRoute: ApiQuestApproveMintRoute,
+  ApiQuestStatusRoute: ApiQuestStatusRoute,
+  ApiQuestVerifyRoute: ApiQuestVerifyRoute,
+  ApiRaffleEntriesRoute: ApiRaffleEntriesRoute,
+  ApiRaffleStatusRoute: ApiRaffleStatusRoute,
   ApiSocialStatusRoute: ApiSocialStatusRoute,
   ApiSocialVerifyRoute: ApiSocialVerifyRoute,
   ApiSponsorEligibilityRoute: ApiSponsorEligibilityRoute,
@@ -801,18 +1592,26 @@ const rootRouteChildren: RootRouteChildren = {
   ApiSwapStatusRoute: ApiSwapStatusRoute,
   ApiTelegramPrepareShareRoute: ApiTelegramPrepareShareRoute,
   ApiTelegramWebhookRoute: ApiTelegramWebhookRoute,
+  PredictResultMatchIdRoute: PredictResultMatchIdRoute,
+  ApiClaimsIndexRoute: ApiClaimsIndexRoute,
   ApiFeedIndexRoute: ApiFeedIndexRoute,
+  ApiAdminClaimsMarkPaidRoute: ApiAdminClaimsMarkPaidRoute,
   ApiAgentsCultureOpsTickRoute: ApiAgentsCultureOpsTickRoute,
   ApiAgentsLuckApproveRoute: ApiAgentsLuckApproveRoute,
   ApiAgentsLuckTickRoute: ApiAgentsLuckTickRoute,
+  ApiAgentsMatchOpsTickRoute: ApiAgentsMatchOpsTickRoute,
   ApiAgentsPepeApproveRoute: ApiAgentsPepeApproveRoute,
   ApiAgentsPepeTickRoute: ApiAgentsPepeTickRoute,
+  ApiAuthFarcasterLinkAccountRoute: ApiAuthFarcasterLinkAccountRoute,
   ApiAuthFarcasterVerifyRoute: ApiAuthFarcasterVerifyRoute,
   ApiAuthTelegramVerifyRoute: ApiAuthTelegramVerifyRoute,
   ApiAuthWorldStartRoute: ApiAuthWorldStartRoute,
   ApiAuthWorldVerifyRoute: ApiAuthWorldVerifyRoute,
   ApiAuthXCallbackRoute: ApiAuthXCallbackRoute,
   ApiAuthXStartRoute: ApiAuthXStartRoute,
+  ApiLifiV1SplatRoute: ApiLifiV1SplatRoute,
+  ApiMatchesMatchIdStatsRoute: ApiMatchesMatchIdStatsRoute,
+  ApiAdminRaffleIndexRoute: ApiAdminRaffleIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

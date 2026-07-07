@@ -6,6 +6,8 @@ export type MemeShareCardProps = {
   away: string;
   pick: string;
   stakeLabel: string;
+  homePct?: number;
+  awayPct?: number;
   pepeSrc?: string;
   subtitle?: string;
 };
@@ -23,8 +25,10 @@ export const MemeShareCard = forwardRef<HTMLDivElement, MemeShareCardProps>(func
     away,
     pick,
     stakeLabel,
+    homePct = 50,
+    awayPct = 50,
     pepeSrc = "/pepeheadball.jpg",
-    subtitle = "I just locked my prediction on STACK XI",
+    subtitle = "My prediction is locked.",
   },
   ref,
 ) {
@@ -121,6 +125,19 @@ export const MemeShareCard = forwardRef<HTMLDivElement, MemeShareCardProps>(func
         </div>
 
         <p style={{ marginTop: 20, fontSize: 14, color: GRAY[300] }}>{subtitle}</p>
+
+        <div style={{ marginTop: 16 }}>
+          <div style={{ fontSize: 12, color: GRAY[400], marginBottom: 6 }}>{home}</div>
+          <div style={{ display: "flex", height: 8, borderRadius: 4, overflow: "hidden", background: "#374151" }}>
+            <div style={{ width: `${homePct}%`, background: EXPORT_COLORS.neon }} />
+            <div style={{ width: `${awayPct}%`, background: "#60a5fa" }} />
+          </div>
+          <div style={{ fontSize: 12, color: GRAY[400], marginTop: 6, textAlign: "right" }}>{away}</div>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: GRAY[500], marginTop: 4 }}>
+            <span>{homePct}%</span>
+            <span>{awayPct}%</span>
+          </div>
+        </div>
 
         <div
           style={{

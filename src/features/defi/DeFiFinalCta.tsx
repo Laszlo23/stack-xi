@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useConnectBaseWallet } from "@/hooks/use-connect-base-wallet";
 import { BCC_SYMBOL } from "@/lib/base/config";
-import { BccSwapPanel } from "@/features/swap/BccSwapPanel";
+import { BccExchangePanel } from "@/features/swap/BccExchangePanel";
 
 export function DeFiFinalCta() {
   const { isConnected, connectWallet, isConnecting } = useConnectBaseWallet();
@@ -51,7 +51,7 @@ export function DeFiFinalCta() {
         </div>
 
         <div className="mt-10 text-left">
-          <BccSwapPanel compact />
+          <BccExchangePanel compact defaultFromAmount="25" />
         </div>
       </div>
     </section>

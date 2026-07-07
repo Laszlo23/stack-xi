@@ -139,9 +139,9 @@ const KNOCKOUT_WEEK_DAYS: ViralCalendarDay[] = [
     builderTags: tagsForDay(3),
     farcasterPost: [
       "STACK XI knockout receipts 🐸⚽",
-      "Portugal vs Spain settled in Dallas — quarterfinal picture updating.",
+      "Belgium 4-1 USA in Seattle — all three hosts out. Spain vs Belgium QF confirmed Jul 10.",
       "Today: Salah vs Messi in Atlanta · Switzerland vs Colombia in Vancouver.",
-      "France vs Morocco QF confirmed Jul 9 · Norway vs England Jul 11.",
+      "France vs Morocco QF Jul 9 · Norway vs England Jul 11.",
       tagsForDay(3).join(" "),
     ].join("\n"),
     xPost: "Salah vs Messi today. Quarterfinal bracket tightening. 🐸",
